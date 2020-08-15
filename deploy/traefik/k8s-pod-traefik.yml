@@ -1,0 +1,86 @@
+apiVersion: v1
+kind: Service # 这个svc主要用来跟rule转发规则里转到至的端口相对应
+metadata:
+  namespace: liaotian
+  name: traefik
+spec:
+  ports:
+    - name: web
+      port: 8005
+    - name: websecure
+      port: 4433
+    - name: admin
+      port: 8080
+  selector:
+    app: traefik
+---
+apiVersion: apps/v1
+kind: DaemonSet # DaemonSet保证在每个Node上都运行一个Pod，如果 新增一个Node，这个Pod也会运行在新增的Node上，如果删除这个DadmonSet，就会清除它所创建的Pod。
+metadata:
+  name: traefik-ingress-controller
+  namespace: liaotian
+  labels:
+    app: traefik
+spec:
+  selector:
+    matchLabels:
+      app: traefik
+  template:
+    metadata:
+      name: traefik
+      labels:
+        app: traefik
+    spec:
+      serviceAccountName: traefik-ingress-services
+      terminationGracePeriodSeconds: 1
+      hostNetwork: true ## 将容器端口绑定所在服务器端口
+      containers:
+        - image: traefik:v2.2.1
+          name: traefik-ingress-lb
+          ports:
+            - name: web
+              containerPort: 8005
+            - name: websecure
+              containerPort: 4433
+            - name: admin
+              containerPort: 8080   ## Traefik Dashboard 端口
+          resources:
+            limits:
+              cpu: 2000m
+              memory: 1024Mi
+            requests:
+              cpu: 1000m
+              memory: 1024Mi
+          securityContext:
+            capabilities:
+              drop:
+                - ALL
+              add:
+                - NET_BIND_SERVICE
+          args:
+            - --configfile=/config/traefik.yaml
+          volumeMounts:
+            - mountPath: "/config"
+              name: "config"
+          readinessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+          livenessProbe:
+            httpGet:
+              path: /ping
+              port: 8080
+            failureThreshold: 3
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            timeoutSeconds: 5
+      volumes:
+        - name: config
+          configMap:
+            name: traefik-config

@@ -1,0 +1,19 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: traefik-dashboard-route
+  namespace: liaotian
+spec:
+  entryPoints:
+    - web
+  routes:
+    - match: Host(`local.traefik.com`)
+      kind: Rule
+      services:
+        - name: traefik # svc的名称
+          port: 8080 # cluster 访问
+    - match: Host(`local.liaotian.com`)
+      kind: Rule
+      services:
+        - name: user-web # svc的名称
+          port: 80 # cluster 访问

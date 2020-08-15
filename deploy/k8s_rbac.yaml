@@ -1,0 +1,37 @@
+apiVersion: v1
+kind: ServiceAccount
+metadata:
+  namespace: liaotian
+  name: liaotian-account
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  name: liaotian-role
+  namespace: liaotian
+rules:
+  - apiGroups:
+      - ""
+    resources:
+      - pods
+      - configmaps
+      - secrets
+    verbs:
+      - get
+      - list
+      - patch
+      - watch
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: liaotian-role
+  namespace: liaotian
+roleRef:
+  apiGroup: rbac.authorization.k8s.io
+  kind: Role
+  name: liaotian-role # 要被绑定的Role的name
+subjects:
+  - kind: ServiceAccount
+    name: liaotian-account # 要被绑定的serviceAccount的name
+    namespace: liaotian

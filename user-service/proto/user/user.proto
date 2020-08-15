@@ -1,0 +1,30 @@
+syntax = "proto3";
+
+package user.service.user;
+
+service User {
+	rpc Create(CreateRequest) returns (Response) {}
+	rpc Get(Request) returns (Response) {}
+}
+
+message user {
+	int64 id = 1;
+	string name = 2;
+	string password = 3;
+}
+
+message CreateRequest {
+	string name = 1;
+	string password = 2;
+}
+
+message Request {
+	string name = 1;
+	string password = 2;
+}
+
+message Response {
+	int64 code = 1;
+	string message = 2;
+	user user = 3;
+}
