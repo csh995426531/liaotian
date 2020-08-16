@@ -1,16 +1,11 @@
 package handler
 
 import (
-	"liaotian/basic/config"
 	"net/http"
 	"testing"
 )
 
 func TestMain(m *testing.M) {
-	config.Init(func(options *config.Options) {
-		options.Path = "../"
-	})
-
 	m.Run()
 }
 

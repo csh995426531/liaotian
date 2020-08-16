@@ -5,7 +5,7 @@ import (
 	proto "liaotian/user-service/proto/user"
 )
 
-func (h *Handler) Create (ctx context.Context, request *proto.CreateRequest, response *proto.Response) error {
+func (h *Handler) Create(ctx context.Context, request *proto.CreateRequest, response *proto.Response) error {
 
 	user, err := h.repo.Create(request.Name, request.Password)
 	if err != nil {
@@ -20,7 +20,7 @@ func (h *Handler) Create (ctx context.Context, request *proto.CreateRequest, res
 	return nil
 }
 
-func (h *Handler) Get (ctx context.Context, request *proto.Request, response *proto.Response) error {
+func (h *Handler) Get(ctx context.Context, request *proto.Request, response *proto.Response) error {
 
 	user, err := h.repo.Get(request.Name, request.Password)
 	if err != nil {
@@ -30,8 +30,8 @@ func (h *Handler) Get (ctx context.Context, request *proto.Request, response *pr
 	response.Code = 200
 	response.Message = "SUCCESS"
 	response.User = &proto.User{
-		Id: user.ID,
-		Name: user.Username,
+		Id:       user.ID,
+		Name:     user.Username,
 		Password: user.Password,
 	}
 	return nil

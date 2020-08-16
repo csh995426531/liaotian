@@ -3,21 +3,19 @@ package handler
 import (
 	"context"
 	"fmt"
-	"liaotian/basic/config"
+	"liaotian/user-service/config"
 	user "liaotian/user-service/proto/user"
 	"liaotian/user-service/repository"
 	"testing"
 )
 
 var (
-	handler *Handler
-	userModel	*repository.ModelUser
+	handler   *Handler
+	userModel *repository.ModelUser
 )
 
 func TestMain(m *testing.M) {
-	config.Init(func(options *config.Options) {
-		options.Path = "../"
-	})
+	config.Init()
 	handler = New(repository.Init())
 	m.Run()
 }
@@ -29,13 +27,13 @@ func TestRun(t *testing.T) {
 
 func testCreate(t *testing.T) {
 
-	createTests := []struct{
-		Name 		string
-		Password	string
-		Resp		*user.Response
-	} {
-		{"张三", "a123123123",&user.Response{Code: 200, Message: "SUCCESS"}},
-		{"李四", "a123123123",&user.Response{Code: 200, Message: "SUCCESS"}},
+	createTests := []struct {
+		Name     string
+		Password string
+		Resp     *user.Response
+	}{
+		{"张三", "a123123123", &user.Response{Code: 200, Message: "SUCCESS"}},
+		{"李四", "a123123123", &user.Response{Code: 200, Message: "SUCCESS"}},
 	}
 
 	for _, test := range createTests {
@@ -43,7 +41,7 @@ func testCreate(t *testing.T) {
 		t.Run(test.Name, func(t *testing.T) {
 			resp := &user.Response{}
 			err := handler.Create(context.Background(), &user.CreateRequest{
-				Name: test.Name,
+				Name:     test.Name,
 				Password: test.Password,
 			}, resp)
 
@@ -63,20 +61,20 @@ func testCreate(t *testing.T) {
 
 func testGet(t *testing.T) {
 
-	getTests := []struct{
-		Name 		string
-		Password	string
-		Resp 		*user.Response
-	} {
-		{"张三","a123123123",&user.Response{Code: 200, Message: "SUCCESS"}},
-		{"张四","a123123123",&user.Response{Code: 200, Message: "SUCCESS"}},
+	getTests := []struct {
+		Name     string
+		Password string
+		Resp     *user.Response
+	}{
+		{"张三", "a123123123", &user.Response{Code: 200, Message: "SUCCESS"}},
+		{"张四", "a123123123", &user.Response{Code: 200, Message: "SUCCESS"}},
 	}
 
 	for _, test := range getTests {
 		t.Run(test.Name, func(t *testing.T) {
 			resp := &user.Response{}
 			err := handler.Get(context.Background(), &user.Request{
-				Name: test.Name,
+				Name:     test.Name,
 				Password: test.Password,
 			}, resp)
 
