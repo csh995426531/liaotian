@@ -1,0 +1,59 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etcd-cluster-client
+  labels:
+    name: etcd-cluster-client
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: etcd-cluster-client
+  template:
+    metadata:
+      labels:
+        app: etcd-cluster-client
+    spec:
+      containers:
+      - name: etcd-cluster-client
+        image: bitnami/etcd:3.4.9
+        imagePullPolicy: IfNotPresent 
+        env:
+        - name: host_ip
+          valueFrom:
+            fieldRef:
+              fieldPath: status.podIP
+        command: ["/bin/sh","-c"]
+        args:
+        - /tmp/etcd
+          --name etcd-cluster-client
+          --initial-advertise-peer-urls http://${host_ip}:2380
+          --listen-peer-urls http://${host_ip}:2380
+          --listen-client-urls http://${host_ip}:2379,http://127.0.0.1:2379
+          --advertise-client-urls http://${host_ip}:2379
+          --initial-cluster-token etcd-cluster-1
+          --initial-cluster-state new
+          --data-dir=/etcd_data
+        volumeMounts:
+          - mountPath: /etcd_data/:rw
+            name: data
+      volumes:
+        - name: data
+          hostPath:
+            path: /mnt/hgfs/work_code/go_work/liaotian/data/etcd/ #宿主机挂载点
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: etcd-cluster-client
+spec:
+  clusterIP: None
+  ports:
+  - name: client
+    port: 2379
+    targetPort: 2379
+  - name: message
+    port: 2380
+    targetPort: 2380
+  selector:
+    app: etcd-cluster-client

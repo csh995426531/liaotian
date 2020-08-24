@@ -2,64 +2,55 @@ package handler
 
 import (
 	"context"
-	"encoding/json"
+	"github.com/gin-gonic/gin"
 	"github.com/micro/go-micro/v2/logger"
-	"io/ioutil"
 	"net/http"
-	"time"
+
+	user "liaotian/user-service/proto/user"
 
 	"github.com/micro/go-micro/v2/client"
-	user "liaotian/user-service/proto/user"
 )
 
 var (
-	rpcUser	user.UserService
+	rpcUser user.UserService
 )
 
-func Init () {
+func Init() {
 	rpcUser = user.NewUserService("user.service.user", client.DefaultClient)
 }
 
-func Login(w http.ResponseWriter, r *http.Request) {
+func Login(c *gin.Context) {
 
-	if r.Method != "POST" {
-		logger.Error("非法请求")
-		http.Error(w, "非法请求", 500)
-		return
-	}
-
-	body, _ := ioutil.ReadAll(r.Body)
-	data := user.Request{}
-	err := json.Unmarshal(body, &data)
-
-	if err != nil {
-		logger.Error(err)
-		http.Error(w, err.Error(), 500)
-		return
-	}
+	var data user.Request
+	_ = c.ShouldBindJSON(&data)
 
 	res, err := rpcUser.Get(context.TODO(), &data)
 
+	resultCode := http.StatusOK
+	resultData := gin.H{}
+
 	if err != nil {
 		logger.Error(err)
-		http.Error(w, err.Error(), 500)
+		resultCode = http.StatusInternalServerError
+		resultData = gin.H{
+			"message": res.Message,
+		}
 		return
 	}
 
 	if res.Code != 200 {
-		http.Error(w, res.Message, 500)
+		resultCode = http.StatusInternalServerError
+		resultData = gin.H{
+			"message": res.Message,
+		}
 		return
 	}
 
-	response := map[string]interface{}{
-		"ref": time.Now().UnixNano(),
-		"user": &res.User,
-		"rpc_data": &res,
+	resultData = gin.H{
+		"status":  "posted",
+		"message": res.Message,
+		"user":    res.User,
 	}
-
-	// encode and write the response as json
-	if err := json.NewEncoder(w).Encode(response); err != nil {
-		http.Error(w, err.Error(), 500)
-		return
-	}
+	c.JSON(resultCode, resultData)
+	return
 }

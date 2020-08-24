@@ -1,0 +1,272 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apisix-manager
+  namespace: liaotian
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apisix-manager
+  template:
+    metadata:
+      labels:
+        app: apisix-manager
+    spec:
+      containers:
+        - name: apisix-manager
+          image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/apisix-manager:v1.5.2
+          imagePullPolicy: IfNotPresent
+          securityContext:
+            runAsUser: 0
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 6
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 8080
+            timeoutSeconds: 1   
+          ports:
+            - name: 8080-port
+              containerPort: 8080
+          env:
+            - name: ENV
+              value: prod
+          volumeMounts:
+            - mountPath: /root/manager-api/build.sh
+              name: build
+              subPath: build.sh
+      nodeSelector:
+        disktype: master
+      volumes:
+        - name: build
+          hostPath:
+            path: /mnt/hgfs/work_code/go_work/liaotian/deploy/apisix/manager_conf/ #宿主机挂载点
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apisix-manager
+  namespace: liaotian
+spec:
+  ports:
+    - name: 8080-port
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: apisix-manager
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: apisix-dashboard
+  namespace: liaotian
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apisix-dashboard
+  template:
+    metadata:
+      labels:
+        app: apisix-dashboard
+    spec:
+      containers:
+        - name: apisix-dashboard
+          image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/apisix-dashboard:v1.0
+          imagePullPolicy: IfNotPresent
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 6
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 80
+            timeoutSeconds: 1 
+          ports:
+            - name: 80-port
+              containerPort: 80
+          env:
+            - name: ENV
+              value: "prod"
+          volumeMounts:
+            - mountPath: /etc/nginx/conf.d/default.conf:rw
+              name: nginx-config
+              subPath: nginx.conf
+      nodeSelector:
+        disktype: master
+      volumes:
+        - name: nginx-config
+          hostPath:
+            path: /mnt/hgfs/work_code/go_work/liaotian/deploy/apisix/dashboard_conf/ #宿主机挂载点
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apisix-dashboard
+  namespace: liaotian
+spec:
+  type: NodePort
+  ports:
+    - name: 80-port
+      port: 180
+      targetPort: 80
+      nodePort: 180
+  selector:
+    app: apisix-dashboard
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  namespace: liaotian
+  name: apisix-mysql
+  labels:
+    name: apisix-mysql
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apisix-mysql
+  template:
+    metadata:
+      labels: 
+        app: apisix-mysql
+    spec:
+      containers:
+      - name: mysql
+        image: mysql:latest
+        imagePullPolicy: IfNotPresent
+        readinessProbe:
+          failureThreshold: 6
+          initialDelaySeconds: 10
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 3306
+          timeoutSeconds: 1
+        livenessProbe:
+          failureThreshold: 6
+          periodSeconds: 10
+          successThreshold: 1
+          tcpSocket:
+            port: 3306
+          timeoutSeconds: 1 
+        ports:
+        - name: 3306-port
+          containerPort: 3306
+        env:
+        - name: MYSQL_ROOT_PASSWORD
+          value: "123456"
+        volumeMounts:
+          - mountPath: /var/lib/mysql/:rw
+            name: datadir
+          - mountPath: /etc/mysql/conf.d/:ro
+            name: conf
+          - mountPath: /docker-entrypoint-initdb.d/:ro
+            name: script-db
+      nodeSelector:
+        disktype: master
+      volumes:
+        - name: datadir
+          hostPath:
+            path: /tmp/data/apisix/data/ #宿主机挂载点
+        - name: conf
+          hostPath:
+            path: /mnt/hgfs/work_code/go_work/liaotian/data/apisix_mysql/conf.d/
+        - name: script-db
+          hostPath:
+            path: /mnt/hgfs/work_code/go_work/liaotian/deploy/apisix/script/db/
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: apisix-mysql
+  namespace: liaotian
+spec:
+  type: NodePort
+  ports:
+    - name: 3306-port
+      port: 3309
+      targetPort: 3306
+      nodePort: 3309
+  selector:
+    app: apisix-mysql
+# ---
+# apiVersion: apps/v1
+# kind: Deployment
+# metadata:
+#   name: prometheus
+#   namespace: liaotian
+# spec:
+#   replicas: 1
+#   selector:
+#     matchLabels:
+#       app: prometheus
+#   template:
+#     metadata:
+#       labels:
+#         app: prometheus
+#     spec:
+#       containers:
+#         - name: prometheus
+#           image: prom/prometheus
+#           imagePullPolicy: IfNotPresent
+#           readinessProbe:
+#             failureThreshold: 6
+#             initialDelaySeconds: 10
+#             periodSeconds: 10
+#             successThreshold: 1
+#             tcpSocket:
+#               port: 9090
+#             timeoutSeconds: 1
+#           livenessProbe:
+#             failureThreshold: 6
+#             periodSeconds: 10
+#             successThreshold: 1
+#             tcpSocket:
+#               port: 9090
+#             timeoutSeconds: 1 
+#           ports:
+#             - name: 9090-port
+#               containerPort: 9090
+#           volumeMounts:
+#             - mountPath: /etc/prometheus/prometheus.yml:rw
+#               name: nginx-config
+#               subPath: prometheus.yml
+#       nodeSelector:
+#         disktype: master
+#       volumes:
+#         - name: nginx-config
+#           hostPath:
+#             path: /mnt/hgfs/work_code/go_work/liaotian/deploy/apisix/prometheus_conf/ #宿主机挂载点
+# ---
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   name: prometheus
+#   namespace: liaotian
+# spec:
+#   type: NodePort
+#   ports:
+#     - name: 9090-port
+#       port: 9090
+#       targetPort: 9090
+#       nodePort: 9090
+#   selector:
+#     app: prometheus
+

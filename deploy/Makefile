@@ -1,4 +1,4 @@
-.PHONY: buildBinary buildImage
+.PHONY: buildBinary buildImage buildApplyYaml
 
 buildBinary:
 	CGO_ENABLED=0 GOOS=linux go build -o user-service/main ../user-service

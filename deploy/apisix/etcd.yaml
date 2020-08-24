@@ -1,0 +1,80 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: etcd-cluster-client
+  namespace: liaotian
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: apisix-gw
+  strategy:
+    type: Recreate
+  template:
+    metadata:
+      labels:
+        app: apisix-gw
+    spec:
+      containers:
+        - name: etcd-cluster-client
+          image: bitnami/etcd:3.4.9
+          imagePullPolicy:  IfNotPresent
+          securityContext:
+            runAsUser: 0
+          readinessProbe:
+            failureThreshold: 6
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 2379
+            timeoutSeconds: 1
+          livenessProbe:
+            failureThreshold: 6
+            periodSeconds: 10
+            successThreshold: 1
+            tcpSocket:
+              port: 2379
+            timeoutSeconds: 1  
+          env:
+            - name: ETCD_DATA_DIR
+              value: "/etcd_data"
+            - name: ETCD_ENABLE_V2
+              value: "true"
+            - name: ALLOW_NONE_AUTHENTICATION
+              value: "yes"
+            - name: ETCD_LISTEN_CLIENT_URLS
+              value: "http://0.0.0.0:2379"
+            - name: ETCD_LISTEN_PEER_URLS
+              value: "http://0.0.0.0:2380"
+            - name: ETCD_ADVERTISE_CLIENT_URLS
+              value: "http://0.0.0.0:2379"
+          ports:
+          - name: http
+            containerPort: 2379 #容器对外暴露的端口
+          - name: peer 
+            containerPort: 2380
+          volumeMounts:
+            - mountPath: /etcd_data/:rw
+              name: data
+      volumes:
+        - name: data
+          hostPath:
+            path: /mnt/hgfs/work_code/go_work/liaotian/data/etcd/ #宿主机挂载点
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: etcd-cluster-client
+  namespace: liaotian
+spec:
+  type: ClusterIP
+  ports:
+    - name: http
+      port: 2379
+      targetPort: 2379
+    - name: peer
+      port: 2380
+      targetPort: 2380
+  selector:
+    app: apisix-gw

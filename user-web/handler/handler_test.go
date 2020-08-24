@@ -11,11 +11,10 @@ func TestMain(m *testing.M) {
 
 func TestLogin(t *testing.T) {
 
-	loginTests := []struct{
-		Name		string
-		Password 	string
-
-	} {
+	loginTests := []struct {
+		Name     string
+		Password string
+	}{
 		{"张三", "aa123123123"},
 		{"张四", "aa123123123"},
 	}
@@ -23,9 +22,7 @@ func TestLogin(t *testing.T) {
 	for _, test := range loginTests {
 		t.Run(test.Name, func(t *testing.T) {
 			resp := http.Response{}
-			Login(resp, &http.Request{
-
-			})
+			Login(resp, &http.Request{})
 		})
 	}
 }
