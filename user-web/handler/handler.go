@@ -46,11 +46,18 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	resultData = gin.H{
-		"status":  "posted",
-		"message": res.Message,
-		"user":    res.User,
+	if res.User.Password == data.Password && res.User.Name == data.Name {
+		resultData = gin.H{
+			"message": res.Message,
+			"user":    res.User,
+		}
+	} else {
+		resultCode = http.StatusUnauthorized
+		resultData = gin.H{
+			"message": "用户名密码错误",
+		}
 	}
+
 	c.JSON(resultCode, resultData)
 	return
 }
