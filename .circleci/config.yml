@@ -29,8 +29,8 @@ jobs:
       GOPROXY: https://goproxy.cn,direct
     working_directory: /go/release/liaotian/user-service
     steps:
-      - build-service:
-          service-name: "user-service"
+      - build_service:
+          service_name: "user-service"
   user-web:
     docker:
       - image: circleci/golang:1.14.4
@@ -39,14 +39,14 @@ jobs:
       GOPROXY: https://goproxy.cn,direct
     working_directory: /go/release/liaotian/user-web
     steps:
-      - build-service:
-          service-name: "user-web"
+      - build_service:
+          service_name: "user-web"
 
 commands:
-  build-service:
+  build_service:
     description: "构建镜像并推送到阿里云"
     parameters:
-      service-name:
+      service_name:
         type: string
     steps:
       # git pull
@@ -63,26 +63,26 @@ commands:
       # Download and cache dependencies
       - restore_cache:
           keys:
-            - << parameters.service-name >>-{{ checksum "pom.xml"}}
+            - << parameters.service_name >>-{{ checksum "pom.xml"}}
 
       - run:
           name: "从Dockerfile build镜像"
-          command: docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service-name >>:${CIRCLE_BUILD_NUM} -f ~/liaotian/deploy/<< parameters.service-name >>/Dockerfile ../
+          command: docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service_name >>:${CIRCLE_BUILD_NUM} -f ~/liaotian/deploy/<< parameters.service_name >>/Dockerfile ../
 
       - save_cache:
           paths:
             - ~/.m2
-          key: << parameters.service-name >>-{{ checksum "pom.xml"}}
+          key: << parameters.service_name >>-{{ checksum "pom.xml"}}
 
       # package into a jar and build image
       - run:
-          name: "push镜像到阿里云"
-          command: docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service-name >>:${CIRCLE_BUILD_NUM}
+          name: "push镜像到阿里云 "
+          command: docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service_name >>:${CIRCLE_BUILD_NUM}
 
       # store raw content of src code
       - store_artifacts:
           path: target/classes
-          destination: spring-petclinic-<< parameters.service-name >>
+          destination: spring-petclinic-<< parameters.service_name >>
 
 
 
