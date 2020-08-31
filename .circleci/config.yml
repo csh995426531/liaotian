@@ -58,7 +58,7 @@ commands:
 
       - run:
           name: "登录阿里云容器镜像服务"
-          command: docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $$DOCKER_PASS
+          command: docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
 
       # Download and cache dependencies
       - restore_cache:
