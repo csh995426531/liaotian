@@ -29,7 +29,6 @@ func main() {
 
 	// 注册服务
 	_ = proto.RegisterUserHandler(service.Server(), handler.New(repository.Init()))
-
 	
 	// 启动服务
 	if err := service.Run(); err != nil {
