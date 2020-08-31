@@ -23,13 +23,10 @@ func Init() {
 		//configmap.WithConfigPath(os.Getenv("CONFIG_PATH")),
 	)
 	// Create new config
-	Config, err := config.NewConfig()
-	if err != nil {
-		logger.Errorf("【config】初始化NewConfig失败，错误：%s", err)
-	}
+	Config, _ := config.NewConfig()
 
 	// Load file source
-	err = Config.Load(configMapSource)
+	err := Config.Load(configMapSource)
 	if err != nil {
 		logger.Errorf("【config】初始化Load失败，错误：%s", err)
 	}

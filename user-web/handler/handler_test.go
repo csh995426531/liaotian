@@ -1,7 +1,12 @@
 package handler
 
 import (
+	"bytes"
+	"fmt"
+	"github.com/gin-gonic/gin"
+	"io/ioutil"
 	"net/http"
+	"net/http/httptest"
 	"testing"
 )
 
@@ -21,8 +26,19 @@ func TestLogin(t *testing.T) {
 
 	for _, test := range loginTests {
 		t.Run(test.Name, func(t *testing.T) {
-			resp := http.Response{}
-			Login(resp, &http.Request{})
+			resp := httptest.NewRecorder()
+			ctx, _ := gin.CreateTestContext(resp)
+			param := fmt.Sprintf("{name: \"%s\", password: \"%s\"}", test.Name, test.Password)
+			ctx.Request,_ = http.NewRequest("POST", "/", bytes.NewBufferString(param))
+			Login(ctx)
+
+			if resp.Code != 200 {
+				b, _ := ioutil.ReadAll(resp.Body)
+				t.Error(resp.Code, string(b))
+			}
 		})
 	}
+
+
+
 }

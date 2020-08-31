@@ -1,0 +1,44 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: friend-service-cm
+  namespace: liaotian
+data:
+  mysql_url: url=qa:@test190411^@(192.168.1.221:3306)/test_32
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: friend-service
+  namespace: liaotian
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: friend-service
+  template:
+    metadata:
+      labels:
+        app: friend-service
+    spec:
+      containers:
+        - name: friend-service
+          image: liaotian/friend-service:v1.0
+          imagePullPolicy: Never
+          ports:
+            - name: 80-port
+              containerPort: 80
+      serviceAccountName: liaotian-account  # serviceAccount的名称 用于权限
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: friend-service
+  namespace: liaotian
+spec:
+  ports:
+    - name: 80-port
+      port: 80
+      targetPort: 80
+  selector:
+    app: friend-service

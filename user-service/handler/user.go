@@ -22,7 +22,7 @@ func (h *Handler) Create(ctx context.Context, request *proto.CreateRequest, resp
 
 func (h *Handler) Get(ctx context.Context, request *proto.Request, response *proto.Response) error {
 
-	user, err := h.repo.Get(request.Name, request.Password)
+	user, err := h.repo.Get(request.Name, request.Password, request.Id)
 	if err != nil {
 		return err
 	}

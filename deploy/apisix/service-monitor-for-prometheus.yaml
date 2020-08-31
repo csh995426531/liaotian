@@ -22,8 +22,10 @@ apiVersion: monitoring.coreos.com/v1
 kind: ServiceMonitor
 metadata:
   name: apisix-gw
+  namespace: monitoring
   labels:
     app: apisix-gw
+    release: prometheus-operator
 spec:
   endpoints:
     - interval: 10s

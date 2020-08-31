@@ -4,26 +4,27 @@ import (
 	"github.com/jinzhu/gorm"
 	_ "github.com/jinzhu/gorm/dialects/mysql"
 	"github.com/micro/go-micro/v2/logger"
-	"liaotian/user-service/config"
+	"liaotian/friend-service/config"
 	"sync"
-
 )
 
 var (
-	m sync.Mutex
-	repo *Repository
+	m 	sync.Mutex
+	repo	*Repository
 )
 
 type Interface interface {
-	Create(name, password string) (user *ModelUser, err error)
-	Get(name, password string, id int64) (user *ModelUser, err error)
+	Add (operatorId, buddyId int64) (friend *ModelFriend, err error)
+	Del (friendId int64) (err error)
+	List (operatorId, offset, limit int64) (friends []*ModelFriend, err error)
+	Get (friendId int64) (friend *ModelFriend, err error)
 }
 
 type Repository struct {
 	mysqlDB *gorm.DB
 }
 
-func Init () *Repository {
+func Init() Interface {
 	m.Lock()
 	defer m.Unlock()
 
@@ -35,24 +36,18 @@ func Init () *Repository {
 	repo = &Repository{
 		mysqlDB: newDb(),
 	}
-
 	return repo
 }
 
-/**
-	创建新db链接实例
- */
-func newDb () *gorm.DB {
+func newDb() *gorm.DB {
 
+	logger.Infof("db链接地址：%#+v", config.MysqlConfig.Url)
 
-	logger.Errorf("%#+v", config.MysqlConfig.Url)
 	mysqlDb, err := gorm.Open("mysql", config.MysqlConfig.Url + "?charset=utf8&parseTime=true")
 	if err != nil {
 		logger.Error(err)
 		panic(err)
 	}
-	mysqlDb.LogMode(true)
 
 	return mysqlDb
 }
-

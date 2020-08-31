@@ -22,21 +22,29 @@ type UserInfo struct {
 	password string
 }
 
-
-
 func (ModelUser) TableName() string {
 	return "users"
 }
 
 func (r *Repository) Create (name, password string) (user *ModelUser, err error) {
 	user = &ModelUser{Username: name, Password: password}
-	r.mysqlDB.Create(user)
+	err = r.mysqlDB.Create(user).Error
 	return
 }
 
-func (r *Repository) Get (name, password string) (user *ModelUser, err error) {
+func (r *Repository) Get (name, password string, id int64) (user *ModelUser, err error) {
 
 	user = new(ModelUser)
-	r.mysqlDB.Where("username = ? and password = ?", name, password).Last(user)
+	var where string
+	var param []interface{}
+	if id == 0 {
+		where = "username = ? and password = ?"
+		param = append(param, name, password)
+	} else {
+		where = "id = ? "
+		param = append(param, id)
+	}
+	err = r.mysqlDB.Where(where, param...).First(user).Error
+
 	return
 }

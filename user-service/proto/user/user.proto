@@ -19,8 +19,9 @@ message CreateRequest {
 }
 
 message Request {
-	string name = 1;
-	string password = 2;
+	string	name = 1;
+	string 	password = 2;
+	int64	id	=	3;
 }
 
 message Response {

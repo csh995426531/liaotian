@@ -1,7 +1,7 @@
 #!/bin/bash
 DOCKER_IMAGE_NAMESPACE="liaotian_csh"
 DOCKER_IMAGE_HUB="user-web"
-IMAGE_TAG="v1.0"
+IMAGE_TAG="v1.0.4"
 
 # 进到当前sh脚本目录
 cd $(cd $(dirname ${BASH_SOURCE:-$0});pwd)

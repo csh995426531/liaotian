@@ -1,7 +1,7 @@
 package handler
 
 import (
-	"context"
+	"fmt"
 	"github.com/gin-gonic/gin"
 	"github.com/micro/go-micro/v2/logger"
 	"net/http"
@@ -19,15 +19,22 @@ func Init() {
 	rpcUser = user.NewUserService("user.service.user", client.DefaultClient)
 }
 
-func Login(c *gin.Context) {
-
-	var data user.Request
-	_ = c.ShouldBindJSON(&data)
-
-	res, err := rpcUser.Get(context.TODO(), &data)
-
+func Login(ctx *gin.Context) {
 	resultCode := http.StatusOK
 	resultData := gin.H{}
+
+	var request user.Request
+	err := ctx.ShouldBindJSON(&request)
+	if err != nil {
+		logger.Error(err)
+		resultCode = http.StatusBadRequest
+		resultData = gin.H{
+			"message": fmt.Sprintf("传参错误：%+v", err),
+		}
+		return
+	}
+
+	res, err := rpcUser.Get(ctx, &request)
 
 	if err != nil {
 		logger.Error(err)
@@ -46,7 +53,7 @@ func Login(c *gin.Context) {
 		return
 	}
 
-	if res.User.Password == data.Password && res.User.Name == data.Name {
+	if res.User.Password == request.Password && res.User.Name == request.Name {
 		resultData = gin.H{
 			"message": res.Message,
 			"user":    res.User,
@@ -58,6 +65,5 @@ func Login(c *gin.Context) {
 		}
 	}
 
-	c.JSON(resultCode, resultData)
-	return
+	defer ctx.JSON(resultCode, resultData)
 }
