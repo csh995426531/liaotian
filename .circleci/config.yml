@@ -57,7 +57,7 @@ commands:
           version: 19.03.12-ce
 
       - run:
-          name: Login to AliyunDockerhub
+          name: "登录阿里云容器镜像服务"
           command: docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $$DOCKER_PASS
 
       # Download and cache dependencies
@@ -65,7 +65,9 @@ commands:
           keys:
             - << parameters.service-name >>-{{ checksum "pom.xml"}}
 
-      - run: docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service-name >>:${CIRCLE_BUILD_NUM} -f ~/liaotian/deploy/<< parameters.service-name >>/Dockerfile ../
+      - run:
+          name: "从Dockerfile build镜像"
+          command: docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service-name >>:${CIRCLE_BUILD_NUM} -f ~/liaotian/deploy/<< parameters.service-name >>/Dockerfile ../
 
       - save_cache:
           paths:
@@ -73,7 +75,9 @@ commands:
           key: << parameters.service-name >>-{{ checksum "pom.xml"}}
 
       # package into a jar and build image
-      - run: docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service-name >>:${CIRCLE_BUILD_NUM}
+      - run:
+          name: "push镜像到阿里云"
+          command: docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service-name >>:${CIRCLE_BUILD_NUM}
 
       # store raw content of src code
       - store_artifacts:
