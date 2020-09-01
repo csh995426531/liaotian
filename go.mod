@@ -3,7 +3,7 @@ module liaotian
 go 1.14
 
 require (
-	github.com/gin-gonic/gin v1.6.3 // indirect
+	github.com/gin-gonic/gin v1.6.3
 	github.com/go-playground/validator/v10 v10.3.0 // indirect
 	github.com/golang/protobuf v1.4.2
 	github.com/googleapis/gnostic v0.5.1 // indirect
@@ -22,6 +22,7 @@ require (
 )
 
 replace (
+	github.com/coreos/etcd => github.com/coreos/etcd v3.3.4+incompatible
 	github.com/googleapis/gnostic => github.com/googleapis/gnostic v0.4.0
 	k8s.io/api => k8s.io/api v0.0.0-20190409021203-6e4e0e4f393b
 	k8s.io/apimachinery => k8s.io/apimachinery v0.0.0-20190404173353-6a84e37a896d
