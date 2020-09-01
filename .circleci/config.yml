@@ -51,7 +51,7 @@ commands:
           path: ~/liaotian
 
       - setup_remote_docker:
-          version: 19.03.12-ce
+          version: 19.03.12
 
       - run:
           name: "登录阿里云容器镜像服务"
