@@ -1,7 +1,4 @@
-# Golang CircleCI 2.0 configuration file
-#
-# Check https://circleci.com/docs/2.0/language-go/ for more details
-version: 2
+version: 2.1
 jobs:
   build:
     docker:
@@ -29,7 +26,7 @@ jobs:
       GOPROXY: https://goproxy.cn,direct
     working_directory: /go/release/liaotian/user-service
     steps:
-      - build_service:
+      - build-service:
           service_name: "user-service"
   user-web:
     docker:
@@ -39,11 +36,11 @@ jobs:
       GOPROXY: https://goproxy.cn,direct
     working_directory: /go/release/liaotian/user-web
     steps:
-      - build_service:
+      - build-service:
           service_name: "user-web"
 
 commands:
-  build_service:
+  build-service:
     description: "构建镜像并推送到阿里云"
     parameters:
       service_name:
