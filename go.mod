@@ -28,3 +28,4 @@ replace (
 	k8s.io/client-go => k8s.io/client-go v11.0.1-0.20190409021438-1a26190bd76a+incompatible
 	google.golang.org/grpc => google.golang.org/grpc v1.26.0
 )
+
