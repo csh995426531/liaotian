@@ -58,18 +58,18 @@ commands:
           command: docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
 
       # Download and cache dependencies
-      - restore_cache:
-          keys:
-            - << parameters.service_name >>-{{ checksum "pom.xml"}}
+#      - restore_cache:
+#          keys:
+#            - << parameters.service_name >>-{{ checksum "pom.xml"}}
 
       - run:
           name: "从Dockerfile build镜像"
-          command: docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service_name >>:${CIRCLE_BUILD_NUM} -f ~/liaotian/deploy/<< parameters.service_name >>/Dockerfile ~/liaotian/
+          command: docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service_name >>:v${CIRCLE_BUILD_NUM} -f ~/liaotian/deploy/<< parameters.service_name >>/Dockerfile ~/liaotian/
 
-      - save_cache:
-          paths:
-            - ~/.m2
-          key: << parameters.service_name >>-{{ checksum "pom.xml"}}
+#      - save_cache:
+#          paths:
+#            - ~/.m2
+#          key: << parameters.service_name >>-{{ checksum "pom.xml"}}
 
       # package into a jar and build image
       - run:
@@ -77,9 +77,9 @@ commands:
           command: docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service_name >>:${CIRCLE_BUILD_NUM}
 
       # store raw content of src code
-      - store_artifacts:
-          path: target/classes
-          destination: liaotian-<< parameters.service_name >>
+#      - store_artifacts:
+#          path: target/classes
+#          destination: liaotian-<< parameters.service_name >>
 
 
 
