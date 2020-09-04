@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: friend-service
-          image: registry.cn-hangzhou.aliyuncs.com/liaotian/friend-service:v1.0
+          image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/friend-service:v1.0
           imagePullPolicy: Always
           ports:
             - name: 80-port

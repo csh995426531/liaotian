@@ -23,7 +23,7 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: registry.cn-hangzhou.aliyuncs.com/liaotian/user-service:37
+          image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/user-service:37
           imagePullPolicy: Always
           ports:
             - name: 80-port
