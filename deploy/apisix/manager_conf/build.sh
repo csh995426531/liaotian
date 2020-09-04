@@ -19,9 +19,9 @@
 
 pwd=`pwd`
 
-export MYSQL_SERVER_ADDRESS="apisix-mysql.liaotian.svc.cluster.local:3309"
-export MYSQL_USER=root
-export MYSQL_PASSWORD=123456
+export MYSQL_SERVER_ADDRESS="129.211.55.205:3306"
+export MYSQL_USER="debian-sys-maint"
+export MYSQL_PASSWORD="F0sm3f7WrNJox1oV"
 export SYSLOG_HOST=127.0.0.1
 export APISIX_BASE_URL="http://apisix-gw-lb.liaotian.svc.cluster.local:9080/apisix/admin"
 export APISIX_API_KEY="edd1c9f034335f136f87ad84b625c8f1"

@@ -23,5 +23,8 @@ README.md
 ~~~~
 #### 2.编译proto文件
 ~~~~
+cd liaotian
 protoc --proto_path=. --go_out=. --micro_out=. proto/user/user.proto
 ~~~~
+
+### 二、目录结构
