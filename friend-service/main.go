@@ -14,7 +14,7 @@ import (
 )
 
 func main() {
-	
+
 	config.Init()
 
 	// New Service
@@ -35,4 +35,5 @@ func main() {
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}
+
 }

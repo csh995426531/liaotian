@@ -34,4 +34,5 @@ func main() {
         if err := service.Run(); err != nil {
                 logger.Fatal(err)
         }
+
 }
