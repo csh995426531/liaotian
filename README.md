@@ -31,7 +31,6 @@ protoc --proto_path=. --go_out=. --micro_out=. proto/user/user.proto
 - [.circleci](https://github.com/csh995426531/liaotian/tree/master/.circleci) - circleci 持续集成工具的配置
 - [argocd-deploy](https://github.com/csh995426531/liaotian/tree/master/argocd-deploy) - argocd 持续交付的配置，里面放服务部署文件。（argocd的安装配置在deploy下）
 - [data](#data) - 临时数据
-  - [](#)
 - [deploy](https://github.com/csh995426531/liaotian/tree/master/deploy) - 部署文件，业务服务其实是用argocd来部署了
   - [apisix](https://github.com/csh995426531/liaotian/tree/master/deploy/apisix) - apisix 网关，熔断限流应该可以用这个
   - [argocd](https://github.com/csh995426531/liaotian/tree/master/deploy/argocd) - argocd 持续部署工具
@@ -42,9 +41,9 @@ protoc --proto_path=. --go_out=. --micro_out=. proto/user/user.proto
   - [traefik](https://github.com/csh995426531/liaotian/tree/master/deploy/traefik) - traefik 网关，不用了，用apisix
   - [user-service](https://github.com/csh995426531/liaotian/tree/master/deploy/user-service)
   - [user-web](https://github.com/csh995426531/liaotian/tree/master/deploy/user-web)
-- [friend-service]() - 朋友服务
-- [friend-web]() - 朋友api
-- [plugins]() - 插件
+- [friend-service](#) - 朋友服务
+- [friend-web](#) - 朋友api
+- [plugins](#) - 插件
   - [wrapper](https://github.com/csh995426531/liaotian/tree/master/plugins/wrapper) - 包装器
-- [user-service]() - 用户服务
-- [user-web]() - 用户api
+- [user-service](#) - 用户服务
+- [user-web](#) - 用户api

@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: friend-web
-          image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/friend-web:v1.0
+          image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/friend-web:latest
           imagePullPolicy: Always
           ports:
             - name: 80-port

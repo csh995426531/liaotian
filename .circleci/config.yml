@@ -64,7 +64,7 @@ commands:
 
       - run:
           name: "从Dockerfile build镜像"
-          command: docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service_name >>:v${CIRCLE_BUILD_NUM} -f ~/liaotian/deploy/<< parameters.service_name >>/Dockerfile ~/liaotian/
+          command: docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service_name >>:latest -f ~/liaotian/deploy/<< parameters.service_name >>/Dockerfile ~/liaotian/
 
 #      - save_cache:
 #          paths:
