@@ -23,7 +23,6 @@ func main() {
 		web.Address(os.Getenv("SERVICE_PORT")),
 	)
 
-
 	// initialise service
 	if err := service.Init(
 		web.Action(func(c *cli.Context) {

@@ -14,7 +14,6 @@ import (
 )
 
 func main() {
-
 	
 	config.Init()
 

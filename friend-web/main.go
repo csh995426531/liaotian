@@ -11,7 +11,6 @@ import (
 
 func main() {
 
-
         ginRouter := handler.InitRouters()
 
 	// create new web service

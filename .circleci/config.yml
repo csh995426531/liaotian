@@ -94,7 +94,7 @@ commands:
       # package into a jar and build image
       - run:
           name: "push镜像到阿里云 "
-          command: docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service_name >>:${CIRCLE_BUILD_NUM}
+          command: docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/<< parameters.service_name >>:latest
 
       # store raw content of src code
 #      - store_artifacts:
