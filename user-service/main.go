@@ -12,6 +12,7 @@ import (
 	proto "liaotian/user-service/proto/user"
 )
 
+
 func main() {
 	config.Init()
 	// 新建服务
