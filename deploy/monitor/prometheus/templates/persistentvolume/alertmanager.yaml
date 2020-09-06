@@ -1,0 +1,14 @@
+apiVersion: v1
+kind: PersistentVolume
+metadata:
+  labels:
+    {{- include "prometheus.alertmanager.labels" . | nindent 4 }}
+  name: {{ template "prometheus.alertmanager.fullname" . }}
+{{ include "prometheus.namespace" . | indent 2 }}
+spec:
+  capacity:
+    storage: "{{ .Values.alertmanager.persistentVolume.size }}"
+  accessModes:
+{{ toYaml .Values.server.persistentVolume.accessModes | indent 4 }}
+  hostPath:
+    path: "/tmp/data/prometheus"

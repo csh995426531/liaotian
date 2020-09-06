@@ -1,4 +1,7 @@
-.PHONY: buildInit
+.PHONY: init
 
-buildInit:
+init:
+	kubectl create ns argocd
+	kubectl create ns liaotian
+	kubectl create ns monitoring
 
