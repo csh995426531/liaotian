@@ -33,7 +33,7 @@ protoc --proto_path=. --go_out=. --micro_out=. proto/user/user.proto
 - [data](#data) - 临时数据
 - [deploy](https://github.com/csh995426531/liaotian/tree/master/deploy) - 部署文件，业务服务其实是用argocd来部署了
   - [apisix](https://github.com/csh995426531/liaotian/tree/master/deploy/apisix) - apisix 网关，熔断限流应该可以用这个
-  - [argocd](https://github.com/csh995426531/liaotian/tree/master/deploy/argocd) - argocd 持续部署工具
+  - [argocd](https://github.com/csh995426531/liaotian/tree/master/deploy/argocd) - argocd 持续交付工具
   - [friend-service](https://github.com/csh995426531/liaotian/tree/master/deploy/friend-service)
   - [friend-web](https://github.com/csh995426531/liaotian/tree/master/deploy/friend-web)
   - [k8s](https://github.com/csh995426531/liaotian/tree/master/deploy/k8s) - micro使用k8s作为服务注册，需要配置RBAC权限

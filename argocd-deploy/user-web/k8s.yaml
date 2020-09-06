@@ -4,7 +4,7 @@ metadata:
   name: user-web
   namespace: liaotian
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: user-web

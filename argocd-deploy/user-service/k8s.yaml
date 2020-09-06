@@ -12,7 +12,7 @@ metadata:
   name: user-service
   namespace: liaotian
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: user-service

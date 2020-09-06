@@ -12,7 +12,7 @@ metadata:
   name: friend-service
   namespace: liaotian
 spec:
-  replicas: 2
+  replicas: 3
   selector:
     matchLabels:
       app: friend-service
