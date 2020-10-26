@@ -2,7 +2,7 @@
 **注意事项**：
 1. 创建pv挂载目录
 ~~~
-sudo make /tmp/data/prometheus 
+sudo mkdir /tmp/data/prometheus 
 ~~~
 2. 启动prometheus服务
 ~~~

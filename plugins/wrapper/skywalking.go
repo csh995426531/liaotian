@@ -5,6 +5,11 @@ import (
 	"github.com/micro/go-micro/v2/server"
 )
 
+type Req struct {
+	A		int
+	Header 	string // 添加此字段，用于传递context信息
+}
+
 func NewLogWrapper(fn server.HandlerFunc) server.HandlerFunc {
 	return func(ctx context.Context, req server.Request, rsp interface{}) error {
 		//log.Printf("[Log Wrapper] Before serving request method: %v", req.Endpoint())
