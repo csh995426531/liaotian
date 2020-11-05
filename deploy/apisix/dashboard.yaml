@@ -16,7 +16,7 @@ spec:
       containers:
         - name: apisix-manager
           image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/apisix-manager:v1.5.2
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           securityContext:
             runAsUser: 0
           readinessProbe:
@@ -82,7 +82,7 @@ spec:
       containers:
         - name: apisix-dashboard
           image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/apisix-dashboard:v1.0
-          imagePullPolicy: IfNotPresent
+          imagePullPolicy: Always
           readinessProbe:
             failureThreshold: 6
             initialDelaySeconds: 10
