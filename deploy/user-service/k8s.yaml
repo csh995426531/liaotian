@@ -24,7 +24,7 @@ spec:
       containers:
         - name: user-service
           image: liaotian/user-service:v1.0.4
-          imagePullPolicy: Never
+          imagePullPolicy: IfNotPresent
           ports:
             - name: 80-port
               containerPort: 80

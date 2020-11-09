@@ -145,7 +145,8 @@ data:
 
     etcd:
       host:                           # it's possible to define multiple etcd hosts addresses of the same etcd cluster.
-        - "http://129.211.55.205:2379"     # multiple etcd address
+        - "http://192.168.66.100:12379"     # multiple etcd address
+        - "http://192.168.66.101:12379"
       prefix: "/apisix"               # apisix configurations prefix
       timeout: 30                     # 30 seconds
       # user: root                     # root username for etcd
