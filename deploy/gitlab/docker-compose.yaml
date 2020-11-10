@@ -1,0 +1,47 @@
+version: '3'
+
+services:
+  gitlab:
+    image: 'gitlab/gitlab-ce:latest'
+    restart: always
+    hostname: 'local.gitlab.com'
+    networks:
+      - cicd
+    container_name: gitlab
+    environment:
+      GITLAB_OMNIBUS_CONFIG: |
+        external_url 'http://local.gitlab.com:8011'
+        gitlab_rails['time_zone'] = 'Asia/Shanghai'
+        gitlab_rails['smtp_enable'] = true
+        gitlab_rails['smtp_address'] = "smtp.exmail.qq.com"
+        gitlab_rails['smtp_tls'] = true
+        gitlab_rails['smtp_port'] = 465
+        gitlab_rails['smtp_user_name'] = "xxx@qq.com"
+        gitlab_rails['smtp_password'] = "xxx"
+        gitlab_rails['smtp_domain'] = "smtp.qq.com"
+        gitlab_rails['smtp_authentication'] = "login"
+        gitlab_rails['smtp_enable_starttls_auto'] = true
+        gitlab_rails['gitlab_email_from'] = '1114313879@qq.com'
+        gitlab_rails['backup_keep_time'] = 14515200
+        logging['logrotate_frequency'] = "weekly"
+        logging['logrotate_rotate'] = 52
+        logging['logrotate_compress'] = "compress"
+        logging['logrotate_method'] = "copytruncate"
+        logging['logrotate_delaycompress'] = "delaycompress"
+        gitlab_rails['gitlab_shell_ssh_port'] = 22
+        # Add any other gitlab.rb configuration options
+    ports:
+      - '443:443'
+      - '22:22'
+      - '8011:8011'
+      - '9090:9090'
+    volumes:
+      - '/usr/local/gitlab/etc:/etc/gitlab'
+      - '/usr/local/gitlab/log:/var/log/gitlab'
+      - '/usr/local/gitlab/data:/var/opt/gitlab'
+      - '/root/.ssh:/root/.ssh'
+
+networks:
+  cicd:
+    external:
+      name: cicd

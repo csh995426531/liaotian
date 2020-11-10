@@ -41,7 +41,7 @@ spec:
             - name: ENV
               value: prod
           volumeMounts:
-            - mountPath: /root/manager-api/build.sh
+            - mountPath: /root/manager-api/build_2.sh #TODO: 没办法，有的机器无法覆盖挂载
               name: build
               subPath: build.sh
       nodeSelector:
