@@ -334,7 +334,7 @@ alertmanager:
     ## Image of Alertmanager
     ##
     image:
-      repository: quay.io/prometheus/alertmanager
+      repository: quay.mirrors.ustc.edu.cn/prometheus/alertmanager
       tag: v0.21.0
       sha: ""
 
@@ -1335,7 +1335,7 @@ prometheusOperator:
   ## Prometheus-operator image
   ##
   image:
-    repository: quay.io/coreos/prometheus-operator
+    repository: quay.mirrors.ustc.edu.cn/coreos/prometheus-operator
     tag: v0.38.1
     sha: ""
     pullPolicy: IfNotPresent
@@ -1350,7 +1350,7 @@ prometheusOperator:
   ## Prometheus-config-reloader image to use for config and rule reloading
   ##
   prometheusConfigReloaderImage:
-    repository: quay.io/coreos/prometheus-config-reloader
+    repository: quay.mirrors.ustc.edu.cn/coreos/prometheus-config-reloader
     tag: v0.38.1
     sha: ""
 
@@ -1610,7 +1610,7 @@ prometheus:
     ## Image of Prometheus.
     ##
     image:
-      repository: quay.io/prometheus/prometheus
+      repository: quay.mirrors.ustc.edu.cn/prometheus/prometheus
       tag: v2.18.2
       sha: ""
 
