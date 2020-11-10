@@ -2,7 +2,7 @@
 # This is a YAML-formatted file.
 # Declare variables to be passed into your templates.
 image:
-  repository: quay.io/prometheus/node-exporter
+  repository: quay.mirrors.ustc.edu.cn/prometheus/node-exporter
   tag: v1.0.0
   pullPolicy: IfNotPresent
 
