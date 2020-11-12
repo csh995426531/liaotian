@@ -2579,6 +2579,12 @@ spec:
       labels:
         app.kubernetes.io/name: argocd-application-controller
     spec:
+      hostAliases:
+        - ip: "192.168.66.103"
+          hostnames:
+            - "local.gitlab.com"
+      nodeSelector:
+        disktype: node1
       containers:
         - command:
             - argocd-application-controller
@@ -2622,6 +2628,12 @@ spec:
       labels:
         app.kubernetes.io/name: argocd-dex-server
     spec:
+      hostAliases:
+        - ip: "192.168.66.103"
+          hostnames:
+            - "local.gitlab.com"
+      nodeSelector:
+        disktype: node1
       containers:
         - command:
             - /shared/argocd-util
@@ -2670,6 +2682,12 @@ spec:
       labels:
         app.kubernetes.io/name: argocd-redis
     spec:
+      hostAliases:
+        - ip: "192.168.66.103"
+          hostnames:
+            - "local.gitlab.com"
+      nodeSelector:
+        disktype: node1
       containers:
         - args:
             - --save
@@ -2705,6 +2723,12 @@ spec:
         app.kubernetes.io/name: argocd-repo-server
     spec:
       automountServiceAccountToken: false
+      hostAliases:
+        - ip: "192.168.66.103"
+          hostnames:
+            - "local.gitlab.com"
+      nodeSelector:
+        disktype: node1
       containers:
         - command:
             - uid_entrypoint.sh
@@ -2761,6 +2785,12 @@ spec:
       labels:
         app.kubernetes.io/name: argocd-server
     spec:
+      hostAliases:
+        - ip: "192.168.66.103"
+          hostnames:
+            - "local.gitlab.com"
+      nodeSelector:
+        disktype: node1
       containers:
         - command:
             - argocd-server

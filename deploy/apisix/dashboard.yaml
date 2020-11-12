@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: apisix-manager
-          image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/apisix-manager:v1.5.2
+          image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/apisix-manager:v1.5.3
           imagePullPolicy: IfNotPresent
           securityContext:
             runAsUser: 0
