@@ -4,7 +4,7 @@ metadata:
   name: user-service-cm
   namespace: liaotian
 data:
-  mysql_url: url=qa:@test190411^@(192.168.1.221:3306)/test_32
+  mysql_url: url=debian-sys-maint:F0sm3f7WrNJox1oV(129.211.55.205:3306)/liaotian
 ---
 apiVersion: apps/v1
 kind: Deployment

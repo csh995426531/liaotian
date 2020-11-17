@@ -1,12 +1,13 @@
 package main
 
 import (
+	"liaotian/user-web/handler"
+	"os"
+
 	"github.com/micro/cli/v2"
 	"github.com/micro/go-micro/v2/logger"
 	"github.com/micro/go-micro/v2/web"
 	"github.com/micro/go-plugins/registry/kubernetes/v2"
-	"liaotian/user-web/handler"
-	"os"
 )
 
 func main() {

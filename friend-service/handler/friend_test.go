@@ -15,7 +15,7 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	config.MysqlConfig.Url = "qa:@test190411^@(192.168.1.221:3306)/test_32"
+	config.MysqlConfig.Url = "debian-sys-maint:F0sm3f7WrNJox1oV(129.211.55.205:3306)/liaotian"
 	handler = New(repository.Init())
 	m.Run()
 }

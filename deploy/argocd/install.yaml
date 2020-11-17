@@ -2569,6 +2569,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
   name: argocd-application-controller
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: argocd-application-controller
@@ -2583,8 +2584,6 @@ spec:
         - ip: "192.168.66.103"
           hostnames:
             - "local.gitlab.com"
-      nodeSelector:
-        disktype: node1
       containers:
         - command:
             - argocd-application-controller
@@ -2620,6 +2619,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
   name: argocd-dex-server
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: argocd-dex-server
@@ -2632,8 +2632,6 @@ spec:
         - ip: "192.168.66.103"
           hostnames:
             - "local.gitlab.com"
-      nodeSelector:
-        disktype: node1
       containers:
         - command:
             - /shared/argocd-util
@@ -2674,6 +2672,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
   name: argocd-redis
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: argocd-redis
@@ -2686,8 +2685,6 @@ spec:
         - ip: "192.168.66.103"
           hostnames:
             - "local.gitlab.com"
-      nodeSelector:
-        disktype: node1
       containers:
         - args:
             - --save
@@ -2714,6 +2711,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
   name: argocd-repo-server
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: argocd-repo-server
@@ -2727,8 +2725,6 @@ spec:
         - ip: "192.168.66.103"
           hostnames:
             - "local.gitlab.com"
-      nodeSelector:
-        disktype: node1
       containers:
         - command:
             - uid_entrypoint.sh
@@ -2777,6 +2773,7 @@ metadata:
     app.kubernetes.io/part-of: argocd
   name: argocd-server
 spec:
+  replicas: 2
   selector:
     matchLabels:
       app.kubernetes.io/name: argocd-server
@@ -2789,8 +2786,6 @@ spec:
         - ip: "192.168.66.103"
           hostnames:
             - "local.gitlab.com"
-      nodeSelector:
-        disktype: node1
       containers:
         - command:
             - argocd-server
