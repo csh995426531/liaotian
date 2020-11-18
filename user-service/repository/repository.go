@@ -1,16 +1,16 @@
 package repository
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/micro/go-micro/v2/logger"
 	"liaotian/user-service/config"
 	"sync"
 
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/micro/go-micro/v2/logger"
 )
 
 var (
-	m sync.Mutex
+	m    sync.Mutex
 	repo *Repository
 )
 
@@ -23,7 +23,7 @@ type Repository struct {
 	mysqlDB *gorm.DB
 }
 
-func Init () *Repository {
+func Init() *Repository {
 	m.Lock()
 	defer m.Unlock()
 
@@ -40,13 +40,12 @@ func Init () *Repository {
 }
 
 /**
-	创建新db链接实例
- */
-func newDb () *gorm.DB {
-
+创建新db链接实例
+*/
+func newDb() *gorm.DB {
 
 	logger.Errorf("%#+v", config.MysqlConfig.Url)
-	mysqlDb, err := gorm.Open("mysql", config.MysqlConfig.Url + "?charset=utf8&parseTime=true")
+	mysqlDb, err := gorm.Open("mysql", config.MysqlConfig.Url+"?charset=utf8&parseTime=true")
 	if err != nil {
 		logger.Error(err)
 		panic(err)
@@ -55,4 +54,3 @@ func newDb () *gorm.DB {
 
 	return mysqlDb
 }
-
