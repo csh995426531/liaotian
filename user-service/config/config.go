@@ -1,14 +1,17 @@
 package config
 
 import (
-	"github.com/micro/go-micro/v2/config"
-	"github.com/micro/go-micro/v2/logger"
-	"github.com/micro/go-plugins/config/source/configmap/v2"
+	"github.com/micro/go-micro/config"
+	"github.com/micro/go-micro/util/log"
+	"github.com/micro/go-plugins/config/source/configmap"
 )
 
 var (
 	Config      *config.Config
 	MysqlConfig struct {
+		Url string
+	}
+	SkywalkingConfig struct {
 		Url string
 	}
 )
@@ -23,13 +26,14 @@ func Init() {
 		//configmap.WithConfigPath(os.Getenv("CONFIG_PATH")),
 	)
 	// Create new config
-	Config, _ := config.NewConfig()
+	Config := config.NewConfig()
 
 	// Load file source
 	err := Config.Load(configMapSource)
 	if err != nil {
-		logger.Errorf("【config】初始化Load失败，错误：%s", err)
+		log.Errorf("【config】初始化Load失败，错误：%s", err)
 	}
 
 	MysqlConfig.Url = Config.Get("mysql_url").StringMap(map[string]string{"url": "localhost"})["url"]
+	SkywalkingConfig.Url = Config.Get("skywalking_url").StringMap(map[string]string{"url": "localhost"})["url"]
 }

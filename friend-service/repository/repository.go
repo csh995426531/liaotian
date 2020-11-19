@@ -1,23 +1,24 @@
 package repository
 
 import (
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/micro/go-micro/v2/logger"
 	"liaotian/friend-service/config"
 	"sync"
+
+	"github.com/jinzhu/gorm"
+	_ "github.com/jinzhu/gorm/dialects/mysql"
+	"github.com/micro/go-micro/util/log"
 )
 
 var (
-	m 	sync.Mutex
-	repo	*Repository
+	m    sync.Mutex
+	repo *Repository
 )
 
 type Interface interface {
-	Add (operatorId, buddyId int64) (friend *ModelFriend, err error)
-	Del (friendId int64) (err error)
-	List (operatorId, offset, limit int64) (friends []*ModelFriend, err error)
-	Get (friendId int64) (friend *ModelFriend, err error)
+	Add(operatorId, buddyId int64) (friend *ModelFriend, err error)
+	Del(friendId int64) (err error)
+	List(operatorId, offset, limit int64) (friends []*ModelFriend, err error)
+	Get(friendId int64) (friend *ModelFriend, err error)
 }
 
 type Repository struct {
@@ -29,7 +30,7 @@ func Init() Interface {
 	defer m.Unlock()
 
 	if repo != nil {
-		logger.Fatal("repo 已经初始化过了")
+		log.Fatal("repo 已经初始化过了")
 		return repo
 	}
 
@@ -40,12 +41,11 @@ func Init() Interface {
 }
 
 func newDb() *gorm.DB {
+	log.Infof("db链接地址：%#+v", config.MysqlConfig.Url)
 
-	logger.Infof("db链接地址：%#+v", config.MysqlConfig.Url)
-
-	mysqlDb, err := gorm.Open("mysql", config.MysqlConfig.Url + "?charset=utf8&parseTime=true")
+	mysqlDb, err := gorm.Open("mysql", config.MysqlConfig.Url+"?charset=utf8&parseTime=true")
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		panic(err)
 	}
 

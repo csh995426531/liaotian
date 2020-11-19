@@ -3,8 +3,8 @@ package handler
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
-	"github.com/micro/go-micro/v2/client"
-	"github.com/micro/go-micro/v2/logger"
+	"github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/util/log"
 	proto "liaotian/friend-service/proto/friend"
 	protoUser "liaotian/user-service/proto/user"
 	"net/http"
@@ -12,16 +12,16 @@ import (
 
 var (
 	rpcFriend proto.FriendService
-	rpcUser	protoUser.UserService
+	rpcUser   protoUser.UserService
 )
 
 func Init() {
 	rpcFriend = proto.NewFriendService("friend.service.friend", client.DefaultClient)
-	rpcUser	=	protoUser.NewUserService("user.service.user", client.DefaultClient)
+	rpcUser = protoUser.NewUserService("user.service.user", client.DefaultClient)
 }
 
 type UserInfo struct {
-	id   int64 `json:"id"`
+	id   int64  `json:"id"`
 	name string `json:"name"`
 }
 
@@ -32,7 +32,7 @@ func Add(ctx *gin.Context) {
 	var request proto.AddRequest
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		resultCode = http.StatusBadRequest
 		resultData = gin.H{
 			"message": fmt.Sprintf("参数错误：%+v", err),
@@ -42,7 +42,7 @@ func Add(ctx *gin.Context) {
 
 	res, err := rpcFriend.Add(ctx, &request)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		resultCode = http.StatusInternalServerError
 		resultData = gin.H{
 			"message": fmt.Sprintf("添加失败：%+v", err),
@@ -69,7 +69,7 @@ func Del(ctx *gin.Context) {
 
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		resultCode = http.StatusBadRequest
 		resultData = gin.H{
 			"message": fmt.Sprintf("参数错误：%+v", err),
@@ -79,7 +79,7 @@ func Del(ctx *gin.Context) {
 
 	res, err := rpcFriend.Del(ctx, &request)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		resultCode = http.StatusInternalServerError
 		resultData = gin.H{
 			"message": fmt.Sprintf("删除失败：%+v", err),
@@ -104,7 +104,7 @@ func List(ctx *gin.Context) {
 	var request proto.ListRequest
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		httpCode = http.StatusBadRequest
 		httpData = gin.H{
 			"message": fmt.Sprintf("参数错误：%+v", err),
@@ -114,7 +114,7 @@ func List(ctx *gin.Context) {
 
 	res, err := rpcFriend.List(ctx, &request)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		httpCode = http.StatusInternalServerError
 		httpData = gin.H{
 			"message": fmt.Sprintf("查询列表失败：%+v", err),
@@ -122,20 +122,20 @@ func List(ctx *gin.Context) {
 		return
 	}
 
-	var List [] *UserInfo
+	var List []*UserInfo
 
 	for _, friend := range res.List {
 
 		userRes, err := rpcUser.Get(ctx, &protoUser.Request{Id: friend.UserId})
 		if err != nil {
-			logger.Error(err)
+			log.Error(err)
 		}
 		if userRes == nil || userRes.User == nil {
-			logger.Errorf("user信息异常：%+v", userRes)
+			log.Errorf("user信息异常：%+v", userRes)
 		} else {
 
 			List = append(List, &UserInfo{
-				id:	friend.Id,
+				id:   friend.Id,
 				name: userRes.User.Name,
 			})
 		}
@@ -143,7 +143,7 @@ func List(ctx *gin.Context) {
 
 	httpData = gin.H{
 		"message": "SUCCESS",
-		"data": List,
+		"data":    List,
 	}
 
 	defer ctx.JSON(httpCode, httpData)
@@ -157,7 +157,7 @@ func Info(ctx *gin.Context) {
 	var request proto.Request
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		httpCode = http.StatusBadRequest
 		httpData = gin.H{
 			"message": fmt.Errorf("参数错误：%+v", err),
@@ -167,7 +167,7 @@ func Info(ctx *gin.Context) {
 
 	res, err := rpcFriend.Get(ctx, &request)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		httpCode = http.StatusInternalServerError
 		httpData = gin.H{
 			"message": fmt.Sprintf("查询friend失败：%+v", err),
@@ -175,7 +175,7 @@ func Info(ctx *gin.Context) {
 		return
 	}
 	if res == nil || res.Friend == nil {
-		logger.Error(err)
+		log.Error(err)
 		httpCode = http.StatusInternalServerError
 		httpData = gin.H{
 			"message": fmt.Sprintf("friend信息异常：%+v", err),
@@ -185,7 +185,7 @@ func Info(ctx *gin.Context) {
 
 		resUser, err := rpcUser.Get(ctx, &protoUser.Request{Id: res.Friend.UserId})
 		if err != nil {
-			logger.Error(err)
+			log.Error(err)
 			httpCode = http.StatusInternalServerError
 			httpData = gin.H{
 				"message": fmt.Sprintf("user信息异常：%+v", err),
@@ -194,7 +194,7 @@ func Info(ctx *gin.Context) {
 		httpData = gin.H{
 			"message": "SUCCESS",
 			"data": &UserInfo{
-				id: resUser.User.Id,
+				id:   resUser.User.Id,
 				name: resUser.User.Name,
 			},
 		}

@@ -2,11 +2,15 @@ package repository
 
 import (
 	"liaotian/user-service/config"
+	"log"
+	"os"
 	"sync"
+	"time"
 
-	"github.com/jinzhu/gorm"
-	_ "github.com/jinzhu/gorm/dialects/mysql"
-	"github.com/micro/go-micro/v2/logger"
+	microlog "github.com/micro/go-micro/util/log"
+	"gorm.io/driver/mysql"
+	"gorm.io/gorm"
+	"gorm.io/gorm/logger"
 )
 
 var (
@@ -28,7 +32,7 @@ func Init() *Repository {
 	defer m.Unlock()
 
 	if repo != nil {
-		logger.Fatal("repo 已经初始化过了")
+		microlog.Fatal("repo 已经初始化过了")
 		return repo
 	}
 
@@ -44,13 +48,33 @@ func Init() *Repository {
 */
 func newDb() *gorm.DB {
 
-	logger.Errorf("%#+v", config.MysqlConfig.Url)
-	mysqlDb, err := gorm.Open("mysql", config.MysqlConfig.Url+"?charset=utf8&parseTime=true")
+	newLogger := logger.New(
+		log.New(os.Stdout, "\r\n", log.LstdFlags), // io writer
+		logger.Config{
+			SlowThreshold: time.Second,   // 慢 SQL 阈值
+			LogLevel:      logger.Silent, // Log level
+			Colorful:      false,         // 禁用彩色打印
+		},
+	)
+
+	mysqlDb, err := gorm.Open(mysql.New(mysql.Config{
+		DSN: config.MysqlConfig.Url + "?charset=utf8&parseTime=true&loc=Local", // Data Source Name，参考 https://github.com/go-sql-driver/mysql#dsn-data-source-name
+	}), &gorm.Config{
+		Logger: newLogger,
+	})
 	if err != nil {
-		logger.Error(err)
+		microlog.Error(err)
 		panic(err)
 	}
-	mysqlDb.LogMode(true)
+	sqlDB, err := mysqlDb.DB()
+	// SetMaxIdleConns 设置空闲连接池中连接的最大数量
+	sqlDB.SetMaxIdleConns(10)
+
+	// SetMaxOpenConns 设置打开数据库连接的最大数量。
+	sqlDB.SetMaxOpenConns(100)
+
+	// SetConnMaxLifetime 设置了连接可复用的最大时间。
+	sqlDB.SetConnMaxLifetime(time.Hour)
 
 	return mysqlDb
 }

@@ -4,7 +4,8 @@ metadata:
   name: user-service-cm
   namespace: liaotian
 data:
-  mysql_url: url=debian-sys-maint:F0sm3f7WrNJox1oV(129.211.55.205:3306)/liaotian
+  mysql_url: url=debian-sys-maint:F0sm3f7WrNJox1oV@tcp(129.211.55.205:3306)/liaotian
+  skywalking_url: url=oap.skywalking:11800
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -23,11 +24,13 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: liaotian/user-service:v1.0.4
-          imagePullPolicy: IfNotPresent
+          image: test:v1
+          imagePullPolicy: Never
           ports:
             - name: 80-port
               containerPort: 80
+      nodeSelector:
+        disktype: master
       serviceAccountName: liaotian-account  # serviceAccount的名称 用于权限
 ---
 apiVersion: v1

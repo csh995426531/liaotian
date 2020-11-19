@@ -15,18 +15,18 @@ var (
 )
 
 func TestMain(m *testing.M) {
-	config.MysqlConfig.Url = "debian-sys-maint:F0sm3f7WrNJox1oV(129.211.55.205:3306)/liaotian"
+	config.MysqlConfig.Url = "debian-sys-maint:F0sm3f7WrNJox1oV@tcp(129.211.55.205:3306)/liaotian"
 	handler = New(repository.Init())
 	m.Run()
 }
 
 func TestHandler_Add(t *testing.T) {
 
-	addTests := []struct{
+	addTests := []struct {
 		OperatorId int64
-		BuddyId int64
-		Resp *proto.Response
-	} {
+		BuddyId    int64
+		Resp       *proto.Response
+	}{
 		{1, 2, &proto.Response{Code: 200, Message: "SUCCESS"}},
 		{1, 3, &proto.Response{Code: 200, Message: "SUCCESS"}},
 		{1, 4, &proto.Response{Code: 200, Message: "SUCCESS"}},
@@ -37,7 +37,7 @@ func TestHandler_Add(t *testing.T) {
 	for i, test := range addTests {
 		t.Run(strconv.Itoa(i), func(t *testing.T) {
 			resp := proto.Response{}
-			err := handler.Add(context.Background(), &proto.AddRequest{OperatorId:test.OperatorId, BuddyId: test.BuddyId}, &resp)
+			err := handler.Add(context.Background(), &proto.AddRequest{OperatorId: test.OperatorId, BuddyId: test.BuddyId}, &resp)
 			if err != nil {
 				t.Error(err)
 			}
@@ -54,14 +54,14 @@ func TestHandler_Add(t *testing.T) {
 
 func TestHandler_List(t *testing.T) {
 
-	listTests := []struct{
+	listTests := []struct {
 		OperatorId int64
-		Offset int64
-		Limit int64
-		Resp *proto.Response
+		Offset     int64
+		Limit      int64
+		Resp       *proto.Response
 	}{
-		{1, 0, 2,&proto.Response{Code: 200, Message: "SUCCESS"}},
-		{1, 2, 2,&proto.Response{Code: 200, Message: "SUCCESS"}},
+		{1, 0, 2, &proto.Response{Code: 200, Message: "SUCCESS"}},
+		{1, 2, 2, &proto.Response{Code: 200, Message: "SUCCESS"}},
 	}
 
 	for _, test := range listTests {
@@ -74,7 +74,7 @@ func TestHandler_List(t *testing.T) {
 
 			expected := fmt.Sprint(test.Resp)
 			got := fmt.Sprint(resp)
-			if resp.Code !=test.Resp.Code {
+			if resp.Code != test.Resp.Code {
 				t.Errorf("list failed to input: %+v, expected:%s, got:%s", test, expected, got)
 			} else {
 
@@ -104,5 +104,3 @@ func TestHandler_List(t *testing.T) {
 		})
 	}
 }
-
-

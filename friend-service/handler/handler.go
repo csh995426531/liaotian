@@ -4,14 +4,12 @@ import (
 	"liaotian/friend-service/repository"
 )
 
-type Handler struct{
+type Handler struct {
 	repo repository.Interface
 }
 
-func New (repo repository.Interface) (handler *Handler) {
+func New(repo repository.Interface) (handler *Handler) {
 	handler = new(Handler)
 	handler.repo = repo
 	return handler
 }
-
-

@@ -16,10 +16,10 @@ func TestMain(m *testing.M) {
 }
 
 func TestAdd(t *testing.T) {
-	addTests := []struct{
+	addTests := []struct {
 		OperatorId int64
-		BuddyId int64
-	} {
+		BuddyId    int64
+	}{
 		{1, 2},
 		{1, 3},
 		{1, 4},
@@ -32,7 +32,7 @@ func TestAdd(t *testing.T) {
 		ctx, _ := gin.CreateTestContext(resp)
 
 		param := fmt.Sprintf("{OperatorId: \"%d\", BuddyId: \"%d\"}", test.OperatorId, test.BuddyId)
-		ctx.Request,_ = http.NewRequest("POST", "/", bytes.NewBufferString(param))
+		ctx.Request, _ = http.NewRequest("POST", "/", bytes.NewBufferString(param))
 		Add(ctx)
 
 		if resp.Code != 200 {
@@ -43,11 +43,11 @@ func TestAdd(t *testing.T) {
 }
 
 func TestList(t *testing.T) {
-	listTests := []struct{
-		OperatorId  int64
-		Offset      int64
-		Limit       int64
-	} {
+	listTests := []struct {
+		OperatorId int64
+		Offset     int64
+		Limit      int64
+	}{
 		{1, 0, 2},
 		{1, 0, 3},
 	}

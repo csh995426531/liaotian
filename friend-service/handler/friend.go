@@ -55,7 +55,7 @@ func (h *Handler) Get(ctx context.Context, request *proto.Request, response *pro
 	response.Code = 200
 	response.Message = "SUCCESS"
 	response.Friend = &proto.Friend{
-		Id: friend.ID,
+		Id:     friend.ID,
 		UserId: friend.BuddyId,
 	}
 

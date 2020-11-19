@@ -29,7 +29,7 @@ func TestLogin(t *testing.T) {
 			resp := httptest.NewRecorder()
 			ctx, _ := gin.CreateTestContext(resp)
 			param := fmt.Sprintf("{name: \"%s\", password: \"%s\"}", test.Name, test.Password)
-			ctx.Request,_ = http.NewRequest("POST", "/", bytes.NewBufferString(param))
+			ctx.Request, _ = http.NewRequest("POST", "/", bytes.NewBufferString(param))
 			Login(ctx)
 
 			if resp.Code != 200 {
@@ -38,7 +38,5 @@ func TestLogin(t *testing.T) {
 			}
 		})
 	}
-
-
 
 }

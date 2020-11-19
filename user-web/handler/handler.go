@@ -5,11 +5,11 @@ import (
 	"net/http"
 
 	"github.com/gin-gonic/gin"
-	"github.com/micro/go-micro/v2/logger"
+	"github.com/micro/go-micro/util/log"
 
 	user "liaotian/user-service/proto/user"
 
-	"github.com/micro/go-micro/v2/client"
+	"github.com/micro/go-micro/client"
 )
 
 var (
@@ -27,7 +27,7 @@ func Login(ctx *gin.Context) {
 	var request user.Request
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		resultCode = http.StatusBadRequest
 		resultData = gin.H{
 			"message": fmt.Sprintf("传参错误：%+v", err),
@@ -38,7 +38,7 @@ func Login(ctx *gin.Context) {
 	res, err := rpcUser.Get(ctx, &request)
 
 	if err != nil {
-		logger.Error(err)
+		log.Error(err)
 		resultCode = http.StatusInternalServerError
 		resultData = gin.H{
 			"message": res.Message,
