@@ -12,10 +12,6 @@ import (
 
 func main() {
 
-	// tracer, err := skywalking.InitTracer("oap.skywalking:11800", "user-service")
-	// if err != nil {
-	// }
-
 	//初始化路由
 	ginRouter := handler.InitRouters()
 
@@ -27,16 +23,6 @@ func main() {
 		web.Handler(ginRouter),
 		web.Address(os.Getenv("SERVICE_PORT")),
 	)
-
-	// 新建服务
-	// service := micro.NewService(
-	// 	micro.Name("user.web.user"),
-	// 	micro.Registry(kubernetes.NewRegistry()), //注册到Kubernetes
-	// 	micro.Version("latest"),
-	// 	micro.Address(os.Getenv("SERVICE_PORT")),
-	// 	// micro.RegisterHandler(ginRouter),
-	// 	micro.WrapHandler(skywalking.NewHandlerWrapper(tracer, "user-service")),
-	// )
 
 	// 服务初始化
 	// initialise service

@@ -1,13 +1,14 @@
 package main
 
 import (
+	"liaotian/middlewares/wrapper/skywalking/micro2sky"
 	"liaotian/user-service/config"
 	"liaotian/user-service/handler"
 	"liaotian/user-service/repository"
 	"time"
 
 	"github.com/SkyAPM/go2sky"
-	sky2micro "github.com/SkyAPM/go2sky-plugins/micro"
+	// sky2micro "github.com/SkyAPM/go2sky-plugins/micro"
 	"github.com/SkyAPM/go2sky/reporter"
 
 	"github.com/micro/go-micro"
@@ -20,7 +21,7 @@ import (
 func main() {
 	config.Init()
 
-	report, err := reporter.NewGRPCReporter(config.SkywalkingConfig.Url)
+	report, err := reporter.NewGRPCReporter("oap.skywalking.svc.cluster.local:11800")
 	if err != nil {
 		log.Fatalf("crate grpc reporter error: %v \n", err)
 	}
@@ -37,7 +38,7 @@ func main() {
 		micro.Registry(kubernetes.NewRegistry()), //注册到Kubernetes
 		micro.Version("latest"),
 		micro.RegisterTTL(time.Second*15),
-		micro.WrapHandler(sky2micro.NewHandlerWrapper(tracer, "user-service")),
+		micro.WrapHandler(micro2sky.NewHandlerWrapper(tracer, "user-service")),
 	)
 
 	// 服务初始化

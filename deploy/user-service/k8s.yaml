@@ -5,7 +5,7 @@ metadata:
   namespace: liaotian
 data:
   mysql_url: url=debian-sys-maint:F0sm3f7WrNJox1oV@tcp(129.211.55.205:3306)/liaotian
-  skywalking_url: url=oap.skywalking:11800
+  skywalking_url: url=oap.skywalking.svc.cluster.local:12800
 ---
 apiVersion: apps/v1
 kind: Deployment
@@ -13,7 +13,7 @@ metadata:
   name: user-service
   namespace: liaotian
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: user-service
@@ -24,7 +24,7 @@ spec:
     spec:
       containers:
         - name: user-service
-          image: test:v1
+          image: user-service:testv2
           imagePullPolicy: Never
           ports:
             - name: 80-port

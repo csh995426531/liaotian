@@ -3,7 +3,7 @@ module liaotian
 go 1.14
 
 require (
-	github.com/SkyAPM/go2sky v0.5.0
+	github.com/SkyAPM/go2sky v0.6.0
 	github.com/SkyAPM/go2sky-plugins/micro v0.0.0-20201013142527-b9cca04e7aa8
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-log/log v0.2.0 // indirect
@@ -23,8 +23,10 @@ require (
 	github.com/miekg/dns v1.1.35 // indirect
 	github.com/onsi/ginkgo v1.13.0 // indirect
 	github.com/pkg/errors v0.9.1 // indirect
+	github.com/prometheus/common v0.7.0
 	github.com/sirupsen/logrus v1.6.0 // indirect
 	github.com/stretchr/testify v1.6.1 // indirect
+	github.com/ugorji/go v1.1.9 // indirect
 	golang.org/x/crypto v0.0.0-20201117144127-c1f2f97bffc9 // indirect
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
 	golang.org/x/oauth2 v0.0.0-20191202225959-858c2ad4c8b6 // indirect
@@ -35,9 +37,8 @@ require (
 	google.golang.org/genproto v0.0.0-20201117123952-62d171c70ae1 // indirect
 	google.golang.org/grpc v1.33.2 // indirect
 	google.golang.org/protobuf v1.25.0
-	gorm.io/driver/mysql v1.0.3 // indirect
-	gorm.io/driver/sqlite v1.1.3 // indirect
-	gorm.io/gorm v1.20.7 // indirect
+	gorm.io/driver/mysql v1.0.3
+	gorm.io/gorm v1.20.7
 	honnef.co/go/tools v0.0.1-2020.1.5 // indirect
 	k8s.io/api v0.17.1 // indirect
 	k8s.io/apimachinery v0.17.1 // indirect

@@ -35,7 +35,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	res, err := rpcUser.Get(ctx, &request)
+	res, err := rpcUser.Get(ctx.Request.Context(), &request)
 
 	if err != nil {
 		log.Error(err)

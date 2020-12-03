@@ -4,7 +4,7 @@ metadata:
   name: user-web
   namespace: liaotian
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: user-web
@@ -15,7 +15,7 @@ spec:
     spec:
       containers:
         - name: user-web
-          image: liaotian/user-web:v1.0.4
+          image: user-web:test-v2
           imagePullPolicy: Never
           ports:
             - name: 80-port
@@ -23,6 +23,8 @@ spec:
           env:
             - name: SERVICE_PORT
               value: ":80"
+      nodeSelector:
+        disktype: master
       serviceAccountName: liaotian-account  # serviceAccount的名称 用于权限
 ---
 apiVersion: v1
