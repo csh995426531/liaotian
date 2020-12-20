@@ -1,0 +1,12 @@
+apiVersion: storage.k8s.io/v1
+kind: StorageClass
+metadata:
+  name: es-data-db
+provisioner: kubernetes.io/glusterfs
+parameters:
+  resturl: http://192.168.66.103:18080
+  restuser: "admin"
+  restuserkey: "adminkey"
+  gidMin: "40000"
+  gidMax: "50000"
+  volumetype: "replicate:2"

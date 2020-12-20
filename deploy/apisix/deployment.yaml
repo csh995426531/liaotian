@@ -78,7 +78,7 @@ spec:
                   apiVersion: v1
                   fieldPath: metadata.namespace
           image: 'apache/apisix:dev'
-          imagePullPolicy: Always
+          imagePullPolicy: IfNotPresent
           name: apisix-gw-deployment
           ports:
             - containerPort: 9080
