@@ -24,10 +24,10 @@ jobs:
     environment:
       GO111MODULE: on
       GOPROXY: https://goproxy.cn,direct
-    working_directory: /go/release/liaotian/user-service
+    working_directory: /go/release/liaotian/user-handler
     steps:
       - build-service:
-          service_name: "user-service"
+          service_name: "user-handler"
   user-web:
     docker:
       - image: circleci/golang:1.14.4
@@ -44,10 +44,10 @@ jobs:
     environment:
       GO111MODULE: on
       GOPROXY: https://goproxy.cn,direct
-    working_directory: /go/release/liaotian/friend-service
+    working_directory: /go/release/liaotian/friend-handler
     steps:
       - build-service:
-          service_name: "friend-service"
+          service_name: "friend-handler"
   friend-web:
     docker:
       - image: circleci/golang:1.14.4

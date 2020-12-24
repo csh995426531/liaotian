@@ -5,42 +5,42 @@ metadata:
   namespace: {{ template "grafana.namespace" . }}
   labels:
     {{- include "grafana.labels" . | nindent 4 }}
-{{- if .Values.service.labels }}
-{{ toYaml .Values.service.labels | indent 4 }}
+{{- if .Values.handler.labels }}
+{{ toYaml .Values.handler.labels | indent 4 }}
 {{- end }}
-{{- with .Values.service.annotations }}
+{{- with .Values.handler.annotations }}
   annotations:
 {{ toYaml . | indent 4 }}
 {{- end }}
 spec:
-{{- if (or (eq .Values.service.type "ClusterIP") (empty .Values.service.type)) }}
+{{- if (or (eq .Values.handler.type "ClusterIP") (empty .Values.handler.type)) }}
   type: ClusterIP
-  {{- if .Values.service.clusterIP }}
-  clusterIP: {{ .Values.service.clusterIP }}
+  {{- if .Values.handler.clusterIP }}
+  clusterIP: {{ .Values.handler.clusterIP }}
   {{end}}
-{{- else if eq .Values.service.type "LoadBalancer" }}
-  type: {{ .Values.service.type }}
-  {{- if .Values.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.service.loadBalancerIP }}
+{{- else if eq .Values.handler.type "LoadBalancer" }}
+  type: {{ .Values.handler.type }}
+  {{- if .Values.handler.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.handler.loadBalancerIP }}
   {{- end }}
-  {{- if .Values.service.loadBalancerSourceRanges }}
+  {{- if .Values.handler.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-{{ toYaml .Values.service.loadBalancerSourceRanges | indent 4 }}
+{{ toYaml .Values.handler.loadBalancerSourceRanges | indent 4 }}
   {{- end -}}
 {{- else }}
-  type: {{ .Values.service.type }}
+  type: {{ .Values.handler.type }}
 {{- end }}
-{{- if .Values.service.externalIPs }}
+{{- if .Values.handler.externalIPs }}
   externalIPs:
-{{ toYaml .Values.service.externalIPs | indent 4 }}
+{{ toYaml .Values.handler.externalIPs | indent 4 }}
 {{- end }}
   ports:
-    - name: {{ .Values.service.portName }}
-      port: {{ .Values.service.port }}
+    - name: {{ .Values.handler.portName }}
+      port: {{ .Values.handler.port }}
       protocol: TCP
-      targetPort: {{ .Values.service.targetPort }}
-{{ if (and (eq .Values.service.type "NodePort") (not (empty .Values.service.nodePort))) }}
-      nodePort: {{.Values.service.nodePort}}
+      targetPort: {{ .Values.handler.targetPort }}
+{{ if (and (eq .Values.handler.type "NodePort") (not (empty .Values.handler.nodePort))) }}
+      nodePort: {{.Values.handler.nodePort}}
 {{ end }}
   {{- if .Values.extraExposePorts }}
   {{- tpl (toYaml .Values.extraExposePorts) . | indent 4 }}

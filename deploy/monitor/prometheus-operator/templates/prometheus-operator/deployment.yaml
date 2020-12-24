@@ -43,7 +43,7 @@ spec:
             - --manage-crds={{ .Values.prometheusOperator.manageCrds }}
           {{- end }}
           {{- if .Values.prometheusOperator.kubeletService.enabled }}
-            - --kubelet-service={{ .Values.prometheusOperator.kubeletService.namespace }}/{{ template "prometheus-operator.fullname" . }}-kubelet
+            - --kubelet-handler={{ .Values.prometheusOperator.kubeletService.namespace }}/{{ template "prometheus-operator.fullname" . }}-kubelet
           {{- end }}
           {{- if .Values.prometheusOperator.logFormat }}
             - --log-format={{ .Values.prometheusOperator.logFormat }}

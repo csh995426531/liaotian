@@ -2,46 +2,46 @@
 apiVersion: v1
 kind: Service
 metadata:
-{{- if .Values.nodeExporter.service.annotations }}
+{{- if .Values.nodeExporter.handler.annotations }}
   annotations:
-{{ toYaml .Values.nodeExporter.service.annotations | indent 4 }}
+{{ toYaml .Values.nodeExporter.handler.annotations | indent 4 }}
 {{- end }}
   labels:
     {{- include "prometheus.nodeExporter.labels" . | nindent 4 }}
-{{- if .Values.nodeExporter.service.labels }}
-{{ toYaml .Values.nodeExporter.service.labels | indent 4 }}
+{{- if .Values.nodeExporter.handler.labels }}
+{{ toYaml .Values.nodeExporter.handler.labels | indent 4 }}
 {{- end }}
   name: {{ template "prometheus.nodeExporter.fullname" . }}
 {{ include "prometheus.namespace" . | indent 2 }}
 spec:
-{{- if .Values.nodeExporter.service.clusterIP }}
-  clusterIP: {{ .Values.nodeExporter.service.clusterIP }}
+{{- if .Values.nodeExporter.handler.clusterIP }}
+  clusterIP: {{ .Values.nodeExporter.handler.clusterIP }}
 {{- end }}
-{{- if .Values.nodeExporter.service.externalIPs }}
+{{- if .Values.nodeExporter.handler.externalIPs }}
   externalIPs:
-{{ toYaml .Values.nodeExporter.service.externalIPs | indent 4 }}
+{{ toYaml .Values.nodeExporter.handler.externalIPs | indent 4 }}
 {{- end }}
-{{- if .Values.nodeExporter.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.nodeExporter.service.loadBalancerIP }}
+{{- if .Values.nodeExporter.handler.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.nodeExporter.handler.loadBalancerIP }}
 {{- end }}
-{{- if .Values.nodeExporter.service.loadBalancerSourceRanges }}
+{{- if .Values.nodeExporter.handler.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-  {{- range $cidr := .Values.nodeExporter.service.loadBalancerSourceRanges }}
+  {{- range $cidr := .Values.nodeExporter.handler.loadBalancerSourceRanges }}
     - {{ $cidr }}
   {{- end }}
 {{- end }}
   ports:
     - name: metrics
     {{- if .Values.nodeExporter.hostNetwork }}
-      port: {{ .Values.nodeExporter.service.hostPort }}
+      port: {{ .Values.nodeExporter.handler.hostPort }}
       protocol: TCP
-      targetPort: {{ .Values.nodeExporter.service.hostPort }}
+      targetPort: {{ .Values.nodeExporter.handler.hostPort }}
     {{- else }}
-      port: {{ .Values.nodeExporter.service.servicePort }}
+      port: {{ .Values.nodeExporter.handler.servicePort }}
       protocol: TCP
       targetPort: 9100
     {{- end }}
   selector:
     {{- include "prometheus.nodeExporter.matchLabels" . | nindent 4 }}
-  type: "{{ .Values.nodeExporter.service.type }}"
+  type: "{{ .Values.nodeExporter.handler.type }}"
 {{- end -}}

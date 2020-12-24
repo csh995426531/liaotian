@@ -40,7 +40,7 @@ spec:
         severity: critical
     - alert: AggregatedAPIErrors
       annotations:
-        message: An aggregated API {{`{{`}} $labels.name {{`}}`}}/{{`{{`}} $labels.namespace {{`}}`}} has reported errors. The number of errors have increased for it in the past five minutes. High values indicate that the availability of the service changes too often.
+        message: An aggregated API {{`{{`}} $labels.name {{`}}`}}/{{`{{`}} $labels.namespace {{`}}`}} has reported errors. The number of errors have increased for it in the past five minutes. High values indicate that the availability of the handler changes too often.
         runbook_url: {{ .Values.defaultRules.runbookUrl }}alert-name-aggregatedapierrors
       expr: sum by(name, namespace)(increase(aggregator_unavailable_apiservice_count[5m])) > 2
       labels:

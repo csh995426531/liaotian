@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+option go_package = "./proto;proto";
+
+package domain.user.service;
+
+service User {
+  rpc CreateUserInfo(Request) returns (Response) {}
+  rpc GetUserInfo(Request) returns (Response) {}
+  rpc UpdateUserInfo(Request) returns (Response) {}
+  rpc CheckUserPwd(Request) returns (Response) {}
+}
+
+message user {
+  int64 id = 1;
+  string name = 2;
+  string account = 3;
+  string avatar = 5;
+}
+
+message Request {
+  int64 id = 1;
+  string name = 2;
+  string account = 3;
+  string password = 4;
+  string avatar = 5;
+}
+
+message Response {
+  int64 code = 1;
+  string message = 2;
+  user data = 3;
+}

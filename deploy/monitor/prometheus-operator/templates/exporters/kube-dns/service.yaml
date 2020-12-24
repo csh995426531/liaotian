@@ -12,16 +12,16 @@ spec:
   clusterIP: None
   ports:
     - name: http-metrics-dnsmasq
-      port: {{ .Values.kubeDns.service.dnsmasq.port }}
+      port: {{ .Values.kubeDns.handler.dnsmasq.port }}
       protocol: TCP
-      targetPort: {{ .Values.kubeDns.service.dnsmasq.targetPort }}
+      targetPort: {{ .Values.kubeDns.handler.dnsmasq.targetPort }}
     - name: http-metrics-skydns
-      port: {{ .Values.kubeDns.service.skydns.port }}
+      port: {{ .Values.kubeDns.handler.skydns.port }}
       protocol: TCP
-      targetPort: {{ .Values.kubeDns.service.skydns.targetPort }}
+      targetPort: {{ .Values.kubeDns.handler.skydns.targetPort }}
   selector:
-    {{- if .Values.kubeDns.service.selector }}
-{{ toYaml .Values.kubeDns.service.selector | indent 4 }}
+    {{- if .Values.kubeDns.handler.selector }}
+{{ toYaml .Values.kubeDns.handler.selector | indent 4 }}
     {{- else}}
     k8s-app: kube-dns
     {{- end}}

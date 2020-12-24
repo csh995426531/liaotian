@@ -15,21 +15,21 @@ metadata:
     {{- if .Values.prometheusScrape }}
     prometheus.io/scrape: '{{ .Values.prometheusScrape }}'
     {{- end }}
-    {{- if .Values.service.annotations }}
-    {{- toYaml .Values.service.annotations | nindent 4 }}
+    {{- if .Values.handler.annotations }}
+    {{- toYaml .Values.handler.annotations | nindent 4 }}
     {{- end }}
 spec:
-  type: "{{ .Values.service.type }}"
+  type: "{{ .Values.handler.type }}"
   ports:
   - name: "http"
     protocol: TCP
-    port: {{ .Values.service.port }}
-  {{- if .Values.service.nodePort }}
-    nodePort: {{ .Values.service.nodePort }}
+    port: {{ .Values.handler.port }}
+  {{- if .Values.handler.nodePort }}
+    nodePort: {{ .Values.handler.nodePort }}
   {{- end }}
     targetPort: 8080
-{{- if .Values.service.loadBalancerIP }}
-  loadBalancerIP: "{{ .Values.service.loadBalancerIP }}"
+{{- if .Values.handler.loadBalancerIP }}
+  loadBalancerIP: "{{ .Values.handler.loadBalancerIP }}"
 {{- end }}
   selector:
     app.kubernetes.io/name: {{ template "kube-state-metrics.name" . }}

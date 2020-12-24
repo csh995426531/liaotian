@@ -8,45 +8,45 @@ metadata:
     app: {{ template "prometheus-operator.name" . }}-prometheus
     self-monitor: {{ .Values.prometheus.serviceMonitor.selfMonitor | quote }}
 {{ include "prometheus-operator.labels" . | indent 4 }}
-{{- if .Values.prometheus.service.labels }}
-{{ toYaml .Values.prometheus.service.labels | indent 4 }}
+{{- if .Values.prometheus.handler.labels }}
+{{ toYaml .Values.prometheus.handler.labels | indent 4 }}
 {{- end }}
-{{- if .Values.prometheus.service.annotations }}
+{{- if .Values.prometheus.handler.annotations }}
   annotations:
-{{ toYaml .Values.prometheus.service.annotations | indent 4 }}
+{{ toYaml .Values.prometheus.handler.annotations | indent 4 }}
 {{- end }}
 spec:
-{{- if .Values.prometheus.service.clusterIP }}
-  clusterIP: {{ .Values.prometheus.service.clusterIP }}
+{{- if .Values.prometheus.handler.clusterIP }}
+  clusterIP: {{ .Values.prometheus.handler.clusterIP }}
 {{- end }}
-{{- if .Values.prometheus.service.externalIPs }}
+{{- if .Values.prometheus.handler.externalIPs }}
   externalIPs:
-{{ toYaml .Values.prometheus.service.externalIPs | indent 4 }}
+{{ toYaml .Values.prometheus.handler.externalIPs | indent 4 }}
 {{- end }}
-{{- if .Values.prometheus.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.prometheus.service.loadBalancerIP }}
+{{- if .Values.prometheus.handler.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.prometheus.handler.loadBalancerIP }}
 {{- end }}
-{{- if .Values.prometheus.service.loadBalancerSourceRanges }}
+{{- if .Values.prometheus.handler.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-  {{- range $cidr := .Values.prometheus.service.loadBalancerSourceRanges }}
+  {{- range $cidr := .Values.prometheus.handler.loadBalancerSourceRanges }}
     - {{ $cidr }}
   {{- end }}
 {{- end }}
   ports:
   - name: {{ .Values.prometheus.prometheusSpec.portName }}
-    {{- if eq .Values.prometheus.service.type "NodePort" }}
-    nodePort: {{ .Values.prometheus.service.nodePort }}
+    {{- if eq .Values.prometheus.handler.type "NodePort" }}
+    nodePort: {{ .Values.prometheus.handler.nodePort }}
     {{- end }}
-    port: {{ .Values.prometheus.service.port }}
-    targetPort: {{ .Values.prometheus.service.targetPort }}
-{{- if .Values.prometheus.service.additionalPorts }}
-{{ toYaml .Values.prometheus.service.additionalPorts | indent 2 }}
+    port: {{ .Values.prometheus.handler.port }}
+    targetPort: {{ .Values.prometheus.handler.targetPort }}
+{{- if .Values.prometheus.handler.additionalPorts }}
+{{ toYaml .Values.prometheus.handler.additionalPorts | indent 2 }}
 {{- end }}
   selector:
     app: prometheus
     prometheus: {{ template "prometheus-operator.fullname" . }}-prometheus
-{{- if .Values.prometheus.service.sessionAffinity }}
-  sessionAffinity: {{ .Values.prometheus.service.sessionAffinity }}
+{{- if .Values.prometheus.handler.sessionAffinity }}
+  sessionAffinity: {{ .Values.prometheus.handler.sessionAffinity }}
 {{- end }}
-  type: "{{ .Values.prometheus.service.type }}"
+  type: "{{ .Values.prometheus.handler.type }}"
 {{- end }}

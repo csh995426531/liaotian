@@ -321,17 +321,17 @@ func file_proto_user_user_proto_rawDescGZIP() []byte {
 
 var file_proto_user_user_proto_msgTypes = make([]protoimpl.MessageInfo, 4)
 var file_proto_user_user_proto_goTypes = []interface{}{
-	(*User)(nil),          // 0: user.service.user.user
-	(*CreateRequest)(nil), // 1: user.service.user.CreateRequest
-	(*Request)(nil),       // 2: user.service.user.Request
-	(*Response)(nil),      // 3: user.service.user.Response
+	(*User)(nil),          // 0: user.handler.user.user
+	(*CreateRequest)(nil), // 1: user.handler.user.CreateRequest
+	(*Request)(nil),       // 2: user.handler.user.Request
+	(*Response)(nil),      // 3: user.handler.user.Response
 }
 var file_proto_user_user_proto_depIdxs = []int32{
-	0, // 0: user.service.user.Response.user:type_name -> user.service.user.user
-	1, // 1: user.service.user.User.Create:input_type -> user.service.user.CreateRequest
-	2, // 2: user.service.user.User.Get:input_type -> user.service.user.Request
-	3, // 3: user.service.user.User.Create:output_type -> user.service.user.Response
-	3, // 4: user.service.user.User.Get:output_type -> user.service.user.Response
+	0, // 0: user.handler.user.Response.user:type_name -> user.handler.user.user
+	1, // 1: user.handler.user.User.Create:input_type -> user.handler.user.CreateRequest
+	2, // 2: user.handler.user.User.Get:input_type -> user.handler.user.Request
+	3, // 3: user.handler.user.User.Create:output_type -> user.handler.user.Response
+	3, // 4: user.handler.user.User.Get:output_type -> user.handler.user.Response
 	3, // [3:5] is the sub-list for method output_type
 	1, // [1:3] is the sub-list for method input_type
 	1, // [1:1] is the sub-list for extension type_name

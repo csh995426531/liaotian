@@ -21,7 +21,7 @@ metadata:
   name: apisix-gw-lb
   namespace: liaotian
   labels:
-    app: apisix-gw   # useful for service discovery, for example, prometheus-operator.
+    app: apisix-gw   # useful for handler discovery, for example, prometheus-operator.
 spec:
   ports:
     - name: http

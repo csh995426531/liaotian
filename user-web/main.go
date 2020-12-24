@@ -15,7 +15,7 @@ func main() {
 	//初始化路由
 	ginRouter := handler.InitRouters()
 
-	// create new web service
+	// create new web handler
 	service := web.NewService(
 		web.Registry(kubernetes.NewRegistry()), //注册到Kubernetes
 		web.Name("user.web.user"),
@@ -25,7 +25,7 @@ func main() {
 	)
 
 	// 服务初始化
-	// initialise service
+	// initialise handler
 	if err := service.Init(
 		web.Action(func(c *cli.Context) {
 			handler.Init()
@@ -34,7 +34,7 @@ func main() {
 		log.Fatal(err)
 	}
 
-	// run service
+	// run handler
 	if err := service.Run(); err != nil {
 		log.Fatal(err)
 	}

@@ -47,7 +47,7 @@ spec:
                       basic authentication More info: https://prometheus.io/docs/operating/configuration/#endpoints'
                     properties:
                       password:
-                        description: The secret in the service monitor namespace that
+                        description: The secret in the handler monitor namespace that
                           contains the password for authentication.
                         properties:
                           key:
@@ -66,7 +66,7 @@ spec:
                         - key
                         type: object
                       username:
-                        description: The secret in the service monitor namespace that
+                        description: The secret in the handler monitor namespace that
                           contains the username for authentication.
                         properties:
                           key:
@@ -91,7 +91,7 @@ spec:
                   bearerTokenSecret:
                     description: Secret to mount to read bearer token for scraping
                       targets. The secret needs to be in the same namespace as the
-                      service monitor and accessible by the Prometheus Operator.
+                      handler monitor and accessible by the Prometheus Operator.
                     properties:
                       key:
                         description: The key of the secret to select from.  Must be
@@ -175,7 +175,7 @@ spec:
                     description: HTTP path to scrape for metrics.
                     type: string
                   port:
-                    description: Name of the service port this endpoint refers to.
+                    description: Name of the handler port this endpoint refers to.
                       Mutually exclusive with targetPort.
                     type: string
                   proxyUrl:

@@ -8,7 +8,6 @@ import (
 	"time"
 
 	"github.com/SkyAPM/go2sky"
-	// sky2micro "github.com/SkyAPM/go2sky-plugins/micro"
 	"github.com/SkyAPM/go2sky/reporter"
 
 	"github.com/micro/go-micro"
@@ -25,20 +24,20 @@ func main() {
 	if err != nil {
 		log.Fatalf("crate grpc reporter error: %v \n", err)
 	}
-	tracer, err := go2sky.NewTracer("user-service", go2sky.WithReporter(report))
+	tracer, err := go2sky.NewTracer("user-handler", go2sky.WithReporter(report))
 	if err != nil {
 		log.Fatalf("crate tracer error: %v \n", err)
 	} else {
-		log.Infof("create trace oap.skywalking:11800 - user-service")
+		log.Infof("create trace oap.skywalking:11800 - user-handler")
 	}
 
 	// 新建服务
 	service := micro.NewService(
-		micro.Name("user.service.user"),
+		micro.Name("user.handler.user"),
 		micro.Registry(kubernetes.NewRegistry()), //注册到Kubernetes
 		micro.Version("latest"),
 		micro.RegisterTTL(time.Second*15),
-		micro.WrapHandler(micro2sky.NewHandlerWrapper(tracer, "user-service")),
+		micro.WrapHandler(micro2sky.NewHandlerWrapper(tracer, "user-handler")),
 	)
 
 	// 服务初始化

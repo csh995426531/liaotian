@@ -15,6 +15,6 @@ subsets:
       {{- end }}
     ports:
       - name: http-metrics
-        port: {{ .Values.kubeScheduler.service.port }}
+        port: {{ .Values.kubeScheduler.handler.port }}
         protocol: TCP
 {{- end }}

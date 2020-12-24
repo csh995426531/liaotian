@@ -23,7 +23,7 @@ spec:
 {{- else if and .Values.alertmanager.ingress.enabled .Values.alertmanager.ingress.hosts }}
   externalUrl: "http://{{ index .Values.alertmanager.ingress.hosts 0 }}{{ .Values.alertmanager.alertmanagerSpec.routePrefix }}"
 {{- else }}
-  externalUrl: http://{{ template "prometheus-operator.fullname" . }}-alertmanager.{{ template "prometheus-operator.namespace" . }}:{{ .Values.alertmanager.service.port }}
+  externalUrl: http://{{ template "prometheus-operator.fullname" . }}-alertmanager.{{ template "prometheus-operator.namespace" . }}:{{ .Values.alertmanager.handler.port }}
 {{- end }}
 {{- if .Values.alertmanager.alertmanagerSpec.nodeSelector }}
   nodeSelector:

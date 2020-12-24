@@ -31,7 +31,7 @@ var _ context.Context
 var _ client.Option
 var _ server.Option
 
-// Client API for User service
+// Client API for User handler
 
 type UserService interface {
 	Create(ctx context.Context, in *CreateRequest, opts ...client.CallOption) (*Response, error)
@@ -48,7 +48,7 @@ func NewUserService(name string, c client.Client) UserService {
 		c = client.NewClient()
 	}
 	if len(name) == 0 {
-		name = "user.service.user"
+		name = "user.handler.user"
 	}
 	return &userService{
 		c:    c,
@@ -76,7 +76,7 @@ func (c *userService) Get(ctx context.Context, in *Request, opts ...client.CallO
 	return out, nil
 }
 
-// Server API for User service
+// Server API for User handler
 
 type UserHandler interface {
 	Create(context.Context, *CreateRequest, *Response) error

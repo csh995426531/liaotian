@@ -21,7 +21,7 @@ func Init() {
 		// optionally specify a namespace; default to default
 		configmap.WithNamespace("liaotian"),
 		// optionally specify name for ConfigMap; defaults micro
-		configmap.WithName("user-service-cm"),
+		configmap.WithName("user-handler-cm"),
 		// optionally strip the provided path to a kube config file mostly used outside of a cluster, defaults to "" for in cluster support.
 		//configmap.WithConfigPath(os.Getenv("CONFIG_PATH")),
 	)

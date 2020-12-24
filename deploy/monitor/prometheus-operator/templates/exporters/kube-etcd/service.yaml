@@ -12,13 +12,13 @@ spec:
   clusterIP: None
   ports:
     - name: http-metrics
-      port: {{ .Values.kubeEtcd.service.port }}
+      port: {{ .Values.kubeEtcd.handler.port }}
       protocol: TCP
-      targetPort: {{ .Values.kubeEtcd.service.targetPort }}
+      targetPort: {{ .Values.kubeEtcd.handler.targetPort }}
 {{- if .Values.kubeEtcd.endpoints }}{{- else }}
   selector:
-    {{- if .Values.kubeEtcd.service.selector }}
-{{ toYaml .Values.kubeEtcd.service.selector | indent 4 }}
+    {{- if .Values.kubeEtcd.handler.selector }}
+{{ toYaml .Values.kubeEtcd.handler.selector | indent 4 }}
     {{- else}}
     component: etcd
     {{- end}}

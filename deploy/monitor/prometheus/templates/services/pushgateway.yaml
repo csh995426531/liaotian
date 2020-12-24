@@ -2,40 +2,40 @@
 apiVersion: v1
 kind: Service
 metadata:
-{{- if .Values.pushgateway.service.annotations }}
+{{- if .Values.pushgateway.handler.annotations }}
   annotations:
-{{ toYaml .Values.pushgateway.service.annotations | indent 4}}
+{{ toYaml .Values.pushgateway.handler.annotations | indent 4}}
 {{- end }}
   labels:
     {{- include "prometheus.pushgateway.labels" . | nindent 4 }}
-{{- if .Values.pushgateway.service.labels }}
-{{ toYaml .Values.pushgateway.service.labels | indent 4}}
+{{- if .Values.pushgateway.handler.labels }}
+{{ toYaml .Values.pushgateway.handler.labels | indent 4}}
 {{- end }}
   name: {{ template "prometheus.pushgateway.fullname" . }}
 {{ include "prometheus.namespace" . | indent 2 }}
 spec:
-{{- if .Values.pushgateway.service.clusterIP }}
-  clusterIP: {{ .Values.pushgateway.service.clusterIP }}
+{{- if .Values.pushgateway.handler.clusterIP }}
+  clusterIP: {{ .Values.pushgateway.handler.clusterIP }}
 {{- end }}
-{{- if .Values.pushgateway.service.externalIPs }}
+{{- if .Values.pushgateway.handler.externalIPs }}
   externalIPs:
-{{ toYaml .Values.pushgateway.service.externalIPs | indent 4 }}
+{{ toYaml .Values.pushgateway.handler.externalIPs | indent 4 }}
 {{- end }}
-{{- if .Values.pushgateway.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.pushgateway.service.loadBalancerIP }}
+{{- if .Values.pushgateway.handler.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.pushgateway.handler.loadBalancerIP }}
 {{- end }}
-{{- if .Values.pushgateway.service.loadBalancerSourceRanges }}
+{{- if .Values.pushgateway.handler.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-  {{- range $cidr := .Values.pushgateway.service.loadBalancerSourceRanges }}
+  {{- range $cidr := .Values.pushgateway.handler.loadBalancerSourceRanges }}
     - {{ $cidr }}
   {{- end }}
 {{- end }}
   ports:
     - name: http
-      port: {{ .Values.pushgateway.service.servicePort }}
+      port: {{ .Values.pushgateway.handler.servicePort }}
       protocol: TCP
       targetPort: 9091
   selector:
     {{- include "prometheus.pushgateway.matchLabels" . | nindent 4 }}
-  type: "{{ .Values.pushgateway.service.type }}"
+  type: "{{ .Values.pushgateway.handler.type }}"
 {{- end }}

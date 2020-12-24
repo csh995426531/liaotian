@@ -225,7 +225,7 @@ func NewHandlerWrapper(sw *go2sky.Tracer, reportTags ...string) server.HandlerWr
 				return errTracerIsNil
 			}
 			data, _ := metadata.FromContext(ctx)
-			log.Infof("service context:%v", data)
+			log.Infof("handler context:%v", data)
 			name := fmt.Sprintf("%s.%s", req.Service(), req.Endpoint())
 			span, ctx, err := sw.CreateEntrySpan(ctx, name, func() (string, error) {
 				str, _ := metadata.Get(ctx, strings.Title(propagation.Header))

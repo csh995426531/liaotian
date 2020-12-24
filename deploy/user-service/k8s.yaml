@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: user-service-cm
+  name: user-handler-cm
   namespace: liaotian
 data:
   mysql_url: url=debian-sys-maint:F0sm3f7WrNJox1oV@tcp(129.211.55.205:3306)/liaotian
@@ -10,21 +10,21 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: user-service
+  name: user-handler
   namespace: liaotian
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: user-service
+      app: user-handler
   template:
     metadata:
       labels:
-        app: user-service
+        app: user-handler
     spec:
       containers:
-        - name: user-service
-          image: user-service:testv2
+        - name: user-handler
+          image: user-handler:testv2
           imagePullPolicy: Never
           ports:
             - name: 80-port
@@ -36,7 +36,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: user-service
+  name: user-handler
   namespace: liaotian
 spec:
   ports:
@@ -44,4 +44,4 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    app: user-service
+    app: user-handler

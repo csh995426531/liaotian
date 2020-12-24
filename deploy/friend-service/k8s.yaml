@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: friend-service-cm
+  name: friend-handler-cm
   namespace: liaotian
 data:
   mysql_url: url=debian-sys-maint:F0sm3f7WrNJox1oV@tcp(129.211.55.205:3306)/liaotian
@@ -10,21 +10,21 @@ data:
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: friend-service
+  name: friend-handler
   namespace: liaotian
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: friend-service
+      app: friend-handler
   template:
     metadata:
       labels:
-        app: friend-service
+        app: friend-handler
     spec:
       containers:
-        - name: friend-service
-          image: liaotian/friend-service:v1.0
+        - name: friend-handler
+          image: liaotian/friend-handler:v1.0
           imagePullPolicy: Never
           ports:
             - name: 80-port
@@ -34,7 +34,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: friend-service
+  name: friend-handler
   namespace: liaotian
 spec:
   ports:
@@ -42,4 +42,4 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    app: friend-service
+    app: friend-handler

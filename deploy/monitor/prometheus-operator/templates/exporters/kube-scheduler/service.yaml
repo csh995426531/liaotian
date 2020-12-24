@@ -12,13 +12,13 @@ spec:
   clusterIP: None
   ports:
     - name: http-metrics
-      port: {{ .Values.kubeScheduler.service.port}}
+      port: {{ .Values.kubeScheduler.handler.port}}
       protocol: TCP
-      targetPort: {{ .Values.kubeScheduler.service.targetPort}}
+      targetPort: {{ .Values.kubeScheduler.handler.targetPort}}
 {{- if .Values.kubeScheduler.endpoints }}{{- else }}
   selector:
-    {{- if .Values.kubeScheduler.service.selector }}
-{{ toYaml .Values.kubeScheduler.service.selector | indent 4 }}
+    {{- if .Values.kubeScheduler.handler.selector }}
+{{ toYaml .Values.kubeScheduler.handler.selector | indent 4 }}
     {{- else}}
     component: kube-scheduler
     {{- end}}

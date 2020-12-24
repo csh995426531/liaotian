@@ -2,43 +2,43 @@
 apiVersion: v1
 kind: Service
 metadata:
-{{- if .Values.alertmanager.service.annotations }}
+{{- if .Values.alertmanager.handler.annotations }}
   annotations:
-{{ toYaml .Values.alertmanager.service.annotations | indent 4 }}
+{{ toYaml .Values.alertmanager.handler.annotations | indent 4 }}
 {{- end }}
   labels:
     {{- include "prometheus.alertmanager.labels" . | nindent 4 }}
-{{- if .Values.alertmanager.service.labels }}
-{{ toYaml .Values.alertmanager.service.labels | indent 4 }}
+{{- if .Values.alertmanager.handler.labels }}
+{{ toYaml .Values.alertmanager.handler.labels | indent 4 }}
 {{- end }}
   name: {{ template "prometheus.alertmanager.fullname" . }}
 {{ include "prometheus.namespace" . | indent 2 }}
 spec:
-{{- if .Values.alertmanager.service.clusterIP }}
-  clusterIP: {{ .Values.alertmanager.service.clusterIP }}
+{{- if .Values.alertmanager.handler.clusterIP }}
+  clusterIP: {{ .Values.alertmanager.handler.clusterIP }}
 {{- end }}
-{{- if .Values.alertmanager.service.externalIPs }}
+{{- if .Values.alertmanager.handler.externalIPs }}
   externalIPs:
-{{ toYaml .Values.alertmanager.service.externalIPs | indent 4 }}
+{{ toYaml .Values.alertmanager.handler.externalIPs | indent 4 }}
 {{- end }}
-{{- if .Values.alertmanager.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.alertmanager.service.loadBalancerIP }}
+{{- if .Values.alertmanager.handler.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.alertmanager.handler.loadBalancerIP }}
 {{- end }}
-{{- if .Values.alertmanager.service.loadBalancerSourceRanges }}
+{{- if .Values.alertmanager.handler.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-  {{- range $cidr := .Values.alertmanager.service.loadBalancerSourceRanges }}
+  {{- range $cidr := .Values.alertmanager.handler.loadBalancerSourceRanges }}
     - {{ $cidr }}
   {{- end }}
 {{- end }}
   ports:
     - name: http
-      port: {{ .Values.alertmanager.service.servicePort }}
+      port: {{ .Values.alertmanager.handler.servicePort }}
       protocol: TCP
       targetPort: 9093
-    {{- if .Values.alertmanager.service.nodePort }}
-      nodePort: {{ .Values.alertmanager.service.nodePort }}
+    {{- if .Values.alertmanager.handler.nodePort }}
+      nodePort: {{ .Values.alertmanager.handler.nodePort }}
     {{- end }}
-{{- if .Values.alertmanager.service.enableMeshPeer }}
+{{- if .Values.alertmanager.handler.enableMeshPeer }}
     - name: meshpeer
       port: 6783
       protocol: TCP
@@ -46,8 +46,8 @@ spec:
 {{- end }}
   selector:
     {{- include "prometheus.alertmanager.matchLabels" . | nindent 4 }}
-{{- if .Values.alertmanager.service.sessionAffinity }}
-  sessionAffinity: {{ .Values.alertmanager.service.sessionAffinity }}
+{{- if .Values.alertmanager.handler.sessionAffinity }}
+  sessionAffinity: {{ .Values.alertmanager.handler.sessionAffinity }}
 {{- end }}
-  type: "{{ .Values.alertmanager.service.type }}"
+  type: "{{ .Values.alertmanager.handler.type }}"
 {{- end }}

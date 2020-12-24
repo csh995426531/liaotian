@@ -109,8 +109,8 @@ podPortName: grafana
 ## Deployment annotations
 # annotations: {}
 
-## Expose the grafana service to be accessed from outside the cluster (LoadBalancer service).
-## or access it from within the cluster (ClusterIP service). Set the service type and the port to serve it.
+## Expose the grafana handler to be accessed from outside the cluster (LoadBalancer handler).
+## or access it from within the cluster (ClusterIP handler). Set the handler type and the port to serve it.
 ## ref: http://kubernetes.io/docs/user-guide/services/
 ##
 service:
@@ -120,7 +120,7 @@ service:
     # targetPort: 4181 To be used with a proxy extraContainer
   annotations: {}
   labels: {}
-  portName: service
+  portName: handler
 
 extraExposePorts: []
  # - name: keycloak

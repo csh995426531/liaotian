@@ -210,7 +210,7 @@ alertmanager:
   secret:
     annotations: {}
 
-  ## Configuration for creating an Ingress that will map to each Alertmanager replica service
+  ## Configuration for creating an Ingress that will map to each Alertmanager replica handler
   ## alertmanager.servicePerReplica must be enabled
   ##
   ingressPerReplica:
@@ -245,7 +245,7 @@ alertmanager:
       ##
       prefix: "alertmanager"
 
-  ## Configuration for Alertmanager service
+  ## Configuration for Alertmanager handler
   ##
   service:
     annotations: {}
@@ -259,10 +259,10 @@ alertmanager:
     ##
     targetPort: 9093
     ## Port to expose on each node
-    ## Only used if service.type is 'NodePort'
+    ## Only used if handler.type is 'NodePort'
     ##
     nodePort: 30903
-    ## List of IP addresses at which the Prometheus server service is available
+    ## List of IP addresses at which the Prometheus server handler is available
     ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
     ##
     externalIPs: []
@@ -543,7 +543,7 @@ grafana:
       annotations: {}
 
       ## Create datasource for each Pod of Prometheus StatefulSet;
-      ## this uses headless service `prometheus-operated` which is
+      ## this uses headless handler `prometheus-operated` which is
       ## created by Prometheus Operator
       ## ref: https://git.io/fjaBS
       createPrometheusReplicasDatasources: false
@@ -574,7 +574,7 @@ grafana:
   ## Passed to grafana subchart and used by servicemonitor below
   ##
   service:
-    portName: service
+    portName: handler
 
   ## If true, create a serviceMonitor for grafana
   ##
@@ -609,7 +609,7 @@ kubeApiServer:
     serverName: kubernetes
     insecureSkipVerify: false
 
-  ## If your API endpoint address is not reachable (as in AKS) you can replace it with the kubernetes service
+  ## If your API endpoint address is not reachable (as in AKS) you can replace it with the kubernetes handler
   ##
   relabelings: []
   # - sourceLabels:
@@ -654,15 +654,15 @@ kubelet:
     ##
     https: true
 
-    ## Enable scraping /metrics/cadvisor from kubelet's service
+    ## Enable scraping /metrics/cadvisor from kubelet's handler
     ##
     cAdvisor: true
 
-    ## Enable scraping /metrics/probes from kubelet's service
+    ## Enable scraping /metrics/probes from kubelet's handler
     ##
     probes: true
 
-    ## Enable scraping /metrics/resource from kubelet's service
+    ## Enable scraping /metrics/resource from kubelet's handler
     ##
     resource: true
     # From kubernetes 1.18, /metrics/resource/v1alpha1 renamed to /metrics/resource
@@ -898,7 +898,7 @@ kubeEtcd:
   # - 10.141.4.23
   # - 10.141.4.24
 
-  ## Etcd service. If using kubeEtcd.endpoints only the port and targetPort are used
+  ## Etcd handler. If using kubeEtcd.endpoints only the port and targetPort are used
   ##
   service:
     port: 2379
@@ -1188,7 +1188,7 @@ prometheusOperator:
     create: true
     name: ""
 
-  ## Configuration for Prometheus operator service
+  ## Configuration for Prometheus operator handler
   ##
   service:
     annotations: {}
@@ -1196,19 +1196,19 @@ prometheusOperator:
     clusterIP: ""
 
   ## Port to expose on each node
-  ## Only used if service.type is 'NodePort'
+  ## Only used if handler.type is 'NodePort'
   ##
     nodePort: 30080
 
     nodePortTls: 30443
 
-  ## Additional ports to open for Prometheus service
+  ## Additional ports to open for Prometheus handler
   ## ref: https://kubernetes.io/docs/concepts/services-networking/service/#multi-port-services
   ##
     additionalPorts: []
 
   ## Loadbalancer IP
-  ## Only use if service.type is "loadbalancer"
+  ## Only use if handler.type is "loadbalancer"
   ##
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
@@ -1218,7 +1218,7 @@ prometheusOperator:
   ##
     type: ClusterIP
 
-    ## List of IP addresses at which the Prometheus server service is available
+    ## List of IP addresses at which the Prometheus server handler is available
     ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
     ##
     externalIPs: []
@@ -1249,7 +1249,7 @@ prometheusOperator:
   ## Decrease log verbosity to errors only
   # logLevel: error
 
-  ## If true, the operator will create and maintain a service for scraping kubelets
+  ## If true, the operator will create and maintain a handler for scraping kubelets
   ## ref: https://github.com/coreos/prometheus-operator/blob/master/helm/prometheus-operator/README.md
   ##
   kubeletService:
@@ -1387,7 +1387,7 @@ prometheus:
     create: true
     name: ""
 
-  ## Configuration for Prometheus service
+  ## Configuration for Prometheus handler
   ##
   service:
     annotations: {}
@@ -1401,18 +1401,18 @@ prometheus:
     ## To be used with a proxy extraContainer port
     targetPort: 9090
 
-    ## List of IP addresses at which the Prometheus server service is available
+    ## List of IP addresses at which the Prometheus server handler is available
     ## Ref: https://kubernetes.io/docs/user-guide/services/#external-ips
     ##
     externalIPs: []
 
     ## Port to expose on each node
-    ## Only used if service.type is 'NodePort'
+    ## Only used if handler.type is 'NodePort'
     ##
     nodePort: 30090
 
     ## Loadbalancer IP
-    ## Only use if service.type is "loadbalancer"
+    ## Only use if handler.type is "loadbalancer"
     loadBalancerIP: ""
     loadBalancerSourceRanges: []
     ## Service type
@@ -1505,7 +1505,7 @@ prometheus:
       #   hosts:
       #     - prometheus.example.com
 
-  ## Configuration for creating an Ingress that will map to each Prometheus replica service
+  ## Configuration for creating an Ingress that will map to each Prometheus replica handler
   ## prometheus.servicePerReplica must be enabled
   ##
   ingressPerReplica:
@@ -1983,11 +1983,11 @@ prometheus:
     # additionalLabels: {}
 
     ## Service label for use in assembling a job name of the form <label value>-<port>
-    ## If no label is specified, the service name is used.
+    ## If no label is specified, the handler name is used.
     ##
     # jobLabel: ""
 
-    ## labels to transfer from the kubernetes service to the target
+    ## labels to transfer from the kubernetes handler to the target
     ##
     # targetLabels: ""
 
@@ -2006,10 +2006,10 @@ prometheus:
       ##
       # matchNames: []
 
-    ## Endpoints of the selected service to be monitored
+    ## Endpoints of the selected handler to be monitored
     ##
     # endpoints: []
-      ## Name of the endpoint's service port
+      ## Name of the endpoint's handler port
       ## Mutually exclusive with targetPort
       # - port: ""
 

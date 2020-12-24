@@ -1,6 +1,6 @@
 {{- if and .Values.alertmanager.enabled .Values.alertmanager.servicePerReplica.enabled .Values.alertmanager.ingressPerReplica.enabled }}
 {{- $count := .Values.alertmanager.alertmanagerSpec.replicas | int -}}
-{{- $servicePort := .Values.alertmanager.service.port -}}
+{{- $servicePort := .Values.alertmanager.handler.port -}}
 {{- $ingressValues := .Values.alertmanager.ingressPerReplica -}}
 apiVersion: v1
 kind: List

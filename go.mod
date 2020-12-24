@@ -19,10 +19,11 @@ require (
 	github.com/mattn/go-sqlite3 v1.14.5 // indirect
 	github.com/micro/cli v0.2.0
 	github.com/micro/go-micro v1.18.0
+	github.com/micro/go-micro/v2 v2.9.1 // indirect
 	github.com/micro/go-plugins v1.5.1
 	github.com/miekg/dns v1.1.35 // indirect
+	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
 	github.com/onsi/ginkgo v1.13.0 // indirect
-	github.com/pkg/errors v0.9.1 // indirect
 	github.com/prometheus/common v0.7.0
 	github.com/sirupsen/logrus v1.6.0 // indirect
 	github.com/stretchr/testify v1.6.1 // indirect

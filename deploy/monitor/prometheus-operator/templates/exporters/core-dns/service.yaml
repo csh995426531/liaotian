@@ -12,12 +12,12 @@ spec:
   clusterIP: None
   ports:
     - name: http-metrics
-      port: {{ .Values.coreDns.service.port }}
+      port: {{ .Values.coreDns.handler.port }}
       protocol: TCP
-      targetPort: {{ .Values.coreDns.service.targetPort }}
+      targetPort: {{ .Values.coreDns.handler.targetPort }}
   selector:
-    {{- if .Values.coreDns.service.selector }}
-{{ toYaml .Values.coreDns.service.selector | indent 4 }}
+    {{- if .Values.coreDns.handler.selector }}
+{{ toYaml .Values.coreDns.handler.selector | indent 4 }}
     {{- else}}
     k8s-app: kube-dns
     {{- end}}

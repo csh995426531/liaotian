@@ -17,7 +17,7 @@ var (
 )
 
 func Init() {
-	rpcUser = user.NewUserService("user.service.user", client.DefaultClient)
+	rpcUser = user.NewUserService("user.handler.user", client.DefaultClient)
 }
 
 func Login(ctx *gin.Context) {

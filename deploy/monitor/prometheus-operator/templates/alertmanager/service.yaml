@@ -8,40 +8,40 @@ metadata:
     app: {{ template "prometheus-operator.name" . }}-alertmanager
     self-monitor: {{ .Values.alertmanager.serviceMonitor.selfMonitor | quote }}
 {{ include "prometheus-operator.labels" . | indent 4 }}
-{{- if .Values.alertmanager.service.labels }}
-{{ toYaml .Values.alertmanager.service.labels | indent 4 }}
+{{- if .Values.alertmanager.handler.labels }}
+{{ toYaml .Values.alertmanager.handler.labels | indent 4 }}
 {{- end }}
-{{- if .Values.alertmanager.service.annotations }}
+{{- if .Values.alertmanager.handler.annotations }}
   annotations:
-{{ toYaml .Values.alertmanager.service.annotations | indent 4 }}
+{{ toYaml .Values.alertmanager.handler.annotations | indent 4 }}
 {{- end }}
 spec:
-{{- if .Values.alertmanager.service.clusterIP }}
-  clusterIP: {{ .Values.alertmanager.service.clusterIP }}
+{{- if .Values.alertmanager.handler.clusterIP }}
+  clusterIP: {{ .Values.alertmanager.handler.clusterIP }}
 {{- end }}
-{{- if .Values.alertmanager.service.externalIPs }}
+{{- if .Values.alertmanager.handler.externalIPs }}
   externalIPs:
-{{ toYaml .Values.alertmanager.service.externalIPs | indent 4 }}
+{{ toYaml .Values.alertmanager.handler.externalIPs | indent 4 }}
 {{- end }}
-{{- if .Values.alertmanager.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.alertmanager.service.loadBalancerIP }}
+{{- if .Values.alertmanager.handler.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.alertmanager.handler.loadBalancerIP }}
 {{- end }}
-{{- if .Values.alertmanager.service.loadBalancerSourceRanges }}
+{{- if .Values.alertmanager.handler.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-  {{- range $cidr := .Values.alertmanager.service.loadBalancerSourceRanges }}
+  {{- range $cidr := .Values.alertmanager.handler.loadBalancerSourceRanges }}
     - {{ $cidr }}
   {{- end }}
 {{- end }}
   ports:
     - name: {{ .Values.alertmanager.alertmanagerSpec.portName }}
-    {{- if eq .Values.alertmanager.service.type "NodePort" }}
-      nodePort: {{ .Values.alertmanager.service.nodePort }}
+    {{- if eq .Values.alertmanager.handler.type "NodePort" }}
+      nodePort: {{ .Values.alertmanager.handler.nodePort }}
     {{- end }}
-      port: {{ .Values.alertmanager.service.port }}
-      targetPort: {{ .Values.alertmanager.service.targetPort }}
+      port: {{ .Values.alertmanager.handler.port }}
+      targetPort: {{ .Values.alertmanager.handler.targetPort }}
       protocol: TCP
   selector:
     app: alertmanager
     alertmanager: {{ template "prometheus-operator.fullname" . }}-alertmanager
-  type: "{{ .Values.alertmanager.service.type }}"
+  type: "{{ .Values.alertmanager.handler.type }}"
 {{- end }}

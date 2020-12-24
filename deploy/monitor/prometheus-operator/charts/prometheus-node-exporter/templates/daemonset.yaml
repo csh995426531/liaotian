@@ -38,13 +38,13 @@ spec:
           args:
             - --path.procfs=/host/proc
             - --path.sysfs=/host/sys
-            - --web.listen-address=$(HOST_IP):{{ .Values.service.port }}
+            - --web.listen-address=$(HOST_IP):{{ .Values.handler.port }}
 {{- if .Values.extraArgs }}
 {{ toYaml .Values.extraArgs | indent 12 }}
 {{- end }}
           env:
           - name: HOST_IP
-            {{- if .Values.service.listenOnAllInterfaces }}
+            {{- if .Values.handler.listenOnAllInterfaces }}
             value: 0.0.0.0
             {{- else }}
             valueFrom:
@@ -54,16 +54,16 @@ spec:
             {{- end }}
           ports:
             - name: metrics
-              containerPort: {{ .Values.service.targetPort }}
+              containerPort: {{ .Values.handler.targetPort }}
               protocol: TCP
           livenessProbe:
             httpGet:
               path: /
-              port: {{ .Values.service.port }}
+              port: {{ .Values.handler.port }}
           readinessProbe:
             httpGet:
               path: /
-              port: {{ .Values.service.port }}
+              port: {{ .Values.handler.port }}
           resources:
 {{ toYaml .Values.resources | indent 12 }}
           volumeMounts:

@@ -12,13 +12,13 @@ spec:
   clusterIP: None
   ports:
     - name: http-metrics
-      port: {{ .Values.kubeProxy.service.port }}
+      port: {{ .Values.kubeProxy.handler.port }}
       protocol: TCP
-      targetPort: {{ .Values.kubeProxy.service.targetPort }}
+      targetPort: {{ .Values.kubeProxy.handler.targetPort }}
 {{- if .Values.kubeProxy.endpoints }}{{- else }}
   selector:
-    {{- if .Values.kubeProxy.service.selector }}
-{{ toYaml .Values.kubeProxy.service.selector | indent 4 }}
+    {{- if .Values.kubeProxy.handler.selector }}
+{{ toYaml .Values.kubeProxy.handler.selector | indent 4 }}
     {{- else}}
     k8s-app: kube-proxy
     {{- end}}

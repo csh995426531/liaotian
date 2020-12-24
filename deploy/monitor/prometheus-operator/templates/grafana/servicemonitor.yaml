@@ -16,7 +16,7 @@ spec:
     matchNames:
       - {{ printf "%s" (include "prometheus-operator.namespace" .) | quote }}
   endpoints:
-  - port: {{ .Values.grafana.service.portName }}
+  - port: {{ .Values.grafana.handler.portName }}
     {{- if .Values.grafana.serviceMonitor.interval }}
     interval: {{ .Values.grafana.serviceMonitor.interval }}
     {{- end }}

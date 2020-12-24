@@ -1,7 +1,7 @@
 {{- if and .Values.alertmanager.enabled .Values.alertmanager.ingress.enabled -}}
 {{- $releaseName := .Release.Name -}}
 {{- $serviceName := include "prometheus.alertmanager.fullname" . }}
-{{- $servicePort := .Values.alertmanager.service.servicePort -}}
+{{- $servicePort := .Values.alertmanager.handler.servicePort -}}
 {{- $extraPaths := .Values.alertmanager.ingress.extraPaths -}}
 {{- if .Capabilities.APIVersions.Has "networking.k8s.io/v1beta1" }}
 apiVersion: networking.k8s.io/v1beta1

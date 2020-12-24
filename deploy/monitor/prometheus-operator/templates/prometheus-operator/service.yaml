@@ -7,41 +7,41 @@ metadata:
   labels:
     app: {{ template "prometheus-operator.name" . }}-operator
 {{ include "prometheus-operator.labels" . | indent 4 }}
-{{- if .Values.prometheusOperator.service.labels }}
-{{ toYaml .Values.prometheusOperator.service.labels | indent 4 }}
+{{- if .Values.prometheusOperator.handler.labels }}
+{{ toYaml .Values.prometheusOperator.handler.labels | indent 4 }}
 {{- end }}
-{{- if .Values.prometheusOperator.service.annotations }}
+{{- if .Values.prometheusOperator.handler.annotations }}
   annotations:
-{{ toYaml .Values.prometheusOperator.service.annotations | indent 4 }}
+{{ toYaml .Values.prometheusOperator.handler.annotations | indent 4 }}
 {{- end }}
 spec:
-{{- if .Values.prometheusOperator.service.clusterIP }}
-  clusterIP: {{ .Values.prometheusOperator.service.clusterIP }}
+{{- if .Values.prometheusOperator.handler.clusterIP }}
+  clusterIP: {{ .Values.prometheusOperator.handler.clusterIP }}
 {{- end }}
-{{- if .Values.prometheusOperator.service.externalIPs }}
+{{- if .Values.prometheusOperator.handler.externalIPs }}
   externalIPs:
-{{ toYaml .Values.prometheusOperator.service.externalIPs | indent 4 }}
+{{ toYaml .Values.prometheusOperator.handler.externalIPs | indent 4 }}
 {{- end }}
-{{- if .Values.prometheusOperator.service.loadBalancerIP }}
-  loadBalancerIP: {{ .Values.prometheusOperator.service.loadBalancerIP }}
+{{- if .Values.prometheusOperator.handler.loadBalancerIP }}
+  loadBalancerIP: {{ .Values.prometheusOperator.handler.loadBalancerIP }}
 {{- end }}
-{{- if .Values.prometheusOperator.service.loadBalancerSourceRanges }}
+{{- if .Values.prometheusOperator.handler.loadBalancerSourceRanges }}
   loadBalancerSourceRanges:
-  {{- range $cidr := .Values.prometheusOperator.service.loadBalancerSourceRanges }}
+  {{- range $cidr := .Values.prometheusOperator.handler.loadBalancerSourceRanges }}
     - {{ $cidr }}
   {{- end }}
 {{- end }}
   ports:
   - name: http
-    {{- if eq .Values.prometheusOperator.service.type "NodePort" }}
-    nodePort: {{ .Values.prometheusOperator.service.nodePort }}
+    {{- if eq .Values.prometheusOperator.handler.type "NodePort" }}
+    nodePort: {{ .Values.prometheusOperator.handler.nodePort }}
     {{- end }}
     port: 8080
     targetPort: http
   {{- if .Values.prometheusOperator.tlsProxy.enabled }}
   - name: https
-    {{- if eq .Values.prometheusOperator.service.type "NodePort"}}
-    nodePort: {{ .Values.prometheusOperator.service.nodePortTls }}
+    {{- if eq .Values.prometheusOperator.handler.type "NodePort"}}
+    nodePort: {{ .Values.prometheusOperator.handler.nodePortTls }}
     {{- end }}
     port: 443
     targetPort: https
@@ -49,5 +49,5 @@ spec:
   selector:
     app: {{ template "prometheus-operator.name" . }}-operator
     release: {{ $.Release.Name | quote }}
-  type: "{{ .Values.prometheusOperator.service.type }}"
+  type: "{{ .Values.prometheusOperator.handler.type }}"
 {{- end }}
