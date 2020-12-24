@@ -1,4 +1,4 @@
 user-service
 user-web
-friend-service
-friend-web
+domain/user
+app/im

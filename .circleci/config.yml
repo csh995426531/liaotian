@@ -38,26 +38,26 @@ jobs:
     steps:
       - build-service:
           service_name: "user-web"
-  friend-service:
+  domain-user:
     docker:
       - image: circleci/golang:1.14.4
     environment:
       GO111MODULE: on
       GOPROXY: https://goproxy.cn,direct
-    working_directory: /go/release/liaotian/friend-handler
+    working_directory: /go/release/liaotian/domain/user
     steps:
       - build-service:
-          service_name: "friend-handler"
-  friend-web:
+          service_name: "domain-user"
+  app-im:
     docker:
       - image: circleci/golang:1.14.4
     environment:
       GO111MODULE: on
       GOPROXY: https://goproxy.cn,direct
-    working_directory: /go/release/liaotian/friend-web
+    working_directory: /go/release/liaotian/app/im
     steps:
       - build-service:
-          service_name: "friend-web"
+          service_name: "app-im"
 
 commands:
   build-service:
