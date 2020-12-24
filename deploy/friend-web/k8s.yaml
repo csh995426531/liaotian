@@ -1,21 +1,21 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: friend-web
+  name: app-im
   namespace: liaotian
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: friend-web
+      app: app-im
   template:
     metadata:
       labels:
-        app: friend-web
+        app: app-im
     spec:
       containers:
-        - name: friend-web
-          image: liaotian/friend-web:v1.0
+        - name: app-im
+          image: liaotian/app-im:v1.0
           imagePullPolicy: Never
           ports:
             - name: 80-port
@@ -28,7 +28,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: friend-web
+  name: app-im
   namespace: liaotian
 spec:
   ports:
@@ -36,4 +36,4 @@ spec:
       port: 80
       targetPort: 80
   selector:
-    app: friend-web
+    app: app-im

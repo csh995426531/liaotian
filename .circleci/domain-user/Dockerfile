@@ -12,8 +12,8 @@ WORKDIR /go/release
 ADD . .
 
 # 编译：把main.go编译成可执行的二进制文件，命名为app
-RUN GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o app friend-web/main.go
-# 压缩编译：RUN GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -ldflags="-s -w" -o app friend-web/main.go
+RUN GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -o app domain/user/cmd/main.go
+# 压缩编译：RUN GOOS=linux CGO_ENABLED=0 GOARCH=amd64 go build -ldflags="-s -w" -o app friend-handler/main.go
 
 # 运行：使用scratch作为基础镜像
 FROM scratch as prod

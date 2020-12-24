@@ -1,4 +1,2 @@
-user-service
-user-web
-domain/user
-app/im
+domain-user
+app-im
