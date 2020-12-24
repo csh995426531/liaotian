@@ -27,7 +27,6 @@ func main() {
 	)
 
 	// 服务初始化
-	// initialise handler
 	if err := service.Init(
 		web.Action(func(c *cli.Context) {
 			handler.Init()

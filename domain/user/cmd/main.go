@@ -20,7 +20,6 @@ import (
 
 func main() {
 	//config.Init()
-
 	zap.InitLogger()
 
 	report, err := reporter.NewGRPCReporter("oap.skywalking.svc.cluster.local:11800")
