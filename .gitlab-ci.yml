@@ -45,7 +45,7 @@ job_app_im:
     SERVICE_NAME: app-im
   rules:
     - changes:
-        - ./app/im/*
+        - app/im/*
     - if: '$TRIGGER_JOB == "app-im"'
 
 job_domain_user:
@@ -57,7 +57,7 @@ job_domain_user:
     SERVICE_NAME: domain-user
   rules:
     - changes:
-        - ./domain/user/*
+        - domain/user/*
     - if: '$TRIGGER_JOB == "domain-user"'
 
 job_push_image:
