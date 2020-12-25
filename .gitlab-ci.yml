@@ -22,9 +22,12 @@ stages:
 
 job_checkout:
   stage: checkout
+  image: debian:stable
   script:
-    - echo "checkout"
+    - echo "检测有改动的微服务项目"
     - |
+      apt update -qy && apt upgrade -qy
+      apt install -y git
       git diff --no-commit-id --name-only -r `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f2 | sort -u >  projects
       printf "Modified directories:\n"
       cat projects
@@ -41,7 +44,7 @@ job_push_image:
   stage: build
   image: docker:stable
   script:
-    - echo "build {$SERVICE_NAME}"
+    - echo "开始 build {$SERVICE_NAME}"
     - docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
     - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f ~/liaotian/.circleci/$SERVICE_NAME/Dockerfile ~/liaotian/
     - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest
