@@ -46,6 +46,7 @@ job_app_im:
   rules:
     - changes:
         - app/im/**/*
+        - middlewares/**/*
     - if: '$TRIGGER_JOB == "app-im"'
       when: always
 
@@ -59,14 +60,15 @@ job_domain_user:
   rules:
     - changes:
         - domain/user/**/*
+        - middlewares/**/*
     - if: '$TRIGGER_JOB == "domain-user"'
       when: always
 
 job_push_image:
   stage: build
   script:
-    - echo "build "
-    - cd ~/liaotian
+    - echo "build $SERVICE_NAME"
+#    - cd ~/liaotian
     - docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
     - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f ~/liaotian/.circleci/$SERVICE_NAME/Dockerfile ~/liaotian/
     - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest
