@@ -17,7 +17,6 @@ before_script:
 
 stages:
   - checkout
-#  - model_init
 #  - test
   - build
 
@@ -32,48 +31,20 @@ job_checkout:
       while read project; do
         if grep -Fxq $project ./.circleci/service-dirs; then
           printf "\nTriggerring build for project: "$project
-          curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[TRIGGER_JOB]=${project}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
+          curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[SERVICE_NAME]=${project}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
         fi
       done < projects
-    except:
-      - triggers
-
-job_app_im:
-  stage: model_init
-  script:
-    - echo "init app-im"
-  variables:
-    working_directory: /go/release/liaotian/app/im
-    SERVICE_NAME: app-im
-  rules:
-#    - changes:
-#        - app/im/**/*
-#        - middlewares/**/*
-    - if: '$TRIGGER_JOB == "app-im"'
-      when: always
-
-job_domain_user:
-  stage: model_init
-  script:
-    - echo "init domain-user"
-  variables:
-    working_directory: /go/release/liaotian/domain/user
-    SERVICE_NAME: domain-user
-  rules:
-#    - changes:
-#        - domain/user/**/*
-#        - middlewares/**/*
-    - if: '$TRIGGER_JOB == "domain-user"'
-      when: always
+  except:
+    - triggers
 
 job_push_image:
   stage: build
   image: docker:stable
   script:
-    - echo "build {$TRIGGER_JOB}"
+    - echo "build {$SERVICE_NAME}"
     - docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
-    - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$TRIGGER_JOB:latest -f ~/liaotian/.circleci/$TRIGGER_JOB/Dockerfile ~/liaotian/
-    - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$TRIGGER_JOB:latest
+    - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f ~/liaotian/.circleci/$SERVICE_NAME/Dockerfile ~/liaotian/
+    - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest
 
 #job_test:
 #  stage: test
