@@ -45,8 +45,9 @@ job_app_im:
     SERVICE_NAME: app-im
   rules:
     - changes:
-        - app/im/*
+        - app/im/**/*
     - if: '$TRIGGER_JOB == "app-im"'
+      when: always
 
 job_domain_user:
   stage: model_init
@@ -57,8 +58,9 @@ job_domain_user:
     SERVICE_NAME: domain-user
   rules:
     - changes:
-        - domain/user/*
+        - domain/user/**/*
     - if: '$TRIGGER_JOB == "domain-user"'
+      when: always
 
 job_push_image:
   stage: build
