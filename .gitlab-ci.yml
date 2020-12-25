@@ -1,4 +1,8 @@
-image: golang:1.14.4
+variables:
+  DOCKER_USER: "崔徐徐ok"
+  DOCKER_PASS: "csh123456789A"
+  DOCKER_IMAGE_HOST: "registry.cn-hangzhou.aliyuncs.com"
+  DOCKER_IMAGE_NAMESPACE: "liaotian_csh"
 
 cache:
   untracked: true #cache all files that are untracked in your Git
@@ -9,32 +13,30 @@ cache:
 before_script:
   - echo "before_script"
   - hostname && cat /etc/*lease && ip a && env && pwd && ls -al
-  - export GOPROXY=https://goproxy.cn,direct
-  - export GO111MODULE=on
   - mkdir -p .goBinTmp
 
 stages:
-#  - checkout
-  - model_init
+  - checkout
+#  - model_init
 #  - test
   - build
 
-#job_checkout:
-#  stage: checkout
-#  script:
-#    - echo "checkout"
-#    - |
-#      git diff --no-commit-id --name-only -r `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f2 | sort -u >  projects
-#      printf "Modified directories:\n"
-#      cat projects
-#      while read project; do
-#        if grep -Fxq $project ./.circleci/service-dirs; then
-#          printf "\nTriggerring build for project: "$project
-#          curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[TRIGGER_JOB]=${project}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
-#        fi
-#      done < projects
-#    except:
-#      - triggers
+job_checkout:
+  stage: checkout
+  script:
+    - echo "checkout"
+    - |
+      git diff --no-commit-id --name-only -r `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f2 | sort -u >  projects
+      printf "Modified directories:\n"
+      cat projects
+      while read project; do
+        if grep -Fxq $project ./.circleci/service-dirs; then
+          printf "\nTriggerring build for project: "$project
+          curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[TRIGGER_JOB]=${project}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
+        fi
+      done < projects
+    except:
+      - triggers
 
 job_app_im:
   stage: model_init
@@ -44,9 +46,9 @@ job_app_im:
     working_directory: /go/release/liaotian/app/im
     SERVICE_NAME: app-im
   rules:
-    - changes:
-        - app/im/**/*
-        - middlewares/**/*
+#    - changes:
+#        - app/im/**/*
+#        - middlewares/**/*
     - if: '$TRIGGER_JOB == "app-im"'
       when: always
 
@@ -58,9 +60,9 @@ job_domain_user:
     working_directory: /go/release/liaotian/domain/user
     SERVICE_NAME: domain-user
   rules:
-    - changes:
-        - domain/user/**/*
-        - middlewares/**/*
+#    - changes:
+#        - domain/user/**/*
+#        - middlewares/**/*
     - if: '$TRIGGER_JOB == "domain-user"'
       when: always
 
@@ -68,10 +70,10 @@ job_push_image:
   stage: build
   image: docker:stable
   script:
-    - echo "build {$SERVICE_NAME}"
+    - echo "build {$TRIGGER_JOB}"
     - docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
-    - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f ~/liaotian/.circleci/$SERVICE_NAME/Dockerfile ~/liaotian/
-    - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest
+    - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$TRIGGER_JOB:latest -f ~/liaotian/.circleci/$TRIGGER_JOB/Dockerfile ~/liaotian/
+    - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$TRIGGER_JOB:latest
 
 #job_test:
 #  stage: test
