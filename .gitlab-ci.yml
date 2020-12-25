@@ -77,6 +77,8 @@ job_push_image:
     - docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
     - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f ~/liaotian/.circleci/$SERVICE_NAME/Dockerfile ~/liaotian/
     - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest
+  only:
+    - triggers
 
 #job_test:
 #  stage: test
