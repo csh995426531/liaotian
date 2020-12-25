@@ -46,7 +46,7 @@ stages:
     - sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
     - apt update -qy && apt upgrade -qy
     - apt install -y curl
-    - echo "check {$SERVICE_NAME}"
+    - echo $SERVICE_NAME
     - curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[SERVICE_NAME]=${SERVICE_NAME}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
 
 job_app_im:
