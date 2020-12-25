@@ -16,29 +16,58 @@ before_script:
   - mkdir -p .goBinTmp
 
 stages:
-  - checkout
-#  - test
+  - check_service
   - build
 
-job_checkout:
-  stage: checkout
-  image: debian:stable
+#job_checkout:
+#  stage: checkout
+#  image: debian:stable
+#  script:
+#    - echo "检测有改动的微服务项目"
+#    - |
+#      apt update -qy && apt upgrade -qy
+#      apt install -y git
+#      git diff --no-commit-id --name-only -r `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f2 | sort -u >  projects
+#      printf "Modified directories:\n"
+#      cat projects
+#      while read project; do
+#        if grep -Fxq $project ./.circleci/service-dirs; then
+#          printf "\nTriggerring build for project: "$project
+#          curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[SERVICE_NAME]=${project}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
+#        fi
+#      done < projects
+#  except:
+#    - triggers
+
+.check_service_template: &check_service_template
+  stage: check_service
   script:
-    - echo "检测有改动的微服务项目"
-    - |
-      apt update -qy && apt upgrade -qy
-      apt install -y git
-      git diff --no-commit-id --name-only -r `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f2 | sort -u >  projects
-      printf "Modified directories:\n"
-      cat projects
-      while read project; do
-        if grep -Fxq $project ./.circleci/service-dirs; then
-          printf "\nTriggerring build for project: "$project
-          curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[SERVICE_NAME]=${project}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
-        fi
-      done < projects
-  except:
-    - triggers
+    - echo "check {$SERVICE_NAME}"
+    - curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[SERVICE_NAME]=${SERVICE_NAME}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
+
+
+job_app_im:
+  variables:
+    SERVICE_NAME: app-im
+  <<: *check_service_template
+  rules:
+    - changes:
+        - app/im/**/*
+        - middlewares/**/*
+#    - if: '$TRIGGER_JOB == "app-im"'
+#      when: always
+
+job_domain_user:
+  variables:
+    SERVICE_NAME: domain-user
+  <<: *check_service_template
+  rules:
+    - changes:
+        - domain/user/**/*
+        - middlewares/**/*
+#    - if: '$TRIGGER_JOB == "domain-user"'
+#      when: always
+
 
 job_push_image:
   stage: build
