@@ -1,0 +1,85 @@
+image: golang:1.14.4
+
+cache:
+  untracked: true #cache all files that are untracked in your Git
+  key: $CI_COMMIT_SHA #-$CI_COMMIT_REF_NAME #-$CI_COMMIT_SHA
+  paths:
+    - .goBinTmp
+
+before_script:
+  - echo "before_script"
+  - hostname && cat /etc/*lease && ip a && env && pwd && ls -al
+  - export GOPROXY=https://goproxy.cn,direct
+  - export GO111MODULE=on
+  - mkdir -p .goBinTmp
+
+stages:
+#  - checkout
+  - model_init
+#  - test
+  - build
+
+#job_checkout:
+#  stage: checkout
+#  script:
+#    - echo "checkout"
+#    - |
+#      git diff --no-commit-id --name-only -r `git log -n 2 --oneline --pretty=format:"%h" | tail -n1` | cut -d/ -f2 | sort -u >  projects
+#      printf "Modified directories:\n"
+#      cat projects
+#      while read project; do
+#        if grep -Fxq $project ./.circleci/service-dirs; then
+#          printf "\nTriggerring build for project: "$project
+#          curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[TRIGGER_JOB]=${project}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
+#        fi
+#      done < projects
+#    except:
+#      - triggers
+
+job_app_im:
+  stage: model_init
+  script:
+    - echo "init app-im"
+  variables:
+    working_directory: /go/release/liaotian/app/im
+    SERVICE_NAME: app-im
+  rules:
+    - changes:
+        - ./app/im/*
+    - if: '$TRIGGER_JOB == "app-im"'
+
+job_domain_user:
+  stage: model_init
+  script:
+    - echo "init domain-user"
+  variables:
+    working_directory: /go/release/liaotian/domain/user
+    SERVICE_NAME: domain-user
+  rules:
+    - changes:
+        - ./domain/user/*
+    - if: '$TRIGGER_JOB == "domain-user"'
+
+job_push_image:
+  stage: build
+  script:
+    - echo "build "
+    - cd ~/liaotian
+    - docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
+    - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f ~/liaotian/.circleci/$SERVICE_NAME/Dockerfile ~/liaotian/
+    - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest
+
+#job_test:
+#  stage: test
+#  script:
+#    - echo "Testing is starting"
+#    - printf "mode=test\nlog_dir=/data1/ms/log/fingerprintGo/" > .env
+#    - go vet ./... #语法错误检查
+#    - ping -c1  redis  #
+#    #    - go test $(go list ./...)
+#    - go test -v  ./...  # -benchmem -bench=.
+#  services: #docker link
+#    - name: redis
+#      alias: redis.test
+#  tags:
+#    - cms
