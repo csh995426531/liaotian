@@ -13,7 +13,6 @@ import (
 func main() {
 
 	zap.InitLogger()
-
 	//初始化路由
 	ginRouter := handler.InitRouters()
 
