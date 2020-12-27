@@ -16,8 +16,8 @@ before_script:
   - mkdir -p .goBinTmp
 
 stages:
-  - check_service
-  - build
+#  - check_service
+  - build_push
 
 #job_checkout:
 #  stage: checkout
@@ -39,49 +39,64 @@ stages:
 #  except:
 #    - triggers
 
-.check_service_template: &check_service_template
-  image: debian:stable
-  stage: check_service
-  script:
-    - sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
-    - apt update -qy && apt upgrade -qy
-    - apt install -y curl
-    - echo $SERVICE_NAME
-    - curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[SERVICE_NAME]={$SERVICE_NAME}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
+#.check_service_template: &check_service_template
+#  image: debian:stable
+#  stage: check_service
+#  script:
+#    - sed -i "s/deb.debian.org/mirrors.aliyun.com/g" /etc/apt/sources.list
+#    - apt update -qy && apt upgrade -qy
+#    - apt install -y curl
+#    - echo $SERVICE_NAME
+#    - curl -X POST -F token=3a67414383be39c0cf351ea9efa16d -F "variables[SERVICE_NAME]={$SERVICE_NAME}" -F ref=master http://local.gitlab.com/api/v4/projects/2/trigger/pipeline
 
-job_app_im:
-  variables:
-    SERVICE_NAME: app-im
-  <<: *check_service_template
-  rules:
-    - changes:
-        - app/im/**/*
-        - middlewares/**/*
+#job_app_im:
+#  variables:
+#    SERVICE_NAME: app-im
+#  <<: *check_service_template
+#  rules:
+#    - changes:
+#        - app/im/**/*
+#        - middlewares/**/*
 #    - if: '$TRIGGER_JOB == "app-im"'
 #      when: always
 
-job_domain_user:
-  variables:
-    SERVICE_NAME: domain-user
-  <<: *check_service_template
-  rules:
-    - changes:
-        - domain/user/**/*
-        - middlewares/**/*
+#job_domain_user:
+#  variables:
+#    SERVICE_NAME: domain-user
+#  <<: *check_service_template
+#  rules:
+#    - changes:
+#        - domain/user/**/*
+#        - middlewares/**/*
 #    - if: '$TRIGGER_JOB == "domain-user"'
 #      when: always
 
-
-job_push_image:
-  stage: build
+.build_push_template: &build_push_template:
+  stage: build_push
   image: docker:stable
   script:
     - echo "开始 build {$SERVICE_NAME}"
     - docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
     - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f ~/liaotian/.circleci/$SERVICE_NAME/Dockerfile ~/liaotian/
     - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest
-  only:
-    - triggers
+
+build_push_app_im:
+  variables:
+    SERVICE_NAME: app-im
+  <<: *build_push_template
+  rules:
+    - changes:
+        - app/im/**/*
+        - middlewares/**/*
+
+build_push_domain_user:
+  variables:
+    SERVICE_NAME: domain-user
+  <<: *build_push_template
+  rules:
+    - changes:
+        - domain/user/**/*
+        - middlewares/**/*
 
 #job_test:
 #  stage: test
