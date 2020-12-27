@@ -76,8 +76,8 @@ stages:
   image: docker:stable
   script:
     - echo "开始 build $SERVICE_NAME"
-    - docker login --username=崔徐徐ok registry.cn-hangzhou.aliyuncs.com -p csh123456789A
-    - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f ~/liaotian/.circleci/$SERVICE_NAME/Dockerfile ~/liaotian/
+    - docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
+    - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f .circleci/$SERVICE_NAME/Dockerfile .
     - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest
 
 build_push_app_im:
