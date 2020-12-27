@@ -71,7 +71,7 @@ stages:
 #    - if: '$TRIGGER_JOB == "domain-user"'
 #      when: always
 
-.build_push_template: &build_push_template:
+.build_push_template: &build_push_template
   stage: build_push
   image: docker:stable
   script:
