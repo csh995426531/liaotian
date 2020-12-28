@@ -71,6 +71,7 @@ stages:
 #    - if: '$TRIGGER_JOB == "domain-user"'
 #      when: always
 
+#模板
 .build_push_template: &build_push_template
   stage: build_push
   image: docker:stable
@@ -80,6 +81,7 @@ stages:
     - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f .circleci/$SERVICE_NAME/Dockerfile .
     - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest
 
+#im应用服务
 build_push_app_im:
   variables:
     SERVICE_NAME: app-im
@@ -89,6 +91,7 @@ build_push_app_im:
         - app/im/**/*
         - middlewares/**/*
 
+#用户领域服务
 build_push_domain_user:
   variables:
     SERVICE_NAME: domain-user

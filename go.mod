@@ -22,12 +22,13 @@ require (
 	github.com/micro/go-micro/v2 v2.9.1 // indirect
 	github.com/micro/go-plugins v1.5.1
 	github.com/miekg/dns v1.1.35 // indirect
-	github.com/natefinch/lumberjack v2.0.0+incompatible // indirect
+	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/onsi/ginkgo v1.13.0 // indirect
 	github.com/prometheus/common v0.7.0
 	github.com/sirupsen/logrus v1.6.0 // indirect
 	github.com/stretchr/testify v1.6.1 // indirect
 	github.com/ugorji/go v1.1.9 // indirect
+	go.uber.org/zap v1.13.0
 	golang.org/x/crypto v0.0.0-20201117144127-c1f2f97bffc9 // indirect
 	golang.org/x/net v0.0.0-20201110031124-69a78807bb2b // indirect
 	golang.org/x/oauth2 v0.0.0-20191202225959-858c2ad4c8b6 // indirect
