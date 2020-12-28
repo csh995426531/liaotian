@@ -5,15 +5,15 @@ variables:
   DOCKER_IMAGE_NAMESPACE: "liaotian_csh"
 
 cache:
-  untracked: true #cache all files that are untracked in your Git
-  key: $CI_COMMIT_SHA #-$CI_COMMIT_REF_NAME #-$CI_COMMIT_SHA
-  paths:
-    - .goBinTmp
+  untracked: false #cache all files that are untracked in your Git
+#  key: $CI_COMMIT_SHA #-$CI_COMMIT_REF_NAME #-$CI_COMMIT_SHA
+#  paths:
+#    - .goBinTmp
 
 before_script:
   - echo "before_script"
   - hostname && cat /etc/*lease && ip a && env && pwd && ls -al
-  - mkdir -p .goBinTmp
+#  - mkdir -p .goBinTmp
 
 stages:
 #  - check_service

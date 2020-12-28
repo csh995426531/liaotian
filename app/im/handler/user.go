@@ -51,7 +51,7 @@ func Login(ctx *gin.Context) {
 func Register(ctx *gin.Context) {
 	resultCode := http.StatusOK
 	resultData := gin.H{}
-
+	ctx.JSON(resultCode, resultData)
 	var result userService.Request
 
 	err := ctx.ShouldBindJSON(&result)
