@@ -78,7 +78,7 @@ stages:
   script:
     - echo "开始 build $SERVICE_NAME"
     - docker login --username=$DOCKER_USER $DOCKER_IMAGE_HOST -p $DOCKER_PASS
-    - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f .circleci/$SERVICE_NAME/Dockerfile .
+    - docker build -t $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest -f .gitlab-ci/$SERVICE_NAME/Dockerfile .
     - docker push $DOCKER_IMAGE_HOST/$DOCKER_IMAGE_NAMESPACE/$SERVICE_NAME:latest
 
 #im应用服务
