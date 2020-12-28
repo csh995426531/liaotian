@@ -13,14 +13,14 @@ import (
 func main() {
 
 	zap.InitLogger()
-	
+
 	//初始化路由
 	ginRouter := handler.InitRouters()
 
 	// create new web handler
 	service := web.NewService(
 		web.Registry(kubernetes.NewRegistry()), //注册到Kubernetes
-		web.Name("user.web.user"),
+		web.Name("app.im.service"),
 		web.Version("latest"),
 		web.Handler(ginRouter),
 		web.Address(os.Getenv("SERVICE_PORT")),

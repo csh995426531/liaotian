@@ -9,10 +9,22 @@ filebeatConfig:
         - /var/lib/docker/containers/*/*.log
       processors:
         - add_kubernetes_metadata: # 增加kubernetes的属性
+            default_indexers.enabled: true
+            default_matchers.enabled: true
             host: ${NODE_NAME}
             matchers:
             - logs_path:
                 logs_path: "/var/lib/docker/containers/"
+        - drop_event:
+            when:
+              not:
+                equals:
+                  kubernetes.namespace: "liaotian"
+        - drop_fields:
+            fields:
+              - "agent"
+              - "log"
+
     # filebeat.autodiscover: # 使用autodiscover功能
     #   providers:
     #     - type: kubernetes

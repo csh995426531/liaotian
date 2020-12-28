@@ -14,11 +14,11 @@ func InitRouters() *gin.Engine {
 	if err != nil {
 		zap.SugarLogger.Fatalf("创建 grpc reporter 失败，error: %v", err)
 	}
-	tracer, err := go2sky.NewTracer("user-web", go2sky.WithReporter(report))
+	tracer, err := go2sky.NewTracer("app-im", go2sky.WithReporter(report))
 	if err != nil {
 		zap.SugarLogger.Fatalf("创建 tracer 失败，error: %v", err)
 	} else {
-		zap.ZapLogger.Info("创建 trace oap.skywalking:11800 - user-web 成功")
+		zap.ZapLogger.Info("创建 trace oap.skywalking:11800 - app-im 成功")
 	}
 
 	router := gin.Default()

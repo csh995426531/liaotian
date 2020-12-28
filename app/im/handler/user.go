@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"github.com/gin-gonic/gin"
 	userService "liaotian/domain/user/proto"
-	"log"
+	"liaotian/middlewares/logger/zap"
 	"net/http"
 )
 
@@ -24,8 +24,15 @@ func Login(ctx *gin.Context) {
 
 	res, err := domainUser.CheckUserPwd(ctx.Request.Context(), &request)
 
-	if err != nil || res.Code != http.StatusOK {
-		log.Printf("domainUser.CheckUserPwd error: %+v", err)
+	if err != nil {
+		zap.SugarLogger.Errorf("domainUser.CheckUserPwd error: %+v", err)
+		resultCode = http.StatusInternalServerError
+		resultData = gin.H{
+			"message": "上游服务异常",
+		}
+		return
+	}
+	if res.Code != http.StatusOK {
 		resultCode = http.StatusInternalServerError
 		resultData = gin.H{
 			"message": res.Message,
@@ -57,11 +64,19 @@ func Register(ctx *gin.Context) {
 	}
 
 	res, err := domainUser.CreateUserInfo(ctx.Request.Context(), &result)
-	if err != nil || res.Code != http.StatusOK {
-		log.Printf("domainUser.CreateUserInfo error: %+v", err)
+	if err != nil {
+		zap.SugarLogger.Errorf("domainUser.CreateUserInfo error: %+v", err)
 		resultCode = http.StatusInternalServerError
 		resultData = gin.H{
-			"message" : res.Message,
+			"message" : "上游服务异常",
+		}
+		return
+	}
+
+	if res.Code != http.StatusOK {
+		resultCode = http.StatusInternalServerError
+		resultData = gin.H{
+		"message" : res.Message,
 		}
 		return
 	}
@@ -90,12 +105,19 @@ func GetUserInfo(ctx *gin.Context) {
 	}
 
 	res, err := domainUser.GetUserInfo(ctx.Request.Context(), &result)
-	if err != nil || res.Code != http.StatusOK {
-		log.Printf("domainUser.GetUserInfo error: %+v", err)
+	if err != nil {
+		zap.SugarLogger.Errorf("domainUser.GetUserInfo error: %+v", err)
 		resultCode = http.StatusInternalServerError
 		resultData = gin.H{
-			"message": res.Message,
+			"message": "上游服务异常",
 		}
+		return
+	}
+	if res.Code != http.StatusOK {
+		resultCode = http.StatusInternalServerError
+		resultData = gin.H{
+		"message": res.Message,
+	}
 		return
 	}
 
@@ -124,12 +146,21 @@ func UpdateUserInfo(ctx *gin.Context) {
 	}
 
 	res, err := domainUser.UpdateUserInfo(ctx.Request.Context(), &result)
-	if err != nil || res.Code != http.StatusOK {
-		log.Printf("domainUser.UpdateUserInfo error: %+v", err)
+	if err != nil {
+		zap.SugarLogger.Errorf("domainUser.UpdateUserInfo error: %+v", err)
 		resultCode = http.StatusInternalServerError
 		resultData = gin.H{
-			"message": res.Message,
+			"message": "上游服务异常",
 		}
+		return
+	}
+
+	if res.Code != http.StatusOK {
+		zap.SugarLogger.Errorf("domainUser.UpdateUserInfo error: %+v", err)
+		resultCode = http.StatusInternalServerError
+		resultData = gin.H{
+		"message": res.Message,
+	}
 		return
 	}
 
