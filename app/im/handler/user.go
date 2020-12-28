@@ -11,7 +11,7 @@ import (
 func Login(ctx *gin.Context) {
 	resultCode := http.StatusOK
 	resultData := gin.H{}
-
+	defer ctx.JSON(resultCode, resultData)
 	var request userService.Request
 	err := ctx.ShouldBindJSON(&request)
 	if err != nil {
@@ -44,14 +44,13 @@ func Login(ctx *gin.Context) {
 		"message": res.Message,
 		"data":    res.Data,
 	}
-
-	defer ctx.JSON(resultCode, resultData)
 }
 
 func Register(ctx *gin.Context) {
 	resultCode := http.StatusOK
 	resultData := gin.H{}
-	ctx.JSON(resultCode, resultData)
+	defer ctx.JSON(resultCode, resultData)
+
 	var result userService.Request
 
 	err := ctx.ShouldBindJSON(&result)
@@ -85,13 +84,12 @@ func Register(ctx *gin.Context) {
 		"message": res.Message,
 		"data": res.Data,
 	}
-
-	defer ctx.JSON(resultCode, resultData)
 }
 
 func GetUserInfo(ctx *gin.Context) {
 	resultCode := http.StatusOK
 	resultData := gin.H{}
+	defer ctx.JSON(resultCode, resultData)
 
 	var result userService.Request
 
@@ -125,15 +123,13 @@ func GetUserInfo(ctx *gin.Context) {
 		"message": res.Message,
 		"data": res.Data,
 	}
-
-	defer ctx.JSON(resultCode, resultData)
 }
 
 func UpdateUserInfo(ctx *gin.Context) {
 
 	resultCode := http.StatusOK
 	resultData := gin.H{}
-
+	defer ctx.JSON(resultCode, resultData)
 	var result userService.Request
 
 	err := ctx.ShouldBindJSON(&result)
@@ -169,5 +165,4 @@ func UpdateUserInfo(ctx *gin.Context) {
 		"data": res.Data,
 	}
 
-	defer ctx.JSON(resultCode, resultData)
 }
