@@ -12,7 +12,6 @@ import (
 )
 
 func InitRouters() *gin.Engine {
-	// gin2micro.SetSamplingFrequency(50)
 	report, err := reporter.NewGRPCReporter("oap.skywalking.svc.cluster.local:11800")
 	if err != nil {
 		log.Fatalf("crate grpc reporter error: %v \n", err)
