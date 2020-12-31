@@ -1,67 +1,202 @@
 package handler
-//
-//import (
-//	"fmt"
-//	"github.com/micro/cli"
-//	"github.com/micro/go-micro/web"
-//	"liaotian/middlewares/logger/zap"
-//	"liaotian/user-web/handler"
-//	"net/http"
-//	"testing"
-//	"net/http/httptest"
-//)
-//
-//func TestMain(m *testing.M) {
-//
-//	zap.InitLogger()
-//
-//	//初始化路由
-//	ginRouter := handler.InitRouters()
-//
-//	// create new web handler
-//	service := web.NewService(
-//		web.Name("app.im.service"),
-//		web.Version("latest"),
-//		web.Handler(ginRouter),
-//	)
-//
-//	// 服务初始化
-//	if err := service.Init(
-//		web.Action(func(c *cli.Context) {
-//			handler.Init()
-//		}),
-//	); err != nil {
-//		panic(fmt.Sprintf("服务初始化失败，error: %v", err))
+
+import (
+	"bytes"
+	"context"
+	"encoding/json"
+	"fmt"
+	client "github.com/micro/go-micro/client"
+	"github.com/micro/go-micro/web"
+	"io/ioutil"
+	userService "liaotian/domain/user/proto"
+	"liaotian/middlewares/logger/zap"
+	"liaotian/middlewares/validate/translate"
+	"net/http"
+	"testing"
+	"time"
+)
+
+type testService struct {
+}
+
+func (c *testService) CreateUserInfo(ctx context.Context, in *userService.Request, opts ...client.CallOption) (*userService.Response, error) {
+	out := new(userService.Response)
+
+	if in.Account == "" || in.Password == "" || in.Name == "" {
+		out.Code = http.StatusBadRequest
+		out.Message = "缺少参数！"
+		out.Data = nil
+		return out, nil
+	}
+
+	if in.Account == "zhangsan" {
+		out.Code = http.StatusForbidden
+		out.Message = "账户已被注册！"
+		out.Data = nil
+		return out, nil
+	}
+
+	out.Code = http.StatusCreated
+	out.Message = "success"
+	out.Data = &userService.User{
+		Id: 1,
+		Name: in.Name,
+		Account: in.Account,
+		Password: in.Password,
+		Avatar: in.Avatar,
+	}
+
+	return out, nil
+}
+
+func (c *testService) GetUserInfo(ctx context.Context, in *userService.Request, opts ...client.CallOption) (*userService.Response, error) {
+	out := new(userService.Response)
+	if in.Account == "" || in.Name == "" || in.Id == 0{
+		out.Code = http.StatusBadRequest
+		out.Message = "缺少参数！"
+		out.Data = nil
+		return out, nil
+	}
+
+	out.Code = http.StatusOK
+	out.Message = "success"
+	out.Data = nil
+
+	if in.Id == 1 || in.Account == "zhangsan" || in.Name == "张三" {
+		out.Data = &userService.User{
+			Id: 1,
+			Name: "张三",
+			Account: "zhangsan",
+			Avatar: "http://www.baicu.com",
+		}
+	}
+	return out, nil
+}
+func (c *testService) UpdateUserInfo(ctx context.Context, in *userService.Request, opts ...client.CallOption) (*userService.Response, error) {
+	out := new(userService.Response)
+	if in.Id != 1 {
+		out.Code = http.StatusNotFound
+		out.Message = "用户不存在"
+		out.Data = nil
+		return out, nil
+	}
+
+	out.Code = http.StatusOK
+	out.Message = "成功"
+	out.Data = &userService.User{
+		Id: 1,
+		Name: "张三",
+		Account: "zhangsan",
+		Avatar: "http://www.baidu.com",
+	}
+	return out, nil
+}
+func (c *testService) CheckUserPwd(ctx context.Context, in *userService.Request, opts ...client.CallOption) (*userService.Response, error) {
+	out := new(userService.Response)
+	if in.Id != 1 {
+		out.Code = http.StatusNotFound
+		out.Message = "用户不存在"
+		out.Data = nil
+		return out, nil
+	}
+
+	if in.Password != "123456" {
+		out.Code = http.StatusUnauthorized
+		out.Message = "密码错误"
+		out.Data = nil
+		return out, nil
+	}
+
+	out.Code = http.StatusOK
+	out.Message = "成功"
+	out.Data = &userService.User{
+		Id: 1,
+		Name: "张三",
+		Account: "zhangsan",
+		Avatar: "http://www.baidu.com",
+	}
+
+	return out, nil
+}
+
+type A struct {
+	Name string
+}
+type B struct {
+	Name string
+}
+
+func TestMain(m *testing.M) {
+
+	zap.InitLogger()
+	translate.Init()
+
+	//初始化路由
+	ginRouter := InitRouters()
+
+	// create new web handler
+	service := web.NewService(
+		web.Name("app.im.service"),
+		web.Version("latest"),
+		web.Handler(ginRouter),
+		web.Address(":18282"),
+	)
+	Init(new(testService))
+
+	// run handler
+	go func() {
+		if err := service.Run(); err != nil {
+			panic(fmt.Sprintf("服务启动失败，error: %v", err))
+		}
+	}()
+
+	fmt.Println("服务启动成功")
+	time.Sleep(time.Second * 1)
+	m.Run()
+}
+
+func TestRegister(t *testing.T) {
+
+	testData := []struct{
+		Account  string
+		Password string
+		Name 	 string
+		Avatar 	 string
+		HttpCode int
+		Response string
+	} {
+		{"zhangsan", "123456", "张三", "http://baidu.com", http.StatusInternalServerError, "{\"data\":null,\"msg\":\"账户已被注册！\"}"},
+		{"", "123456", "李四", "http://baidu.com", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Account为必填字段\"}"},
+		{"lisi", "", "李四", "http://baidu.com", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Password为必填字段\"}"},
+		{"lisi", "123456", "", "http://baidu.com", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Name为必填字段\"}"},
+		{"lisi", "123456", "李四", "", http.StatusCreated,"{\"data\":{\"id\":1,\"name\":\"李四\",\"account\":\"lisi\",\"password\":\"123456\"},\"msg\":\"成功\"}"},
+	}
+
+	for _, data := range testData {
+		t.Run("", func(t *testing.T) {
+			bytesData, _ := json.Marshal(data)
+			reader := bytes.NewReader(bytesData)
+
+			resp, err := http.Post("http://127.0.0.1:18282/user/register", "application/json", reader)
+			if err != nil {
+				t.Error(err)
+			}
+			if resp.StatusCode != data.HttpCode {
+				t.Errorf("响应HttpCode错误，want:%v, got:%v", data.HttpCode, resp.StatusCode)
+			}
+			body, _ := ioutil.ReadAll(resp.Body)
+			if string(body) != data.Response {
+				t.Errorf("响应body错误，want:%v, got:%v", data.Response, string(body))
+			}
+		})
+	}
+}
+
+//func TestLogin(t *testing.T) {
+//	testData := []struct{
+//		Account string
+//		password string
+//	}{
+//		{"aaa", "123456"},
 //	}
-//
-//	// run handler
-//	if err := service.Run(); err != nil {
-//		panic(fmt.Sprintf("服务启动失败，error: %v", err))
-//	}
-//	fmt.Println("服务启动成功")
-//	m.Run()
-//}
-//
-//func TestRegister(t *testing.T) {
-//
-//	req, err := http.NewRequest("POST", "/user/register", nil)
-//	if err != nil {
-//		t.Fatalf("NewRequest error: %v", err)
-//	}
-//
-//	rr := httptest.NewRecorder()
-//	handler := http.HandlerFunc(Register)
-//	handler.ServeHTTP(rr, req)
-//
-//	if status := rr.Code; status != http.StatusOK {
-//		t.Errorf("handler returned wrong status code: got %v want %v",
-//			status, http.StatusOK)
-//	}
-//	// Check the response body is what we expect.
-//	expected := `[{"id":1,"first_name":"Krish","last_name":"Bhanushali","email_address":"krishsb@g.com","phone_number":"0987654321"},{"id":2,"first_name":"xyz","last_name":"pqr","email_address":"xyz@pqr.com","phone_number":"1234567890"},{"id":6,"first_name":"FirstNameSample","last_name":"LastNameSample","email_address":"lr@gmail.com","phone_number":"1111111111"}]`
-//	if rr.Body.String() != expected {
-//		t.Errorf("handler returned unexpected body: got %v want %v",
-//			rr.Body.String(), expected)
-//	}
-//
 //}

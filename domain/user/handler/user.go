@@ -3,6 +3,7 @@ package handler
 import (
 	"context"
 	"liaotian/domain/user/proto"
+	"net/http"
 )
 
 /**
@@ -16,7 +17,7 @@ func (h *Handler) CreateUserInfo (ctx context.Context, request *proto.Request, r
 		return err
 	}
 	if user != nil {
-		response.Code = 500
+		response.Code = http.StatusForbidden
 		response.Message = "账户已被注册！"
 		response.Data = nil
 		return nil
@@ -26,8 +27,8 @@ func (h *Handler) CreateUserInfo (ctx context.Context, request *proto.Request, r
 	if err != nil {
 		return err
 	}
-	response.Code = 200
-	response.Message = "success"
+	response.Code = http.StatusCreated
+	response.Message = "成功"
 	response.Data = &proto.User{
 		Id: user.Id,
 		Name: user.Name,
@@ -45,14 +46,15 @@ func (h *Handler) GetUserInfo (ctx context.Context, request *proto.Request, resp
 		return err
 	}
 
-	response.Code = 200
+	response.Code = http.StatusOK
 	response.Message = "success"
+	response.Data = nil
 
 	if user.Id > 0 {
 		response.Data = &proto.User{
 			Id: user.Id,
 			Name: user.Name,
-			Password: user.Password,
+			Account: user.Account,
 			Avatar: user.Avatar,
 		}
 	}
@@ -67,8 +69,9 @@ func (h *Handler) UpdateUserInfo (ctx context.Context, request *proto.Request, r
 	}
 
 	if user.Id == 0 {
-		response.Code = 500
+		response.Code = http.StatusNotFound
 		response.Message = "用户不存在"
+		response.Data = nil
 		return nil
 	}
 
@@ -76,7 +79,7 @@ func (h *Handler) UpdateUserInfo (ctx context.Context, request *proto.Request, r
 	if err != nil {
 		return err
 	}
-	response.Code = 200
+	response.Code = http.StatusOK
 	response.Message = "success"
 	response.Data = &proto.User{
 		Id: user.Id,
@@ -95,16 +98,16 @@ func (h *Handler) CheckUserPwd (ctx context.Context, request *proto.Request, res
 	}
 
 	if user.Id == 0 {
-		response.Code = 500
+		response.Code = http.StatusNotFound
 		response.Message = "用户不存在"
 		return nil
 	}
 
 	if user.Password != request.Password {
-		response.Code = 500
+		response.Code = http.StatusUnauthorized
 		response.Message = "密码错误"
 	} else {
-		response.Code = 200
+		response.Code = http.StatusOK
 		response.Message = "success"
 		response.Data = &proto.User{
 			Id: user.Id,

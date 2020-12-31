@@ -1,24 +1,25 @@
 package handler
 
 import (
-	"fmt"
 	"github.com/gin-gonic/gin"
-	userService "liaotian/domain/user/proto"
+	"liaotian/app/im/handler/validator"
 	ginResult "liaotian/middlewares/common-result/gin"
 	"liaotian/middlewares/logger/zap"
 	"net/http"
 )
 
+//登录
 func Login(ctx *gin.Context) {
 
-	var request userService.Request
-	err := ctx.ShouldBindJSON(&request)
+	loginValidator := &validator.LoginValidator{}
+	req, err := validator.Bind(ctx, loginValidator)
+
 	if err != nil {
-		ginResult.Failed(ctx, http.StatusBadRequest, fmt.Sprintf("传参错误：%+v", err))
+		ginResult.Failed(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	res, err := domainUser.CheckUserPwd(ctx.Request.Context(), &request)
+	res, err := domainUser.CheckUserPwd(ctx.Request.Context(), &req)
 
 	if err != nil {
 		zap.SugarLogger.Errorf("domainUser.CheckUserPwd error: %+v", err)
@@ -33,41 +34,42 @@ func Login(ctx *gin.Context) {
 	ginResult.Success(ctx, http.StatusOK, res.Data)
 }
 
+//注册
 func Register(ctx *gin.Context) {
-	var result userService.Request
 
-	err := ctx.ShouldBindJSON(&result)
+	registerValidator := &validator.RegisterValidator{}
+	req, err := validator.Bind(ctx, registerValidator)
 	if err != nil {
-		ginResult.Failed(ctx, http.StatusBadRequest, fmt.Sprintf("传参错误：%+v", err))
+		ginResult.Failed(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
 
-	res, err := domainUser.CreateUserInfo(ctx.Request.Context(), &result)
+	res, err := domainUser.CreateUserInfo(ctx.Request.Context(), &req)
 	if err != nil {
 		zap.SugarLogger.Errorf("domainUser.CreateUserInfo error: %+v", err)
 		ginResult.Failed(ctx, http.StatusInternalServerError, "上游服务异常")
 		return
 	}
 
-	if res.Code != http.StatusOK {
+	if res.Code != http.StatusCreated {
 		ginResult.Failed(ctx, http.StatusInternalServerError, res.Message)
 		return
 	}
 
-	ginResult.Success(ctx, http.StatusOK, res.Data)
+	ginResult.Success(ctx, http.StatusCreated, res.Data)
+	return
 }
 
+//获取用户信息
 func GetUserInfo(ctx *gin.Context) {
 
-	var result userService.Request
-
-	err := ctx.ShouldBindJSON(&result)
+	getUserInfoValidator := &validator.GetUserInfoValidator{}
+	req, err := validator.Bind(ctx, getUserInfoValidator)
 	if err != nil {
-		ginResult.Failed(ctx, http.StatusBadRequest, fmt.Sprintf("传参错误：%+v", err))
+		ginResult.Failed(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-
-	res, err := domainUser.GetUserInfo(ctx.Request.Context(), &result)
+	res, err := domainUser.GetUserInfo(ctx.Request.Context(), &req)
 	if err != nil {
 		zap.SugarLogger.Errorf("domainUser.GetUserInfo error: %+v", err)
 		ginResult.Failed(ctx, http.StatusInternalServerError, "上游服务异常")
@@ -79,19 +81,19 @@ func GetUserInfo(ctx *gin.Context) {
 	}
 
 	ginResult.Success(ctx, http.StatusOK, res.Data)
+	return
 }
 
+//更新用户信息
 func UpdateUserInfo(ctx *gin.Context) {
 
-	var result userService.Request
-
-	err := ctx.ShouldBindJSON(&result)
+	updateUserInfoValidator := &validator.UpdateUserInfoValidator{}
+	req, err := validator.Bind(ctx, updateUserInfoValidator)
 	if err != nil {
-		ginResult.Failed(ctx, http.StatusBadRequest, fmt.Sprintf("传参错误：%+v", err))
+		ginResult.Failed(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
-
-	res, err := domainUser.UpdateUserInfo(ctx.Request.Context(), &result)
+	res, err := domainUser.UpdateUserInfo(ctx.Request.Context(), &req)
 	if err != nil {
 		ginResult.Failed(ctx, http.StatusInternalServerError, "上游服务异常")
 		return
@@ -104,4 +106,5 @@ func UpdateUserInfo(ctx *gin.Context) {
 	}
 
 	ginResult.Success(ctx, http.StatusOK, res.Data)
+	return
 }

@@ -14,8 +14,9 @@ func Success(ctx *gin.Context, code int, data interface{}) {
 
 func Failed(ctx *gin.Context, code int, msg interface{}) {
 
+	var data interface{}
 	ctx.JSON(code, gin.H{
 		"msg": msg,
-		"data": nil,
+		"data": data,
 	})
 }

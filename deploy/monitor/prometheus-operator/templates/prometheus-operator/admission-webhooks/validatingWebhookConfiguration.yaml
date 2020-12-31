@@ -27,5 +27,5 @@ webhooks:
       service:
         namespace: {{ template "prometheus-operator.namespace" . }}
         name: {{ template "prometheus-operator.operator.fullname" $ }}
-        path: /admission-prometheusrules/validate
+        path: /admission-prometheusrules/translate
 {{- end }}
