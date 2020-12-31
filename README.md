@@ -24,5 +24,9 @@
   - [traefik](https://github.com/csh995426531/liaotian/tree/master/deploy/traefik) - traefik 网关，(**不用了**)
   - [user-service](https://github.com/csh995426531/liaotian/tree/master/deploy/user-service) 本地调试偶尔用
   - [user-web](https://github.com/csh995426531/liaotian/tree/master/deploy/user-web) 本地调试偶尔用
-- [middlewares](https://github.com/csh995426531/liaotian/tree/master/deploy/middlewares) - 插件
-  - [wrapper](https://github.com/csh995426531/liaotian/tree/master/plugins/wrapper) - 包装器
+- [middlewares](https://github.com/csh995426531/liaotian/tree/master/middlewares) - 插件
+  - [common-result](https://github.com/csh995426531/liaotian/tree/master/middlewares/common-result]) - 公共返回
+  - [logger](https://github.com/csh995426531/liaotian/tree/master/middlewares/logger]) - 日志
+  - [validate](https://github.com/csh995426531/liaotian/tree/master/middlewares/validate]) - 验证
+  - [wrapper](https://github.com/csh995426531/liaotian/tree/master/middlewares/wrapper]) - 包装器，（搞的不行，改了原插件，抽时间重新搞）
+- [.gitlab-ci.yml](https://github.com/csh995426531/liaotian/tree/master/deploy/middlewares) - gitlab-ci配置

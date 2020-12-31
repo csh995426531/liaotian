@@ -1,8 +1,3 @@
-variables:
-  DOCKER_USER: "崔徐徐ok"
-  DOCKER_PASS: "csh123456789A"
-  DOCKER_IMAGE_HOST: "registry.cn-hangzhou.aliyuncs.com"
-  DOCKER_IMAGE_NAMESPACE: "liaotian_csh"
 
 cache:
   untracked: false #cache all files that are untracked in your Git
