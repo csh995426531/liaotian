@@ -10,7 +10,6 @@ import (
 	"io/ioutil"
 	userService "liaotian/domain/user/proto"
 	"liaotian/middlewares/logger/zap"
-	"liaotian/middlewares/validate/translate"
 	"net/http"
 	"testing"
 	"time"
@@ -129,7 +128,7 @@ type B struct {
 func TestMain(m *testing.M) {
 
 	zap.InitLogger()
-	translate.Init()
+	//translate.Init()
 
 	//初始化路由
 	ginRouter := InitRouters()
