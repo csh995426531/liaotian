@@ -5,6 +5,7 @@ import (
 	"liaotian/app/im/handler/validator"
 	ginResult "liaotian/middlewares/common-result/gin"
 	"liaotian/middlewares/logger/zap"
+	"liaotian/middlewares/tool"
 	"net/http"
 )
 
@@ -27,7 +28,7 @@ func Login(ctx *gin.Context) {
 		return
 	}
 	if res.Code != http.StatusOK {
-		ginResult.Failed(ctx, http.StatusInternalServerError, res.Message)
+		ginResult.Failed(ctx, tool.Int64ToInt(res.Code), res.Message)
 		return
 	}
 
@@ -52,7 +53,7 @@ func Register(ctx *gin.Context) {
 	}
 
 	if res.Code != http.StatusCreated {
-		ginResult.Failed(ctx, http.StatusInternalServerError, res.Message)
+		ginResult.Failed(ctx, tool.Int64ToInt(res.Code), res.Message)
 		return
 	}
 
@@ -76,7 +77,7 @@ func GetUserInfo(ctx *gin.Context) {
 		return
 	}
 	if res.Code != http.StatusOK {
-		ginResult.Failed(ctx, http.StatusInternalServerError, res.Message)
+		ginResult.Failed(ctx, tool.Int64ToInt(res.Code), res.Message)
 		return
 	}
 
@@ -95,13 +96,13 @@ func UpdateUserInfo(ctx *gin.Context) {
 	}
 	res, err := domainUser.UpdateUserInfo(ctx.Request.Context(), &req)
 	if err != nil {
+		zap.SugarLogger.Errorf("domainUser.UpdateUserInfo error: %+v", err)
 		ginResult.Failed(ctx, http.StatusInternalServerError, "上游服务异常")
 		return
 	}
 
 	if res.Code != http.StatusOK {
-		zap.SugarLogger.Errorf("domainUser.UpdateUserInfo error: %+v", err)
-		ginResult.Failed(ctx, http.StatusInternalServerError, res.Message)
+		ginResult.Failed(ctx, tool.Int64ToInt(res.Code), res.Message)
 		return
 	}
 

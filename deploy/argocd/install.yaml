@@ -67,7 +67,7 @@ spec:
                   description: Backoff is a backoff strategy
                   properties:
                     duration:
-                      description: Duration is the amount to back off. Default unit
+                      description: Duration is the amount to back off. Default tool
                         is seconds, but could also be a duration (e.g. "2m", "1h")
                       type: string
                     factor:
@@ -634,7 +634,7 @@ spec:
                       properties:
                         duration:
                           description: Duration is the amount to back off. Default
-                            unit is seconds, but could also be a duration (e.g. "2m",
+                            tool is seconds, but could also be a duration (e.g. "2m",
                             "1h")
                           type: string
                         factor:
@@ -974,7 +974,7 @@ spec:
                           properties:
                             duration:
                               description: Duration is the amount to back off. Default
-                                unit is seconds, but could also be a duration (e.g.
+                                tool is seconds, but could also be a duration (e.g.
                                 "2m", "1h")
                               type: string
                             factor:

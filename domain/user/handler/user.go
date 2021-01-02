@@ -46,17 +46,18 @@ func (h *Handler) GetUserInfo (ctx context.Context, request *proto.Request, resp
 		return err
 	}
 
-	response.Code = http.StatusOK
-	response.Message = "success"
-	response.Data = nil
-
-	if user.Id > 0 {
+	if user != nil{
+		response.Code = http.StatusOK
+		response.Message = "success"
 		response.Data = &proto.User{
 			Id: user.Id,
 			Name: user.Name,
 			Account: user.Account,
 			Avatar: user.Avatar,
 		}
+	} else {
+		response.Code = http.StatusNotFound
+		response.Message = "用户不存在"
 	}
 	return nil
 }

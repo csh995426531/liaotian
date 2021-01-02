@@ -17,8 +17,9 @@ import (
 //校验绑定参数
 func Bind (ctx *gin.Context, reqValidator interface{}) (req userService.Request, err error) {
 
-	err = ctx.ShouldBindJSON(reqValidator)
+	err = ctx.ShouldBind(reqValidator)
 	if err != nil {
+		return
 		err = errors.New("参数错误")
 		return
 	}
@@ -61,8 +62,8 @@ func Bind (ctx *gin.Context, reqValidator interface{}) (req userService.Request,
 
 // 登录验证器
 type LoginValidator struct {
-	Account  string `validate:"required"`
-	Password string `validate:"required"`
+	Account  string `validate:"required,min=1,max=20"`
+	Password string `validate:"required,min=1,max=20"`
 }
 
 //注册验证器
@@ -74,13 +75,13 @@ type RegisterValidator struct {
 
 //获取用户信息验证器
 type GetUserInfoValidator struct {
-	Id  int64 `validate:"required"`
+	Id  int64 `validate:"required,min=1"`
 }
 
 //更新用户信息验证器
 type UpdateUserInfoValidator struct {
-	Id    	 int64 `validate:"required"`
-	Name 	 string
-	Password string
+	Id    	 int64  `validate:"required,min=1"`
+	Name 	 string `validate:"required,min=1,max=20"`
+	Password string `validate:"required,min=1,max=20"`
 	Avatar   string
 }
