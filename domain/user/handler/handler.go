@@ -2,7 +2,6 @@ package handler
 
 import (
 	"liaotian/domain/user/entity"
-	"liaotian/domain/user/repository"
 )
 
 /**
@@ -14,7 +13,6 @@ type Handler struct {
 }
 
 func Init() (handler *Handler) {
-	repository.Init()
 	handler = new(Handler)
 	handler.UserEntity = new(entity.User)
 	return

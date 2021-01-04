@@ -1,4 +1,4 @@
-package handler
+package test
 
 import (
 	"bytes"
@@ -8,6 +8,7 @@ import (
 	client "github.com/micro/go-micro/client"
 	"github.com/micro/go-micro/web"
 	"io/ioutil"
+	"liaotian/app/im/handler"
 	userService "liaotian/domain/user/proto"
 	"liaotian/middlewares/logger/zap"
 	"net/http"
@@ -124,7 +125,7 @@ func TestMain(m *testing.M) {
 	//translate.Init()
 
 	//初始化路由
-	ginRouter := InitRouters()
+	ginRouter := handler.InitRouters()
 
 	// create new web handler
 	service := web.NewService(
@@ -133,7 +134,7 @@ func TestMain(m *testing.M) {
 		web.Handler(ginRouter),
 		web.Address(":18282"),
 	)
-	Init(new(testService))
+	handler.Init(new(testService))
 
 	// run handler
 	go func() {

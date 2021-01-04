@@ -3,6 +3,7 @@ package main
 import (
 	"liaotian/domain/user/handler"
 	"liaotian/domain/user/proto"
+	"liaotian/domain/user/repository"
 	"liaotian/middlewares/logger/zap"
 	"liaotian/middlewares/wrapper/skywalking/micro2sky"
 	"time"
@@ -21,6 +22,7 @@ import (
 func main() {
 	//config.Init()
 	zap.InitLogger()
+	repository.Init(repository.NewDb(),nil)
 
 	report, err := reporter.NewGRPCReporter("oap.skywalking.svc.cluster.local:11800")
 	if err != nil {

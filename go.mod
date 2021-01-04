@@ -3,6 +3,7 @@ module liaotian
 go 1.14
 
 require (
+	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/SkyAPM/go2sky v0.6.0
 	github.com/coreos/etcd v3.3.18+incompatible // indirect
 	github.com/gin-gonic/gin v1.6.3
@@ -28,7 +29,6 @@ require (
 	github.com/micro/go-micro v1.18.0
 	github.com/micro/go-plugins v1.5.1
 	github.com/miekg/dns v1.1.35 // indirect
-	github.com/mwitkow/go-proto-validators v0.3.2 // indirect
 	github.com/natefinch/lumberjack v2.0.0+incompatible
 	github.com/nats-io/nats-server/v2 v2.1.6 // indirect
 	github.com/niemeyer/pretty v0.0.0-20200227124842-a10e7caefd8e // indirect

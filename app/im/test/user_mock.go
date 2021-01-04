@@ -2,7 +2,7 @@
 // Source: ./domain/user/proto/user.pb.micro.go
 
 // Package handler is a generated GoMock package.
-package handler
+package test
 
 import (
 	context "context"

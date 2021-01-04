@@ -12,11 +12,19 @@ import (
 
 func (h *Handler) CreateUserInfo (ctx context.Context, request *proto.Request, response *proto.Response) error {
 
+	if request.Account == "" || request.Name == "" || request.Password == "" {
+		response.Code = http.StatusBadRequest
+		response.Message = "缺少参数"
+		response.Data = nil
+		return nil
+	}
+
 	user, err := h.UserEntity.GetUserInfo(0, "", request.Account)
 	if err != nil {
 		return err
 	}
-	if user != nil {
+
+	if user.Id > 0 {
 		response.Code = http.StatusForbidden
 		response.Message = "账户已被注册！"
 		response.Data = nil
@@ -28,7 +36,7 @@ func (h *Handler) CreateUserInfo (ctx context.Context, request *proto.Request, r
 		return err
 	}
 	response.Code = http.StatusCreated
-	response.Message = "成功"
+	response.Message = "success"
 	response.Data = &proto.User{
 		Id: user.Id,
 		Name: user.Name,
@@ -41,12 +49,19 @@ func (h *Handler) CreateUserInfo (ctx context.Context, request *proto.Request, r
 
 func (h *Handler) GetUserInfo (ctx context.Context, request *proto.Request, response *proto.Response) error {
 
+	if request.Account == "" && request.Name == "" && request.Id == 0 {
+		response.Code = http.StatusBadRequest
+		response.Message = "缺少参数"
+		response.Data = nil
+		return nil
+	}
+
 	user, err := h.UserEntity.GetUserInfo(request.Id, request.Name, request.Account)
 	if err != nil {
 		return err
 	}
 
-	if user != nil{
+	if user.Id > 0 {
 		response.Code = http.StatusOK
 		response.Message = "success"
 		response.Data = &proto.User{
@@ -63,6 +78,13 @@ func (h *Handler) GetUserInfo (ctx context.Context, request *proto.Request, resp
 }
 
 func (h *Handler) UpdateUserInfo (ctx context.Context, request *proto.Request, response *proto.Response) error {
+
+	if request.Name == "" || request.Password == "" || request.Id == 0 {
+		response.Code = http.StatusBadRequest
+		response.Message = "缺少参数"
+		response.Data = nil
+		return nil
+	}
 
 	user, err := h.UserEntity.GetUserInfo(request.Id, "", "")
 	if err != nil {
@@ -92,6 +114,13 @@ func (h *Handler) UpdateUserInfo (ctx context.Context, request *proto.Request, r
 }
 
 func (h *Handler) CheckUserPwd (ctx context.Context, request *proto.Request, response *proto.Response) error {
+
+	if request.Account == "" || request.Password == "" {
+		response.Code = http.StatusBadRequest
+		response.Message = "缺少参数"
+		response.Data = nil
+		return nil
+	}
 
 	user, err := h.UserEntity.GetUserInfo(0, "", request.Account)
 	if err != nil {
