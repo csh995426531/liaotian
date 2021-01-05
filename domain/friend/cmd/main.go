@@ -5,7 +5,9 @@ import (
 	"github.com/SkyAPM/go2sky/reporter"
 	"github.com/micro/go-micro"
 	"github.com/micro/go-plugins/registry/kubernetes"
-	"liaotian/domain/user/repository"
+	"liaotian/domain/friend/handler"
+	"liaotian/domain/friend/proto"
+	"liaotian/domain/friend/repository"
 	"liaotian/middlewares/logger/zap"
 	"liaotian/middlewares/wrapper/skywalking/micro2sky"
 	"time"
@@ -34,7 +36,15 @@ func main() {
 		micro.WrapHandler(micro2sky.NewHandlerWrapper(tracer, "domain.user.service")),
 	)
 
+	// 服务初始化
 	service.Init()
 
-	proto.Registe
+	// 注册服务
+	_ = proto.RegisterFriendHandler(service.Server(), handler.Init())
+
+	// 启动服务
+	if err := service.Run(); err != nil {
+		zap.SugarLogger.Fatalf("服务启动失败，error: %v", err)
+	}
+	zap.ZapLogger.Info("服务启动成功")
 }

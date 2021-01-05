@@ -1,0 +1,88 @@
+syntax = "proto3";
+
+option go_package = "./proto;proto";
+
+package domain.friend.service;
+
+service Friend {
+  rpc CreateApplicationInfo(CreateApplicationRequest) returns (ApplicationResponse) {}
+  rpc GetApplicationInfo(GetApplicationRequest) returns (ApplicationResponse) {}
+  rpc PassApplicationInfo(PassApplicationInfoRequest) returns (Response) {}
+  rpc RejectApplicationInfo(RejectApplicationInfoRequest) returns (Response) {}
+  rpc GetApplicationList(GetApplicationListRequest) returns (GetApplicationListResponse) {}
+  rpc GetFriendList(GetFriendListRequest) returns (GetFriendListResponse) {}
+  rpc DeleteFriendInfo(DeleteFriendInfoRequest) returns (Response) {}
+  rpc CreateApplicationSay(CreateApplicationSayRequest) returns (CreateApplicationSayResponse) {}
+}
+
+message ApplicationSay {
+  int64 Id = 1;
+  int64 SenderId = 2;
+  string Content = 3;
+}
+
+message Application {
+  int64 Id = 1;
+  int64 SenderId = 2;
+  int64 ReceiverId = 3;
+  repeated ApplicationSay SayList = 4;
+}
+
+message CreateApplicationRequest {
+  int64 SenderId = 1;
+  int64 ReceiverId = 2;
+}
+
+message ApplicationResponse {
+  Application Data = 1;
+  string message = 2;
+}
+
+message GetApplicationRequest {
+  int64 Id = 1;
+}
+
+message PassApplicationInfoRequest {
+  int64 Id = 1;
+}
+
+message RejectApplicationInfoRequest {
+  int64 Id = 1;
+}
+
+message GetApplicationListRequest {
+  int64 UserId = 1;
+}
+
+message GetApplicationListResponse {
+  repeated Application Data = 1;
+  string message = 2;
+}
+
+message GetFriendListRequest {
+  int64 UserId = 1;
+}
+
+message GetFriendListResponse {
+  repeated int64 data = 1;
+  string message = 2;
+}
+
+message DeleteFriendInfoRequest {
+  int64 Id = 1;
+}
+
+message CreateApplicationSayRequest {
+  int64 ApplicationId = 1;
+  int64 SenderId = 2;
+  string Content = 3;
+}
+
+message CreateApplicationSayResponse {
+  ApplicationSay data = 1;
+  string message = 2;
+}
+
+message Response {
+  bool ok = 1;
+}

@@ -13,28 +13,23 @@ import (
 func (h *Handler) CreateUserInfo(ctx context.Context, request *proto.Request, response *proto.Response) error {
 
 	if request.Account == "" || request.Name == "" || request.Password == "" {
-		response.Code = http.StatusBadRequest
-		response.Message = "缺少参数"
-		response.Data = nil
-		return nil
+		return ErrorBadRequest
 	}
 
 	user, err := h.UserEntity.GetUserInfo(0, "", request.Account)
 	if err != nil {
-		return err
+		return ErrorInternalServerError(err)
 	}
 
 	if user.Id > 0 {
-		response.Code = http.StatusForbidden
-		response.Message = "账户已被注册！"
-		response.Data = nil
-		return nil
+		return ErrorUserExists
 	}
 
 	user, err = h.UserEntity.CreateUserInfo(request.Name, request.Account, request.Password, request.Avatar)
 	if err != nil {
-		return err
+		return ErrorInternalServerError(err)
 	}
+
 	response.Code = http.StatusCreated
 	response.Message = "success"
 	response.Data = &proto.User{
@@ -50,29 +45,25 @@ func (h *Handler) CreateUserInfo(ctx context.Context, request *proto.Request, re
 func (h *Handler) GetUserInfo(ctx context.Context, request *proto.Request, response *proto.Response) error {
 
 	if request.Account == "" && request.Name == "" && request.Id == 0 {
-		response.Code = http.StatusBadRequest
-		response.Message = "缺少参数"
-		response.Data = nil
-		return nil
+		return ErrorBadRequest
 	}
 
 	user, err := h.UserEntity.GetUserInfo(request.Id, request.Name, request.Account)
 	if err != nil {
-		return err
+		return ErrorInternalServerError(err)
 	}
 
-	if user.Id > 0 {
-		response.Code = http.StatusOK
-		response.Message = "success"
-		response.Data = &proto.User{
-			Id:      user.Id,
-			Name:    user.Name,
-			Account: user.Account,
-			Avatar:  user.Avatar,
-		}
-	} else {
-		response.Code = http.StatusNotFound
-		response.Message = "用户不存在"
+	if user.Id == 0 {
+		return ErrorUserNotFound
+	}
+
+	response.Code = http.StatusOK
+	response.Message = "success"
+	response.Data = &proto.User{
+		Id:      user.Id,
+		Name:    user.Name,
+		Account: user.Account,
+		Avatar:  user.Avatar,
 	}
 	return nil
 }
@@ -80,27 +71,21 @@ func (h *Handler) GetUserInfo(ctx context.Context, request *proto.Request, respo
 func (h *Handler) UpdateUserInfo(ctx context.Context, request *proto.Request, response *proto.Response) error {
 
 	if request.Name == "" || request.Password == "" || request.Id == 0 {
-		response.Code = http.StatusBadRequest
-		response.Message = "缺少参数"
-		response.Data = nil
-		return nil
+		return ErrorBadRequest
 	}
 
 	user, err := h.UserEntity.GetUserInfo(request.Id, "", "")
 	if err != nil {
-		return err
+		return ErrorInternalServerError(err)
 	}
 
 	if user.Id == 0 {
-		response.Code = http.StatusNotFound
-		response.Message = "用户不存在"
-		response.Data = nil
-		return nil
+		return ErrorUserNotFound
 	}
 
 	user, err = h.UserEntity.UpdateUserInfo(request.Id, request.Name, request.Password, request.Avatar)
 	if err != nil {
-		return err
+		return ErrorInternalServerError(err)
 	}
 	response.Code = http.StatusOK
 	response.Message = "success"
@@ -116,35 +101,29 @@ func (h *Handler) UpdateUserInfo(ctx context.Context, request *proto.Request, re
 func (h *Handler) CheckUserPwd(ctx context.Context, request *proto.Request, response *proto.Response) error {
 
 	if request.Account == "" || request.Password == "" {
-		response.Code = http.StatusBadRequest
-		response.Message = "缺少参数"
-		response.Data = nil
-		return nil
+		return ErrorBadRequest
 	}
 
 	user, err := h.UserEntity.GetUserInfo(0, "", request.Account)
 	if err != nil {
-		return err
+		return ErrorInternalServerError(err)
 	}
 
 	if user.Id == 0 {
-		response.Code = http.StatusNotFound
-		response.Message = "用户不存在"
-		return nil
+		return ErrorUserNotFound
 	}
 
 	if user.Password != request.Password {
-		response.Code = http.StatusUnauthorized
-		response.Message = "密码错误"
-	} else {
-		response.Code = http.StatusOK
-		response.Message = "success"
-		response.Data = &proto.User{
-			Id:       user.Id,
-			Name:     user.Name,
-			Password: user.Password,
-			Avatar:   user.Avatar,
-		}
+		return ErrorUserPasswordError
+	}
+
+	response.Code = http.StatusOK
+	response.Message = "success"
+	response.Data = &proto.User{
+		Id:       user.Id,
+		Name:     user.Name,
+		Password: user.Password,
+		Avatar:   user.Avatar,
 	}
 
 	return nil

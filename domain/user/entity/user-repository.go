@@ -27,13 +27,6 @@ func (e *User) CreateUserInfo(name, account, password, avatar string) (user *Use
 		return
 	}
 
-	user = &User{
-		Name:     name,
-		Account:  account,
-		Password: password,
-		Avatar:   avatar,
-	}
-
 	model := new(UserModel)
 	model.Name = name
 	model.Account = account
@@ -41,7 +34,13 @@ func (e *User) CreateUserInfo(name, account, password, avatar string) (user *Use
 	model.Avatar = avatar
 
 	err = repository.Repo.MysqlDb.Create(model).Error
-	user.Id = model.Id
+	user = &User{
+		Id: model.Id,
+		Name:     name,
+		Account:  account,
+		Password: password,
+		Avatar:   avatar,
+	}
 
 	return
 }
@@ -64,7 +63,6 @@ func (e *User) GetUserInfo(id int64, name, account string) (user *User, err erro
 		model.Account = account
 	}
 
-	user = &User{}
 	err = repository.Repo.MysqlDb.Where(model).Limit(1).Find(&user).Error
 	return
 }
