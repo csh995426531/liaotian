@@ -189,7 +189,7 @@ type Response struct {
 	unknownFields protoimpl.UnknownFields
 
 	Code    int64  `protobuf:"varint,1,opt,name=code,proto3" json:"code,omitempty"`
-	Message string `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Message string `protobuf:"bytes,2,opt,name=proto,proto3" json:"proto,omitempty"`
 	Data    *User  `protobuf:"bytes,3,opt,name=data,proto3" json:"data,omitempty"`
 }
 

@@ -9,17 +9,17 @@ import (
 )
 
 /**
-	仓库
- */
+仓库
+*/
 
 var (
-	m sync.Mutex
+	m    sync.Mutex
 	Repo *Repository
 )
 
 type Repository struct {
 	MysqlDb *gorm.DB
-	MockDb sqlmock.Sqlmock
+	MockDb  sqlmock.Sqlmock
 }
 
 func Init(db *gorm.DB, mock sqlmock.Sqlmock) {
@@ -33,7 +33,7 @@ func Init(db *gorm.DB, mock sqlmock.Sqlmock) {
 
 	Repo = &Repository{
 		MysqlDb: db,
-		MockDb: mock,
+		MockDb:  mock,
 	}
 }
 
@@ -53,7 +53,7 @@ func NewMockDb() (db *gorm.DB, mock sqlmock.Sqlmock) {
 	}
 
 	db, err = gorm.Open(mysql.New(mysql.Config{
-		Conn: mockDb,
+		Conn:                      mockDb,
 		SkipInitializeWithVersion: true,
 	}), &gorm.Config{})
 

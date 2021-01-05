@@ -16,13 +16,13 @@ import (
 )
 
 /**
-	用户领域服务入口
- */
+用户领域服务入口
+*/
 
 func main() {
 	//config.Init()
 	zap.InitLogger()
-	repository.Init(repository.NewDb(),nil)
+	repository.Init(repository.NewDb(), nil)
 
 	report, err := reporter.NewGRPCReporter("oap.skywalking.svc.cluster.local:11800")
 	if err != nil {

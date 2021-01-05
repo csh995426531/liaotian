@@ -7,31 +7,31 @@ import (
 )
 
 /**
-	用户实体仓库实现
- */
+用户实体仓库实现
+*/
 
 type UserModel struct {
-	User	`gorm:"embedded"`
+	User      `gorm:"embedded"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
-func (UserModel) TableName () string {
+func (UserModel) TableName() string {
 	return "users"
 }
 
-func (e *User) CreateUserInfo (name, account, password, avatar string) (user *User, err error) {
+func (e *User) CreateUserInfo(name, account, password, avatar string) (user *User, err error) {
 
-	if name == "" || account == "" || password == ""  {
+	if name == "" || account == "" || password == "" {
 		err = errors.New("缺少必要参数")
 		return
 	}
 
 	user = &User{
-		Name: name,
-		Account: account,
+		Name:     name,
+		Account:  account,
 		Password: password,
-		Avatar: avatar,
+		Avatar:   avatar,
 	}
 
 	model := new(UserModel)
@@ -46,9 +46,9 @@ func (e *User) CreateUserInfo (name, account, password, avatar string) (user *Us
 	return
 }
 
-func (e *User) GetUserInfo (id int64, name, account string) (user *User, err error) {
+func (e *User) GetUserInfo(id int64, name, account string) (user *User, err error) {
 
-	if id == 0 && name == "" && account == ""  {
+	if id == 0 && name == "" && account == "" {
 		err = errors.New("缺少必要参数")
 		return
 	}
@@ -69,9 +69,9 @@ func (e *User) GetUserInfo (id int64, name, account string) (user *User, err err
 	return
 }
 
-func (e *User) UpdateUserInfo (id int64, name, password, avatar string) (user *User, err error) {
+func (e *User) UpdateUserInfo(id int64, name, password, avatar string) (user *User, err error) {
 
-	if id == 0 || name == "" || password == ""  {
+	if id == 0 || name == "" || password == "" {
 		err = errors.New("缺少必要参数")
 		return
 	}
@@ -80,11 +80,11 @@ func (e *User) UpdateUserInfo (id int64, name, password, avatar string) (user *U
 	model.Id = id
 
 	data := map[string]interface{}{
-		"name": name,
+		"name":     name,
 		"password": password,
-		"avatar": avatar,
+		"avatar":   avatar,
 	}
-	column := [] string {
+	column := []string{
 		"name",
 		"password",
 		"avatar",
@@ -93,11 +93,11 @@ func (e *User) UpdateUserInfo (id int64, name, password, avatar string) (user *U
 	err = repository.Repo.MysqlDb.Model(model).Select(column).Updates(data).Error
 
 	user = &User{
-		Id: model.Id,
-		Name: model.Name,
-		Account: model.Account,
+		Id:       model.Id,
+		Name:     model.Name,
+		Account:  model.Account,
 		Password: model.Password,
-		Avatar: model.Avatar,
+		Avatar:   model.Avatar,
 	}
 	return
 }

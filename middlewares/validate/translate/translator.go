@@ -16,7 +16,7 @@ var (
 	Trans *ut.Translator
 )
 
-func Init () {
+func Init() {
 	en := en.New()
 	zh := zh.New()
 	uni := ut.New(en, zh)
@@ -38,7 +38,7 @@ func Init () {
 
 func ErrTrans(err error, trans *ut.Translator) error {
 
-	errs,ok := err.(validator.ValidationErrors)
+	errs, ok := err.(validator.ValidationErrors)
 
 	if ok {
 		for field, err := range errs.Translate(*trans) {

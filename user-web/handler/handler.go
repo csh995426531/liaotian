@@ -30,7 +30,7 @@ func Login(ctx *gin.Context) {
 		log.Error(err)
 		resultCode = http.StatusBadRequest
 		resultData = gin.H{
-			"message": fmt.Sprintf("传参错误：%+v", err),
+			"proto": fmt.Sprintf("传参错误：%+v", err),
 		}
 		return
 	}
@@ -41,7 +41,7 @@ func Login(ctx *gin.Context) {
 		log.Error(err)
 		resultCode = http.StatusInternalServerError
 		resultData = gin.H{
-			"message": res.Message,
+			"proto": res.Message,
 		}
 		return
 	}
@@ -49,20 +49,20 @@ func Login(ctx *gin.Context) {
 	if res.Code != 200 {
 		resultCode = http.StatusInternalServerError
 		resultData = gin.H{
-			"message": res.Message,
+			"proto": res.Message,
 		}
 		return
 	}
 
 	if res.User.Password == request.Password && res.User.Name == request.Name {
 		resultData = gin.H{
-			"message": res.Message,
-			"user":    res.User,
+			"proto": res.Message,
+			"user":  res.User,
 		}
 	} else {
 		resultCode = http.StatusUnauthorized
 		resultData = gin.H{
-			"message": "用户名密码错误",
+			"proto": "用户名密码错误",
 		}
 	}
 

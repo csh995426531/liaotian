@@ -7,7 +7,7 @@ import (
 func Success(ctx *gin.Context, code int, data interface{}) {
 
 	ctx.JSON(code, gin.H{
-		"msg": "成功",
+		"msg":  "成功",
 		"data": data,
 	})
 }
@@ -16,7 +16,7 @@ func Failed(ctx *gin.Context, code int, msg interface{}) {
 
 	var data interface{}
 	ctx.JSON(code, gin.H{
-		"msg": msg,
+		"msg":  msg,
 		"data": data,
 	})
 }

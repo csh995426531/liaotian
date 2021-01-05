@@ -1,22 +1,22 @@
 package entity
 
 /**
-	用户实体
- */
+用户实体
+*/
 
 type User struct {
-	Id int64
-	Name string
-	Account string
+	Id       int64
+	Name     string
+	Account  string
 	Password string
-	Avatar string
+	Avatar   string
 }
 
 type UserInterface interface {
 	// 创建用户信息
-	CreateUserInfo (name, account, password, avatar string) (user *User, err error)
+	CreateUserInfo(name, account, password, avatar string) (user *User, err error)
 	// 获取用户信息
-	GetUserInfo (id int64, name, account string) (user *User, err error)
+	GetUserInfo(id int64, name, account string) (user *User, err error)
 	// 更新用户信息
-	UpdateUserInfo (id int64, name, password, avatar string) (user *User, err error)
+	UpdateUserInfo(id int64, name, password, avatar string) (user *User, err error)
 }

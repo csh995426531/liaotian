@@ -679,14 +679,14 @@ spec:
                     format: date-time
                     type: string
                   message:
-                    description: Message contains human-readable message indicating
+                    description: Message contains human-readable proto indicating
                       details about condition
                     type: string
                   type:
                     description: Type is an application condition type
                     type: string
                 required:
-                  - message
+                  - proto
                   - type
                 type: object
               type: array
@@ -1311,7 +1311,7 @@ spec:
                           kind:
                             type: string
                           message:
-                            description: message for the last sync OR operation
+                            description: proto for the last sync OR operation
                             type: string
                           name:
                             type: string

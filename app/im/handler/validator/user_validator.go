@@ -15,7 +15,7 @@ import (
 )
 
 //校验绑定参数
-func Bind (ctx *gin.Context, reqValidator interface{}) (req userService.Request, err error) {
+func Bind(ctx *gin.Context, reqValidator interface{}) (req userService.Request, err error) {
 
 	err = ctx.ShouldBind(reqValidator)
 	if err != nil {
@@ -75,13 +75,13 @@ type RegisterValidator struct {
 
 //获取用户信息验证器
 type GetUserInfoValidator struct {
-	Id  int64 `validate:"required,min=1"`
+	Id int64 `validate:"required,min=1"`
 }
 
 //更新用户信息验证器
 type UpdateUserInfoValidator struct {
-	Id    	 int64  `validate:"required,min=1"`
-	Name 	 string `validate:"required,min=1,max=20"`
+	Id       int64  `validate:"required,min=1"`
+	Name     string `validate:"required,min=1,max=20"`
 	Password string `validate:"required,min=1,max=20"`
 	Avatar   string
 }

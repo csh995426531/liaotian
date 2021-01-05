@@ -11,4 +11,3 @@ var (
 func Init(service userService.UserService) {
 	domainUser = service
 }
-

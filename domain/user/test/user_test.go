@@ -48,15 +48,15 @@ func TestMain(m *testing.M) {
 
 func TestCreateUserInfo(t *testing.T) {
 
-	testData := []struct{
+	testData := []struct {
 		Account  string
 		Name     string
 		Password string
 		Avatar   string
-		Code 	 int64
+		Code     int64
 		Msg      string
 		Data     string
-	} {
+	}{
 		{"zhangsan", "张三", "123456", "http://baidu.com", http.StatusCreated, "success", "{\"id\":1,\"name\":\"张三\",\"password\":\"123456\",\"avatar\":\"http://baidu.com\"}"},
 		{"zhangsan", "张三", "123456", "", http.StatusForbidden, "账户已被注册！", ""},
 		{"", "张三", "123456", "http://baidu.com", http.StatusBadRequest, "缺少参数", ""},
@@ -70,10 +70,10 @@ func TestCreateUserInfo(t *testing.T) {
 		t.Run("", func(t *testing.T) {
 
 			request := proto.Request{
-				Account: data.Account,
-				Name: data.Name,
+				Account:  data.Account,
+				Name:     data.Name,
 				Password: data.Password,
-				Avatar: data.Avatar,
+				Avatar:   data.Avatar,
 			}
 
 			if i == 0 {
@@ -118,14 +118,14 @@ func TestCreateUserInfo(t *testing.T) {
 }
 
 func TestGetUserInfo(t *testing.T) {
-	testData := []struct{
-		Account  string
-		Name     string
-		Id  	 int64
-		Code     int64
-		Msg      string
-		Data     string
-	} {
+	testData := []struct {
+		Account string
+		Name    string
+		Id      int64
+		Code    int64
+		Msg     string
+		Data    string
+	}{
 		{"zhangsan", "张三", 1, http.StatusOK, "success", "{\"id\":1,\"name\":\"张三\",\"account\":\"zhangsan\",\"avatar\":\"http://baidu.com\"}"},
 		{"lisi", "", 0, http.StatusNotFound, "用户不存在", ""},
 		{"", "", 0, http.StatusBadRequest, "缺少参数", ""},
@@ -133,13 +133,13 @@ func TestGetUserInfo(t *testing.T) {
 
 	service := proto.NewUserService("domain.user.service", client.DefaultClient)
 
-	for i, data := range testData{
+	for i, data := range testData {
 		t.Run("", func(t *testing.T) {
 
 			request := proto.Request{
 				Account: data.Account,
-				Name: data.Name,
-				Id: data.Id,
+				Name:    data.Name,
+				Id:      data.Id,
 			}
 
 			if i == 0 {
@@ -177,7 +177,7 @@ func TestGetUserInfo(t *testing.T) {
 }
 
 func TestUpdateUserInfo(t *testing.T) {
-	testData := []struct{
+	testData := []struct {
 		Id       int64
 		Account  string
 		Name     string
@@ -185,8 +185,8 @@ func TestUpdateUserInfo(t *testing.T) {
 		Avatar   string
 		Code     int64
 		Msg      string
-		Data 	 string
-	} {
+		Data     string
+	}{
 		{1, "zhangsan", "张三2", "123123", "http://google.com", http.StatusOK, "success", "{\"id\":1,\"name\":\"张三2\",\"password\":\"123123\",\"avatar\":\"http://google.com\"}"},
 		{2, "zhangsan", "张三2", "123123", "http://google.com", http.StatusNotFound, "用户不存在", ""},
 		{0, "zhangsan", "张三2", "123123", "http://google.com", http.StatusBadRequest, "缺少参数", ""},
@@ -194,11 +194,11 @@ func TestUpdateUserInfo(t *testing.T) {
 
 	service := proto.NewUserService("domain.user.service", client.DefaultClient)
 
-	for i, data := range testData{
+	for i, data := range testData {
 		t.Run("", func(t *testing.T) {
 
 			if i == 0 {
-				row := sqlmock.NewRows([]string{"id","name","account","password","avatar"}).
+				row := sqlmock.NewRows([]string{"id", "name", "account", "password", "avatar"}).
 					AddRow(data.Id, data.Name, data.Account, data.Password, data.Avatar)
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `users`*").
 					WithArgs(data.Id).
@@ -216,10 +216,10 @@ func TestUpdateUserInfo(t *testing.T) {
 			}
 
 			request := proto.Request{
-				Id: data.Id,
-				Name: data.Name,
+				Id:       data.Id,
+				Name:     data.Name,
 				Password: data.Password,
-				Avatar: data.Avatar,
+				Avatar:   data.Avatar,
 			}
 			resp, err := service.UpdateUserInfo(context.Background(), &request)
 			if err != nil {
@@ -246,31 +246,31 @@ func TestUpdateUserInfo(t *testing.T) {
 }
 
 func TestCheckUserPwd(t *testing.T) {
-	testData := []struct{
-		Id           int64
-		Account      string
-		Name         string
-		Password     string
-		Avatar       string
-		Code		 int64
-		Msg 		 string
-		Data 		 string
+	testData := []struct {
+		Id       int64
+		Account  string
+		Name     string
+		Password string
+		Avatar   string
+		Code     int64
+		Msg      string
+		Data     string
 	}{
-		{1, "zhangsan", "张三", "123456","http://baidu.com", http.StatusOK, "success", "{\"id\":1,\"name\":\"张三\",\"password\":\"123456\",\"avatar\":\"http://baidu.com\"}"},
-		{1, "zhangsan", "张三", "111111","", http.StatusUnauthorized, "密码错误", ""},
-		{2, "lisi", "李四", "123456","http://baidu.com", http.StatusNotFound, "用户不存在", ""},
-		{0, "", "张三", "123456","http://baidu.com", http.StatusBadRequest, "缺少参数", ""},
+		{1, "zhangsan", "张三", "123456", "http://baidu.com", http.StatusOK, "success", "{\"id\":1,\"name\":\"张三\",\"password\":\"123456\",\"avatar\":\"http://baidu.com\"}"},
+		{1, "zhangsan", "张三", "111111", "", http.StatusUnauthorized, "密码错误", ""},
+		{2, "lisi", "李四", "123456", "http://baidu.com", http.StatusNotFound, "用户不存在", ""},
+		{0, "", "张三", "123456", "http://baidu.com", http.StatusBadRequest, "缺少参数", ""},
 	}
 
 	service := proto.NewUserService("domain.user.service", client.DefaultClient)
-	for i, data := range testData{
+	for i, data := range testData {
 		t.Run("", func(t *testing.T) {
 			request := proto.Request{
-				Account: data.Account,
+				Account:  data.Account,
 				Password: data.Password,
 			}
 			if i < 2 {
-				row := sqlmock.NewRows([]string{"id","name","account","password","avatar"}).
+				row := sqlmock.NewRows([]string{"id", "name", "account", "password", "avatar"}).
 					AddRow(data.Id, data.Name, data.Account, "123456", data.Avatar)
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `users`*").
 					WithArgs(data.Account).
@@ -303,6 +303,3 @@ func TestCheckUserPwd(t *testing.T) {
 		})
 	}
 }
-
-
-

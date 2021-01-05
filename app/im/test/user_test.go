@@ -39,18 +39,18 @@ func (c *testService) CreateUserInfo(ctx context.Context, in *userService.Reques
 	out.Code = http.StatusCreated
 	out.Message = "success"
 	out.Data = &userService.User{
-		Id: 1,
-		Name: in.Name,
-		Account: in.Account,
+		Id:       1,
+		Name:     in.Name,
+		Account:  in.Account,
 		Password: in.Password,
-		Avatar: in.Avatar,
+		Avatar:   in.Avatar,
 	}
 
 	return out, nil
 }
 func (c *testService) GetUserInfo(ctx context.Context, in *userService.Request, opts ...client.CallOption) (*userService.Response, error) {
 	out := new(userService.Response)
-	if in.Account == "" && in.Name == "" && in.Id == 0{
+	if in.Account == "" && in.Name == "" && in.Id == 0 {
 		out.Code = http.StatusBadRequest
 		out.Message = "缺少参数！"
 		out.Data = nil
@@ -61,10 +61,10 @@ func (c *testService) GetUserInfo(ctx context.Context, in *userService.Request, 
 		out.Code = http.StatusOK
 		out.Message = "success"
 		out.Data = &userService.User{
-			Id: 1,
-			Name: "张三",
+			Id:      1,
+			Name:    "张三",
 			Account: "zhangsan",
-			Avatar: "http://www.baicu.com",
+			Avatar:  "http://www.baicu.com",
 		}
 	} else {
 		out.Code = http.StatusNotFound
@@ -84,10 +84,10 @@ func (c *testService) UpdateUserInfo(ctx context.Context, in *userService.Reques
 	out.Code = http.StatusOK
 	out.Message = "成功"
 	out.Data = &userService.User{
-		Id: 1,
-		Name: in.Name,
+		Id:      1,
+		Name:    in.Name,
 		Account: in.Account,
-		Avatar: in.Avatar,
+		Avatar:  in.Avatar,
 	}
 	return out, nil
 }
@@ -110,10 +110,10 @@ func (c *testService) CheckUserPwd(ctx context.Context, in *userService.Request,
 	out.Code = http.StatusOK
 	out.Message = "成功"
 	out.Data = &userService.User{
-		Id: 1,
-		Name: "张三",
+		Id:      1,
+		Name:    "张三",
 		Account: "zhangsan",
-		Avatar: "http://www.baidu.com",
+		Avatar:  "http://www.baidu.com",
 	}
 
 	return out, nil
@@ -150,22 +150,22 @@ func TestMain(m *testing.M) {
 
 func TestRegister(t *testing.T) {
 
-	testData := []struct{
+	testData := []struct {
 		Account  string
 		Password string
-		Name 	 string
-		Avatar 	 string
+		Name     string
+		Avatar   string
 		HttpCode int
 		Response string
-	} {
+	}{
 		{"zhangsan", "123456", "张三", "http://baidu.com", http.StatusForbidden, "{\"data\":null,\"msg\":\"账户已被注册！\"}"},
 		{"", "123456", "李四", "http://baidu.com", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Account为必填字段\"}"},
 		{"lisi", "", "李四", "http://baidu.com", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Password为必填字段\"}"},
 		{"lisi", "123456", "", "http://baidu.com", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Name为必填字段\"}"},
-		{"lisi", "123456", "李四", "", http.StatusCreated,"{\"data\":{\"id\":1,\"name\":\"李四\",\"account\":\"lisi\",\"password\":\"123456\"},\"msg\":\"成功\"}"},
-		{"aaaaaaaaaaaaaaaaaaaaa", "123456", "李四", "", http.StatusBadRequest,"{\"data\":null,\"msg\":\"Account长度不能超过20个字符\"}"},
-		{"lisi", "aaaaaaaaaaaaaaaaaaaaa", "李四", "", http.StatusBadRequest,"{\"data\":null,\"msg\":\"Password长度不能超过20个字符\"}"},
-		{"lisi", "123456", "aaaaaaaaaaaaaaaaaaaaa", "", http.StatusBadRequest,"{\"data\":null,\"msg\":\"Name长度不能超过20个字符\"}"},
+		{"lisi", "123456", "李四", "", http.StatusCreated, "{\"data\":{\"id\":1,\"name\":\"李四\",\"account\":\"lisi\",\"password\":\"123456\"},\"msg\":\"成功\"}"},
+		{"aaaaaaaaaaaaaaaaaaaaa", "123456", "李四", "", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Account长度不能超过20个字符\"}"},
+		{"lisi", "aaaaaaaaaaaaaaaaaaaaa", "李四", "", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Password长度不能超过20个字符\"}"},
+		{"lisi", "123456", "aaaaaaaaaaaaaaaaaaaaa", "", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Name长度不能超过20个字符\"}"},
 	}
 
 	for _, data := range testData {
@@ -189,7 +189,7 @@ func TestRegister(t *testing.T) {
 }
 
 func TestLogin(t *testing.T) {
-	testData := []struct{
+	testData := []struct {
 		Account  string
 		Password string
 		HttpCode int
@@ -225,16 +225,16 @@ func TestLogin(t *testing.T) {
 }
 
 func TestGetUserInfo(t *testing.T) {
-	testData := []struct{
-		Id  	 int64
+	testData := []struct {
+		Id       int64
 		HttpCode int
 		Response string
-	} {
-		{1, http.StatusOK,"{\"data\":{\"id\":1,\"name\":\"张三\",\"account\":\"zhangsan\",\"avatar\":\"http://www.baicu.com\"},\"msg\":\"成功\"}"},
-		{2, http.StatusNotFound,"{\"data\":null,\"msg\":\"用户不存在\"}"},
-		{0, http.StatusBadRequest,"{\"data\":null,\"msg\":\"Id为必填字段\"}"},
+	}{
+		{1, http.StatusOK, "{\"data\":{\"id\":1,\"name\":\"张三\",\"account\":\"zhangsan\",\"avatar\":\"http://www.baicu.com\"},\"msg\":\"成功\"}"},
+		{2, http.StatusNotFound, "{\"data\":null,\"msg\":\"用户不存在\"}"},
+		{0, http.StatusBadRequest, "{\"data\":null,\"msg\":\"Id为必填字段\"}"},
 	}
-	
+
 	for _, data := range testData {
 		t.Run("", func(t *testing.T) {
 
@@ -252,19 +252,19 @@ func TestGetUserInfo(t *testing.T) {
 			if string(body) != data.Response {
 				t.Errorf("响应body错误，want:%v, got: %v", data.Response, string(body))
 			}
- 		})
+		})
 	}
 }
 
 func TestUpdateUserInfo(t *testing.T) {
-	testData := []struct{
+	testData := []struct {
 		Id       int64
 		Name     string
 		Password string
 		Avatar   string
 		HttpCode int
 		Response string
-	} {
+	}{
 		{1, "哈哈", "", "", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Password为必填字段\"}"},
 		{1, "", "123456", "", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Name为必填字段\"}"},
 		{1, "哈哈", "111111", "", http.StatusOK, "{\"data\":{\"id\":1,\"name\":\"哈哈\"},\"msg\":\"成功\"}"},
@@ -275,7 +275,7 @@ func TestUpdateUserInfo(t *testing.T) {
 		{1, "哈哈", "11111111111111111111111", "http://baidu.com", http.StatusBadRequest, "{\"data\":null,\"msg\":\"Password长度不能超过20个字符\"}"},
 	}
 
-	for _, data := range testData{
+	for _, data := range testData {
 		t.Run("", func(t *testing.T) {
 			byteData, _ := json.Marshal(data)
 			reader := bytes.NewReader(byteData)

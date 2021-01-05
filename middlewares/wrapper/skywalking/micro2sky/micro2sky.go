@@ -100,7 +100,7 @@ func (s *clientWrapper) Stream(ctx context.Context, req client.Request, opts ...
 	return stream, err
 }
 
-// Publish is used publish message to subscriber
+// Publish is used publish proto to subscriber
 func (s *clientWrapper) Publish(ctx context.Context, p client.Message, opts ...client.PublishOption) error {
 	name := fmt.Sprintf("Pub to %s", p.Topic())
 	span, err := s.sw.CreateExitSpan(ctx, name, p.ContentType(), func(header string) error {

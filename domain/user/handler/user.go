@@ -7,10 +7,10 @@ import (
 )
 
 /**
-	用户领域服务
- */
+用户领域服务
+*/
 
-func (h *Handler) CreateUserInfo (ctx context.Context, request *proto.Request, response *proto.Response) error {
+func (h *Handler) CreateUserInfo(ctx context.Context, request *proto.Request, response *proto.Response) error {
 
 	if request.Account == "" || request.Name == "" || request.Password == "" {
 		response.Code = http.StatusBadRequest
@@ -38,16 +38,16 @@ func (h *Handler) CreateUserInfo (ctx context.Context, request *proto.Request, r
 	response.Code = http.StatusCreated
 	response.Message = "success"
 	response.Data = &proto.User{
-		Id: user.Id,
-		Name: user.Name,
+		Id:       user.Id,
+		Name:     user.Name,
 		Password: user.Password,
-		Avatar: user.Avatar,
+		Avatar:   user.Avatar,
 	}
 
 	return nil
 }
 
-func (h *Handler) GetUserInfo (ctx context.Context, request *proto.Request, response *proto.Response) error {
+func (h *Handler) GetUserInfo(ctx context.Context, request *proto.Request, response *proto.Response) error {
 
 	if request.Account == "" && request.Name == "" && request.Id == 0 {
 		response.Code = http.StatusBadRequest
@@ -65,10 +65,10 @@ func (h *Handler) GetUserInfo (ctx context.Context, request *proto.Request, resp
 		response.Code = http.StatusOK
 		response.Message = "success"
 		response.Data = &proto.User{
-			Id: user.Id,
-			Name: user.Name,
+			Id:      user.Id,
+			Name:    user.Name,
 			Account: user.Account,
-			Avatar: user.Avatar,
+			Avatar:  user.Avatar,
 		}
 	} else {
 		response.Code = http.StatusNotFound
@@ -77,7 +77,7 @@ func (h *Handler) GetUserInfo (ctx context.Context, request *proto.Request, resp
 	return nil
 }
 
-func (h *Handler) UpdateUserInfo (ctx context.Context, request *proto.Request, response *proto.Response) error {
+func (h *Handler) UpdateUserInfo(ctx context.Context, request *proto.Request, response *proto.Response) error {
 
 	if request.Name == "" || request.Password == "" || request.Id == 0 {
 		response.Code = http.StatusBadRequest
@@ -105,15 +105,15 @@ func (h *Handler) UpdateUserInfo (ctx context.Context, request *proto.Request, r
 	response.Code = http.StatusOK
 	response.Message = "success"
 	response.Data = &proto.User{
-		Id: user.Id,
-		Name: user.Name,
+		Id:       user.Id,
+		Name:     user.Name,
 		Password: user.Password,
-		Avatar: user.Avatar,
+		Avatar:   user.Avatar,
 	}
 	return nil
 }
 
-func (h *Handler) CheckUserPwd (ctx context.Context, request *proto.Request, response *proto.Response) error {
+func (h *Handler) CheckUserPwd(ctx context.Context, request *proto.Request, response *proto.Response) error {
 
 	if request.Account == "" || request.Password == "" {
 		response.Code = http.StatusBadRequest
@@ -140,10 +140,10 @@ func (h *Handler) CheckUserPwd (ctx context.Context, request *proto.Request, res
 		response.Code = http.StatusOK
 		response.Message = "success"
 		response.Data = &proto.User{
-			Id: user.Id,
-			Name: user.Name,
+			Id:       user.Id,
+			Name:     user.Name,
 			Password: user.Password,
-			Avatar: user.Avatar,
+			Avatar:   user.Avatar,
 		}
 	}
 

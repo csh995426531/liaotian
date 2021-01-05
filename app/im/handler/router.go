@@ -20,7 +20,7 @@ func InitRouters(middleware ...gin.HandlerFunc) *gin.Engine {
 	return router
 }
 
-func AddMiddleware(router *gin.Engine, middleware gin.HandlerFunc) *gin.Engine{
+func AddMiddleware(router *gin.Engine, middleware gin.HandlerFunc) *gin.Engine {
 
 	router.Use(middleware)
 	return router
