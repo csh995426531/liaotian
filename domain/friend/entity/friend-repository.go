@@ -7,7 +7,7 @@ import (
 )
 
 type FriendModel struct {
-	Friend `gorm:"embedded"`
+	Friend    `gorm:"embedded"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
@@ -44,7 +44,7 @@ func (f *Friend) CreateFriendInfo(userIdA, userIdB int64) (friend *Friend, err e
 		return
 	}
 	friend = &Friend{
-		Id: model.Id,
+		Id:      model.Id,
 		UserIdA: userIdA,
 		UserIdB: userIdB,
 	}

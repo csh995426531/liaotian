@@ -35,7 +35,7 @@ func (e *User) CreateUserInfo(name, account, password, avatar string) (user *Use
 
 	err = repository.Repo.MysqlDb.Create(model).Error
 	user = &User{
-		Id: model.Id,
+		Id:       model.Id,
 		Name:     name,
 		Account:  account,
 		Password: password,

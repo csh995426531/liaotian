@@ -7,12 +7,12 @@ import (
 )
 
 type SayModel struct {
-	Say `gorm:"embedded"`
+	Say       `gorm:"embedded"`
 	CreatedAt time.Time
 	UpdatedAt time.Time
 }
 
-func (SayModel) TableName () string {
+func (SayModel) TableName() string {
 	return "application_say"
 }
 
@@ -32,12 +32,11 @@ func (s *Say) CreateApplicationSay(applicationId, senderId int64, content string
 		return
 	}
 	say = &Say{
-		Id: model.Id,
+		Id:            model.Id,
 		ApplicationId: applicationId,
-		SenderId: senderId,
-		Content: content,
+		SenderId:      senderId,
+		Content:       content,
 	}
 
 	return
 }
-

@@ -8,11 +8,11 @@ import (
 
 /**
 申请单实体-仓库实现
- */
+*/
 type ApplicationModel struct {
-	Application      `gorm:"embedded"`
-	CreatedAt time.Time
-	UpdatedAt time.Time
+	Application `gorm:"embedded"`
+	CreatedAt   time.Time
+	UpdatedAt   time.Time
 }
 
 func (ApplicationModel) TableName() string {
@@ -36,10 +36,10 @@ func (a *Application) CreateApplicationInfo(senderId, receiverId int64) (applica
 	}
 
 	application = &Application{
-		Id: model.Id,
-		SenderId: model.SenderId,
+		Id:         model.Id,
+		SenderId:   model.SenderId,
 		ReceiverId: model.ReceiverId,
-		Status: model.Status,
+		Status:     model.Status,
 	}
 
 	return
@@ -55,6 +55,12 @@ func (a *Application) GetApplicationInfo(id int64) (application *Application, er
 	model.Id = id
 
 	err = repository.Repo.MysqlDb.Where(model).Limit(1).Find(&application).Error
+	if err == nil {
+		model := new(SayModel)
+		model.SenderId = id
+		err = repository.Repo.MysqlDb.Where(model).Find(&application.SayList).Error
+	}
+
 	return
 }
 

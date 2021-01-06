@@ -85,4 +85,5 @@ message CreateApplicationSayResponse {
 
 message Response {
   bool ok = 1;
+  string message = 2;
 }

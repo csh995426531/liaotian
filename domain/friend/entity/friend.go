@@ -2,7 +2,7 @@ package entity
 
 /**
 朋友实体
- */
+*/
 type Friend struct {
 	Id      int64
 	UserIdA int64

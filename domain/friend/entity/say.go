@@ -1,6 +1,5 @@
 package entity
 
-
 type Say struct {
 	Id            int64
 	ApplicationId int64

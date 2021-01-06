@@ -2,7 +2,7 @@ package entity
 
 /**
 申请单实体
- */
+*/
 
 type Application struct {
 	Id         int64
@@ -13,8 +13,8 @@ type Application struct {
 }
 
 var (
-	StatusWait = 1
-	StatusPass = 2
+	StatusWait   = 1
+	StatusPass   = 2
 	StatusReject = 3
 )
 
