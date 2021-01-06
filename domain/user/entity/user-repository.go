@@ -63,7 +63,8 @@ func (e *User) GetUserInfo(id int64, name, account string) (user *User, err erro
 		model.Account = account
 	}
 
-	err = repository.Repo.MysqlDb.Where(model).Limit(1).Find(&user).Error
+	user = &User{}
+	err = repository.Repo.MysqlDb.Where(model).Limit(1).Find(user).Error
 	return
 }
 

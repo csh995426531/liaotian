@@ -2,8 +2,10 @@ package handler
 
 import (
 	"context"
+	"errors"
 	"liaotian/domain/friend/entity"
 	"liaotian/domain/friend/proto"
+	"liaotian/middlewares/logger/zap"
 )
 
 func (h *Handler) CreateApplicationInfo(ctx context.Context, request *proto.CreateApplicationRequest, response *proto.ApplicationResponse) error {
@@ -12,6 +14,7 @@ func (h *Handler) CreateApplicationInfo(ctx context.Context, request *proto.Crea
 	}
 	application, err := h.ApplicationEntity.CreateApplicationInfo(request.SenderId, request.ReceiverId)
 	if err != nil {
+		zap.ZapLogger.Error(err.Error())
 		return ErrorInternalServerError(err)
 	}
 	response.Message = "success"
@@ -31,6 +34,7 @@ func (h *Handler) GetApplicationInfo(ctx context.Context, request *proto.GetAppl
 
 	application, err := h.ApplicationEntity.GetApplicationInfo(request.Id)
 	if err != nil {
+		zap.ZapLogger.Error(err.Error())
 		return ErrorInternalServerError(err)
 	}
 	if application.Id == 0 {
@@ -61,6 +65,7 @@ func (h *Handler) PassApplicationInfo(ctx context.Context, request *proto.PassAp
 
 	application, err := h.ApplicationEntity.GetApplicationInfo(request.Id)
 	if err != nil {
+		zap.ZapLogger.Error(err.Error())
 		return ErrorInternalServerError(err)
 	}
 	if application.Id == 0 {
@@ -69,7 +74,17 @@ func (h *Handler) PassApplicationInfo(ctx context.Context, request *proto.PassAp
 
 	ok, err := h.ApplicationEntity.UpdateApplicationInfoStatus(request.Id, entity.StatusPass)
 	if err != nil {
+		zap.ZapLogger.Error(err.Error())
 		return ErrorInternalServerError(err)
+	}
+
+	friend, err := h.FriendEntity.CreateFriendInfo(application.SenderId, application.ReceiverId)
+	if err != nil {
+		zap.ZapLogger.Error(err.Error())
+		return ErrorInternalServerError(err)
+	}
+	if friend.Id == 0 {
+		return ErrorInternalServerError(errors.New("创建用户失败"))
 	}
 
 	response.Message = "success"
@@ -84,6 +99,7 @@ func (h *Handler) RejectApplicationInfo(ctx context.Context, request *proto.Reje
 
 	application, err := h.ApplicationEntity.GetApplicationInfo(request.Id)
 	if err != nil {
+		zap.ZapLogger.Error(err.Error())
 		return ErrorInternalServerError(err)
 	}
 	if application.Id == 0 {
@@ -92,6 +108,7 @@ func (h *Handler) RejectApplicationInfo(ctx context.Context, request *proto.Reje
 
 	ok, err := h.ApplicationEntity.UpdateApplicationInfoStatus(request.Id, entity.StatusReject)
 	if err != nil {
+		zap.ZapLogger.Error(err.Error())
 		return ErrorInternalServerError(err)
 	}
 
@@ -106,6 +123,7 @@ func (h *Handler) GetApplicationList(ctx context.Context, request *proto.GetAppl
 	}
 	list, err := h.ApplicationEntity.GetApplicationList(request.UserId)
 	if err != nil {
+		zap.ZapLogger.Error(err.Error())
 		return ErrorInternalServerError(err)
 	}
 
@@ -136,6 +154,7 @@ func (h *Handler) CreateApplicationSay(ctx context.Context, request *proto.Creat
 
 	say, err := h.ApplicationSayEntity.CreateApplicationSay(request.ApplicationId, request.SenderId, request.Content)
 	if err != nil {
+		zap.ZapLogger.Error(err.Error())
 		return ErrorInternalServerError(err)
 	}
 

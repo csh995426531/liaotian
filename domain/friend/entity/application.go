@@ -9,7 +9,7 @@ type Application struct {
 	SenderId   int64
 	ReceiverId int64
 	Status     int
-	SayList    []Say
+	SayList    []*Say
 }
 
 var (

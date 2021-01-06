@@ -16,7 +16,7 @@ type ApplicationModel struct {
 }
 
 func (ApplicationModel) TableName() string {
-	return "users"
+	return "application"
 }
 
 func (a *Application) CreateApplicationInfo(senderId, receiverId int64) (application *Application, err error) {
@@ -51,14 +51,17 @@ func (a *Application) GetApplicationInfo(id int64) (application *Application, er
 		return
 	}
 
-	model := new(ApplicationModel)
-	model.Id = id
+	where := new(ApplicationModel)
+	where.Id = id
 
-	err = repository.Repo.MysqlDb.Where(model).Limit(1).Find(&application).Error
-	if err == nil {
-		model := new(SayModel)
-		model.SenderId = id
-		err = repository.Repo.MysqlDb.Where(model).Find(&application.SayList).Error
+	application = &Application{}
+	err = repository.Repo.MysqlDb.Where(where).Limit(1).Find(application).Error
+	if err == nil && application.Id > 0 {
+		application.SayList = make([]*Say, 1)
+
+		sayWhere := new(SayModel)
+		sayWhere.SenderId = id
+		err = repository.Repo.MysqlDb.Where(sayWhere).Find(&application.SayList).Error
 	}
 
 	return
@@ -96,7 +99,9 @@ func (a *Application) GetApplicationList(userId int64) (list []*Application, err
 	where1.SenderId = userId
 	where2 := new(ApplicationModel)
 	where2.ReceiverId = userId
-	err = repository.Repo.MysqlDb.Where(where1).Or(where2).Find(&list).Error
+
+	list = []*Application{}
+	err = repository.Repo.MysqlDb.Where(where1).Or(where2).Find(list).Error
 
 	return
 }
