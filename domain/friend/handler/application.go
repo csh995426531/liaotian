@@ -71,6 +71,9 @@ func (h *Handler) PassApplicationInfo(ctx context.Context, request *proto.PassAp
 	if application.Id == 0 {
 		return ErrorApplicationNotFound
 	}
+	if application.Status != entity.StatusWait {
+		return ErrorApplicationStatusWrong
+	}
 
 	ok, err := h.ApplicationEntity.UpdateApplicationInfoStatus(request.Id, entity.StatusPass)
 	if err != nil {
@@ -104,6 +107,9 @@ func (h *Handler) RejectApplicationInfo(ctx context.Context, request *proto.Reje
 	}
 	if application.Id == 0 {
 		return ErrorApplicationNotFound
+	}
+	if application.Status != entity.StatusWait {
+		return ErrorApplicationStatusWrong
 	}
 
 	ok, err := h.ApplicationEntity.UpdateApplicationInfoStatus(request.Id, entity.StatusReject)
@@ -150,6 +156,18 @@ func (h *Handler) GetApplicationList(ctx context.Context, request *proto.GetAppl
 func (h *Handler) CreateApplicationSay(ctx context.Context, request *proto.CreateApplicationSayRequest, response *proto.CreateApplicationSayResponse) error {
 	if request.ApplicationId == 0 || request.SenderId == 0 || request.Content == "" {
 		return ErrorBadRequest
+	}
+
+	application, err := h.ApplicationEntity.GetApplicationInfo(request.ApplicationId)
+	if err != nil {
+		zap.ZapLogger.Error(err.Error())
+		return ErrorInternalServerError(err)
+	}
+	if application.Id == 0 {
+		return ErrorApplicationNotFound
+	}
+	if application.Status != entity.StatusWait {
+		return ErrorApplicationStatusWrong
 	}
 
 	say, err := h.ApplicationSayEntity.CreateApplicationSay(request.ApplicationId, request.SenderId, request.Content)

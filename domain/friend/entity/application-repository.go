@@ -60,7 +60,7 @@ func (a *Application) GetApplicationInfo(id int64) (application *Application, er
 		application.SayList = make([]*Say, 1)
 
 		sayWhere := new(SayModel)
-		sayWhere.SenderId = id
+		sayWhere.ApplicationId = id
 		err = repository.Repo.MysqlDb.Where(sayWhere).Find(&application.SayList).Error
 	}
 
@@ -100,8 +100,20 @@ func (a *Application) GetApplicationList(userId int64) (list []*Application, err
 	where2 := new(ApplicationModel)
 	where2.ReceiverId = userId
 
-	list = []*Application{}
-	err = repository.Repo.MysqlDb.Where(where1).Or(where2).Find(list).Error
+	list = make([]*Application, 1)
+	err = repository.Repo.MysqlDb.Where(where1).Or(where2).Find(&list).Error
+
+	for _, application := range list {
+
+		application.SayList = make([]*Say, 1)
+
+		sayWhere := new(SayModel)
+		sayWhere.ApplicationId = application.Id
+		err = repository.Repo.MysqlDb.Where(sayWhere).Find(&application.SayList).Error
+		if err != nil {
+			return list, err
+		}
+	}
 
 	return
 }
