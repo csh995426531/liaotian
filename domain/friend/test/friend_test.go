@@ -14,12 +14,12 @@ import (
 )
 
 func GetFriendList(t *testing.T) {
-	testData := []struct{
+	testData := []struct {
 		UserId int64
-		Code       int32
-		Msg        string
-		Data       string
-	} {
+		Code   int32
+		Msg    string
+		Data   string
+	}{
 		{1, http.StatusOK, "success", "[2,3]"},
 		{0, http.StatusBadRequest, "参数错误", ""},
 	}
@@ -63,18 +63,18 @@ func GetFriendList(t *testing.T) {
 }
 
 func DeleteFriendInfo(t *testing.T) {
-	testData := []struct{
-		Id  int64
+	testData := []struct {
+		Id   int64
 		Code int32
 		Msg  string
-		Ok  bool
-	} {
+		Ok   bool
+	}{
 		{1, http.StatusOK, "success", true},
 		{0, http.StatusBadRequest, "参数错误", false},
 	}
 
 	service := proto.NewFriendService("domain.friend.service", client.DefaultClient)
-	for i, data := range testData{
+	for i, data := range testData {
 		t.Run("", func(t *testing.T) {
 
 			request := &proto.DeleteFriendInfoRequest{
@@ -83,7 +83,7 @@ func DeleteFriendInfo(t *testing.T) {
 			if i == 0 {
 				repository.Repo.MockDb.ExpectExec("^DELETE FROM `friend`*").
 					WithArgs(data.Id).
-					WillReturnResult(sqlmock.NewResult(1,1))
+					WillReturnResult(sqlmock.NewResult(1, 1))
 			}
 			resp, err := service.DeleteFriendInfo(context.Background(), request)
 			if err != nil {

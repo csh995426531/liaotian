@@ -90,11 +90,11 @@ func GetApplicationInfo(t *testing.T) {
 			}
 
 			if i == 0 {
-				row := sqlmock.NewRows([]string{"id","sender_id", "receiver_id", "status", "created_at", "updated_at"}).
+				row := sqlmock.NewRows([]string{"id", "sender_id", "receiver_id", "status", "created_at", "updated_at"}).
 					AddRow(data.Id, 1, 2, entity.StatusWait, time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `applications`*").
 					WithArgs(data.Id).WillReturnRows(row)
-				row = sqlmock.NewRows([]string{"id","application_id", "sender_id", "content", "created_at", "updated_at"}).
+				row = sqlmock.NewRows([]string{"id", "application_id", "sender_id", "content", "created_at", "updated_at"}).
 					AddRow(1, data.Id, 1, "你好啊", time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `says`*").
 					WithArgs(data.Id).WillReturnRows(row)
@@ -130,12 +130,12 @@ func GetApplicationInfo(t *testing.T) {
 }
 
 func PassApplicationInfo(t *testing.T) {
-	testData := []struct{
-		Id  int64
+	testData := []struct {
+		Id   int64
 		Code int32
 		Msg  string
-		Ok  bool
-	} {
+		Ok   bool
+	}{
 		{1, http.StatusOK, "success", true},
 		{1, http.StatusTeapot, "申请单状态错误", false},
 		{2, http.StatusNotFound, "申请单不存在", false},
@@ -150,25 +150,25 @@ func PassApplicationInfo(t *testing.T) {
 			}
 
 			if i == 0 {
-				row := sqlmock.NewRows([]string{"id","sender_id", "receiver_id", "status", "created_at", "updated_at"}).
+				row := sqlmock.NewRows([]string{"id", "sender_id", "receiver_id", "status", "created_at", "updated_at"}).
 					AddRow(data.Id, 1, 2, entity.StatusWait, time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `applications`*").
 					WithArgs(data.Id).WillReturnRows(row)
-				row = sqlmock.NewRows([]string{"id","application_id", "sender_id", "content", "created_at", "updated_at"}).
+				row = sqlmock.NewRows([]string{"id", "application_id", "sender_id", "content", "created_at", "updated_at"}).
 					AddRow(1, data.Id, 1, "你好啊", time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `says`*").
 					WithArgs(data.Id).WillReturnRows(row)
 				repository.Repo.MockDb.ExpectExec("^UPDATE `application` SET*").
-					WillReturnResult(sqlmock.NewResult(1,1))
+					WillReturnResult(sqlmock.NewResult(1, 1))
 				repository.Repo.MockDb.ExpectExec("^INSERT INTO `friend`*").
-					WillReturnResult(sqlmock.NewResult(1,1))
+					WillReturnResult(sqlmock.NewResult(1, 1))
 			}
 			if i == 1 {
-				row := sqlmock.NewRows([]string{"id","sender_id", "receiver_id", "status", "created_at", "updated_at"}).
+				row := sqlmock.NewRows([]string{"id", "sender_id", "receiver_id", "status", "created_at", "updated_at"}).
 					AddRow(data.Id, 1, 2, entity.StatusPass, time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `applications`*").
 					WithArgs(data.Id).WillReturnRows(row)
-				row = sqlmock.NewRows([]string{"id","application_id", "sender_id", "content", "created_at", "updated_at"}).
+				row = sqlmock.NewRows([]string{"id", "application_id", "sender_id", "content", "created_at", "updated_at"}).
 					AddRow(1, data.Id, 1, "你好啊", time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `says`*").
 					WithArgs(data.Id).WillReturnRows(row)
@@ -201,12 +201,12 @@ func PassApplicationInfo(t *testing.T) {
 }
 
 func RejectApplicationInfo(t *testing.T) {
-	testData := []struct{
-		Id  int64
+	testData := []struct {
+		Id   int64
 		Code int32
 		Msg  string
-		Ok  bool
-	} {
+		Ok   bool
+	}{
 		{1, http.StatusOK, "success", true},
 		{1, http.StatusTeapot, "申请单状态错误", false},
 		{2, http.StatusNotFound, "申请单不存在", false},
@@ -221,23 +221,23 @@ func RejectApplicationInfo(t *testing.T) {
 			}
 
 			if i == 0 {
-				row := sqlmock.NewRows([]string{"id","sender_id", "receiver_id", "status", "created_at", "updated_at"}).
+				row := sqlmock.NewRows([]string{"id", "sender_id", "receiver_id", "status", "created_at", "updated_at"}).
 					AddRow(data.Id, 1, 2, entity.StatusWait, time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `applications`*").
 					WithArgs(data.Id).WillReturnRows(row)
-				row = sqlmock.NewRows([]string{"id","application_id", "sender_id", "content", "created_at", "updated_at"}).
+				row = sqlmock.NewRows([]string{"id", "application_id", "sender_id", "content", "created_at", "updated_at"}).
 					AddRow(1, data.Id, 1, "你好啊", time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `says`*").
 					WithArgs(data.Id).WillReturnRows(row)
 				repository.Repo.MockDb.ExpectExec("^UPDATE `application` SET*").
-					WillReturnResult(sqlmock.NewResult(1,1))
+					WillReturnResult(sqlmock.NewResult(1, 1))
 			}
 			if i == 1 {
-				row := sqlmock.NewRows([]string{"id","sender_id", "receiver_id", "status", "created_at", "updated_at"}).
+				row := sqlmock.NewRows([]string{"id", "sender_id", "receiver_id", "status", "created_at", "updated_at"}).
 					AddRow(data.Id, 1, 2, entity.StatusPass, time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `applications`*").
 					WithArgs(data.Id).WillReturnRows(row)
-				row = sqlmock.NewRows([]string{"id","application_id", "sender_id", "content", "created_at", "updated_at"}).
+				row = sqlmock.NewRows([]string{"id", "application_id", "sender_id", "content", "created_at", "updated_at"}).
 					AddRow(1, data.Id, 1, "你好啊", time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `says`*").
 					WithArgs(data.Id).WillReturnRows(row)
@@ -270,12 +270,12 @@ func RejectApplicationInfo(t *testing.T) {
 }
 
 func GetApplicationList(t *testing.T) {
-	testData := []struct{
+	testData := []struct {
 		UserId int64
 		Code   int32
 		Msg    string
 		Data   string
-	} {
+	}{
 		{1, http.StatusOK, "success", "[{\"Id\":1,\"SenderId\":1,\"ReceiverId\":2,\"SayList\":[{\"Id\":1,\"SenderId\":1,\"Content\":\"你好啊\"},{\"Id\":2,\"SenderId\":1,\"Content\":\"我是赛利亚\"}]},{\"Id\":2,\"SenderId\":3,\"ReceiverId\":1}]"},
 		{2, http.StatusOK, "success", "null"},
 		{0, http.StatusBadRequest, "参数错误", ""},
@@ -290,13 +290,13 @@ func GetApplicationList(t *testing.T) {
 			}
 
 			if i == 0 {
-				row := sqlmock.NewRows([]string{"id","sender_id", "receiver_id", "status", "created_at", "updated_at"}).
+				row := sqlmock.NewRows([]string{"id", "sender_id", "receiver_id", "status", "created_at", "updated_at"}).
 					AddRow(1, data.UserId, 2, entity.StatusWait, time.Now().String(), time.Now().String()).
 					AddRow(2, 3, data.UserId, entity.StatusPass, time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `applications`*").
 					WillReturnRows(row)
 
-				row = sqlmock.NewRows([]string{"id","application_id", "sender_id", "content", "created_at", "updated_at"}).
+				row = sqlmock.NewRows([]string{"id", "application_id", "sender_id", "content", "created_at", "updated_at"}).
 					AddRow(1, 1, 1, "你好啊", time.Now().String(), time.Now().String()).
 					AddRow(2, 1, 1, "我是赛利亚", time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `says`*").
@@ -338,18 +338,18 @@ func GetApplicationList(t *testing.T) {
 }
 
 func CreateApplicationSay(t *testing.T) {
-	testData := []struct{
+	testData := []struct {
 		ApplicationId int64
-		SenderId int64
-		Content string
-		Code   int32
-		Msg  string
-		Data  string
-	} {
+		SenderId      int64
+		Content       string
+		Code          int32
+		Msg           string
+		Data          string
+	}{
 		{1, 1, "加我一下吧", http.StatusOK, "success", "{\"Id\":1,\"SenderId\":1,\"Content\":\"加我一下吧\"}"},
-		{1, 1,"赶紧加我",http.StatusTeapot, "申请单状态错误", ""},
-		{2, 1,"赶紧加我",http.StatusNotFound, "申请单不存在", ""},
-		{0, 1,"赶紧加我",http.StatusBadRequest, "参数错误", ""},
+		{1, 1, "赶紧加我", http.StatusTeapot, "申请单状态错误", ""},
+		{2, 1, "赶紧加我", http.StatusNotFound, "申请单不存在", ""},
+		{0, 1, "赶紧加我", http.StatusBadRequest, "参数错误", ""},
 	}
 
 	service := proto.NewFriendService("domain.friend.service", client.DefaultClient)
@@ -358,22 +358,22 @@ func CreateApplicationSay(t *testing.T) {
 		t.Run("", func(t *testing.T) {
 			request := &proto.CreateApplicationSayRequest{
 				ApplicationId: data.ApplicationId,
-				SenderId: data.SenderId,
-				Content: data.Content,
+				SenderId:      data.SenderId,
+				Content:       data.Content,
 			}
 
 			if i == 0 {
-				row := sqlmock.NewRows([]string{"id","sender_id", "receiver_id", "status", "created_at", "updated_at"}).
+				row := sqlmock.NewRows([]string{"id", "sender_id", "receiver_id", "status", "created_at", "updated_at"}).
 					AddRow(1, data.SenderId, 2, entity.StatusWait, time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `applications`*").
 					WillReturnRows(row)
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `says`*").
 					WillReturnRows(sqlmock.NewRows(nil))
 				repository.Repo.MockDb.ExpectExec("^INSERT INTO `application_say`*").
-					WillReturnResult(sqlmock.NewResult(1,1))
+					WillReturnResult(sqlmock.NewResult(1, 1))
 			}
 			if i == 1 {
-				row := sqlmock.NewRows([]string{"id","sender_id", "receiver_id", "status", "created_at", "updated_at"}).
+				row := sqlmock.NewRows([]string{"id", "sender_id", "receiver_id", "status", "created_at", "updated_at"}).
 					AddRow(1, data.SenderId, 2, entity.StatusReject, time.Now().String(), time.Now().String())
 				repository.Repo.MockDb.ExpectQuery("^SELECT \\* FROM `applications`*").
 					WillReturnRows(row)

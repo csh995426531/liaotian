@@ -6,8 +6,8 @@ import (
 )
 
 var (
-	ErrorBadRequest          = errors.New("friend", "参数错误", http.StatusBadRequest)
-	ErrorApplicationNotFound = errors.New("friend", "申请单不存在", http.StatusNotFound)
+	ErrorBadRequest             = errors.New("friend", "参数错误", http.StatusBadRequest)
+	ErrorApplicationNotFound    = errors.New("friend", "申请单不存在", http.StatusNotFound)
 	ErrorApplicationStatusWrong = errors.New("friend", "申请单状态错误", http.StatusTeapot)
 )
 
