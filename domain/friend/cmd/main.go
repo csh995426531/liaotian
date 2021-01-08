@@ -4,7 +4,10 @@ import (
 	"github.com/SkyAPM/go2sky"
 	"github.com/SkyAPM/go2sky/reporter"
 	"github.com/micro/go-micro"
+	"github.com/micro/go-micro/broker"
+	"github.com/micro/go-micro/broker/nats"
 	"github.com/micro/go-plugins/registry/kubernetes"
+	"liaotian/domain/friend/event"
 	"liaotian/domain/friend/handler"
 	"liaotian/domain/friend/proto"
 	"liaotian/domain/friend/repository"
@@ -28,12 +31,16 @@ func main() {
 		zap.ZapLogger.Info("创建 trace oap.skywalking:11800 - domain.user.service 成功")
 	}
 
+	natsBroker := nats.NewBroker(broker.Addrs("nats-cluster.nats.svc.cluster.local:4222"))
+	event.Init(natsBroker)
+
 	service := micro.NewService(
 		micro.Name("domain.friend.service"),
 		micro.Registry(kubernetes.NewRegistry()),
 		micro.RegisterTTL(time.Second*15),
 		micro.Version("latest"),
 		micro.WrapHandler(micro2sky.NewHandlerWrapper(tracer, "domain.user.service")),
+		micro.Broker(natsBroker),
 	)
 
 	// 服务初始化

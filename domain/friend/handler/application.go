@@ -4,6 +4,7 @@ import (
 	"context"
 	"errors"
 	"liaotian/domain/friend/entity"
+	"liaotian/domain/friend/event"
 	"liaotian/domain/friend/proto"
 	"liaotian/middlewares/logger/zap"
 )
@@ -87,7 +88,11 @@ func (h *Handler) PassApplicationInfo(ctx context.Context, request *proto.PassAp
 		return ErrorInternalServerError(err)
 	}
 	if friend.Id == 0 {
-		return ErrorInternalServerError(errors.New("创建用户失败"))
+		return ErrorInternalServerError(errors.New("创建朋友失败，未知错误"))
+	}
+
+	if err = event.Instance.PassApplication(friend.UserIdA, friend.UserIdB); err != nil {
+		zap.SugarLogger.Errorf("通过申请单事件异常，%v", err)
 	}
 
 	response.Message = "success"
