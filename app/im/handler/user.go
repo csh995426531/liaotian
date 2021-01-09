@@ -3,6 +3,8 @@ package handler
 import (
 	"github.com/gin-gonic/gin"
 	"liaotian/app/im/handler/validator"
+	authService "liaotian/domain/auth/proto"
+	userService "liaotian/domain/user/proto"
 	ginResult "liaotian/middlewares/common-result/gin"
 	"liaotian/middlewares/logger/zap"
 	"liaotian/middlewares/tool"
@@ -13,7 +15,8 @@ import (
 func Login(ctx *gin.Context) {
 
 	loginValidator := &validator.LoginValidator{}
-	req, err := validator.Bind(ctx, loginValidator)
+	req := userService.Request{}
+	err := validator.Bind(ctx, loginValidator, &req)
 
 	if err != nil {
 		ginResult.Failed(ctx, http.StatusBadRequest, err.Error())
@@ -32,14 +35,29 @@ func Login(ctx *gin.Context) {
 		return
 	}
 
-	ginResult.Success(ctx, http.StatusOK, res.Data)
+	generatedReq := authService.GeneratedRequest{
+		UserId: res.Data.Id,
+		Name: res.Data.Name,
+	}
+	tokenRes, err := domainAuth.Generated(ctx.Request.Context(), &generatedReq)
+	if err != nil {
+		zap.SugarLogger.Errorf("domainAuth.Generated error: %+v", err)
+		ginResult.Failed(ctx, http.StatusInternalServerError, "上游服务异常")
+		return
+	}
+
+	ginResult.Success(ctx, http.StatusOK, map[string]interface{}{
+		"data": res.Data,
+		"token": tokenRes.Data,
+	})
 }
 
 //注册
 func Register(ctx *gin.Context) {
 
 	registerValidator := &validator.RegisterValidator{}
-	req, err := validator.Bind(ctx, registerValidator)
+	req := userService.Request{}
+	err := validator.Bind(ctx, registerValidator, &req)
 	if err != nil {
 		ginResult.Failed(ctx, http.StatusBadRequest, err.Error())
 		return
@@ -65,7 +83,8 @@ func Register(ctx *gin.Context) {
 func GetUserInfo(ctx *gin.Context) {
 
 	getUserInfoValidator := &validator.GetUserInfoValidator{}
-	req, err := validator.Bind(ctx, getUserInfoValidator)
+	req := userService.Request{}
+	err := validator.Bind(ctx, getUserInfoValidator, &req)
 	if err != nil {
 		ginResult.Failed(ctx, http.StatusBadRequest, err.Error())
 		return
@@ -89,7 +108,8 @@ func GetUserInfo(ctx *gin.Context) {
 func UpdateUserInfo(ctx *gin.Context) {
 
 	updateUserInfoValidator := &validator.UpdateUserInfoValidator{}
-	req, err := validator.Bind(ctx, updateUserInfoValidator)
+	req := userService.Request{}
+	err := validator.Bind(ctx, updateUserInfoValidator, &req)
 	if err != nil {
 		ginResult.Failed(ctx, http.StatusBadRequest, err.Error())
 		return

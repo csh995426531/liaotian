@@ -1,7 +1,7 @@
 package entity
 
 /**
-朋友实体
+好友实体
 */
 type Friend struct {
 	Id      int64

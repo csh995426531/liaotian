@@ -6,14 +6,10 @@ import (
 	"encoding/json"
 	"fmt"
 	client "github.com/micro/go-micro/client"
-	"github.com/micro/go-micro/web"
 	"io/ioutil"
-	"liaotian/app/im/handler"
 	userService "liaotian/domain/user/proto"
-	"liaotian/middlewares/logger/zap"
 	"net/http"
 	"testing"
-	"time"
 )
 
 type testService struct {
@@ -119,36 +115,7 @@ func (c *testService) CheckUserPwd(ctx context.Context, in *userService.Request,
 	return out, nil
 }
 
-func TestMain(m *testing.M) {
-
-	zap.InitLogger()
-	//translate.Init()
-
-	//初始化路由
-	ginRouter := handler.InitRouters()
-
-	// create new web handler
-	service := web.NewService(
-		web.Name("app.im.service"),
-		web.Version("latest"),
-		web.Handler(ginRouter),
-		web.Address(":18282"),
-	)
-	handler.Init(new(testService))
-
-	// run handler
-	go func() {
-		if err := service.Run(); err != nil {
-			panic(fmt.Sprintf("服务启动失败，error: %v", err))
-		}
-	}()
-
-	fmt.Println("服务启动成功")
-	time.Sleep(time.Second * 1)
-	m.Run()
-}
-
-func TestRegister(t *testing.T) {
+func Register(t *testing.T) {
 
 	testData := []struct {
 		Account  string
@@ -188,7 +155,7 @@ func TestRegister(t *testing.T) {
 	}
 }
 
-func TestLogin(t *testing.T) {
+func Login(t *testing.T) {
 	testData := []struct {
 		Account  string
 		Password string
@@ -224,7 +191,7 @@ func TestLogin(t *testing.T) {
 	}
 }
 
-func TestGetUserInfo(t *testing.T) {
+func GetUserInfo(t *testing.T) {
 	testData := []struct {
 		Id       int64
 		HttpCode int
@@ -256,7 +223,7 @@ func TestGetUserInfo(t *testing.T) {
 	}
 }
 
-func TestUpdateUserInfo(t *testing.T) {
+func UpdateUserInfo(t *testing.T) {
 	testData := []struct {
 		Id       int64
 		Name     string

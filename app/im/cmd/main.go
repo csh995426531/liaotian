@@ -5,6 +5,8 @@ import (
 	"github.com/SkyAPM/go2sky/reporter"
 	"github.com/micro/go-micro/client"
 	"liaotian/app/im/handler"
+	authService "liaotian/domain/auth/proto"
+	friendService "liaotian/domain/friend/proto"
 	userService "liaotian/domain/user/proto"
 	"liaotian/middlewares/logger/zap"
 	"liaotian/middlewares/wrapper/skywalking/gin2micro"
@@ -45,7 +47,9 @@ func main() {
 	// 服务初始化
 	if err := service.Init(
 		web.Action(func(c *cli.Context) {
-			handler.Init(userService.NewUserService("domain.user.service", client.DefaultClient))
+			handler.UserDomain(userService.NewUserService("domain.user.service", client.DefaultClient))
+			handler.FriendDomain(friendService.NewFriendService("domain.friend.service", client.DefaultClient))
+			handler.AuthDomain(authService.NewAuthService("domain.auth.service", client.DefaultClient))
 		}),
 	); err != nil {
 		zap.SugarLogger.Fatalf("服务初始化失败，error: %v", err)

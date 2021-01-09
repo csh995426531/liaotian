@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+option go_package = "./proto;proto";
+
+package domain.auth.service;
+
+service Auth {
+  rpc Generated(GeneratedRequest) returns (GeneratedResponse) {}
+  rpc Parse(ParseRequest) returns (ParseResponse) {}
+}
+
+message GeneratedRequest {
+  int64 UserId = 1;
+  string Name = 2;;
+}
+
+message GeneratedResponse {
+  string Data = 1;
+  string Message = 2;
+}
+
+message ParseRequest {
+  string Token = 1;
+}
+
+message User {
+  int64 UserId = 1;
+  string Name = 2;;
+}
+
+message ParseResponse {
+  User Data = 1;
+  string Message = 2;
+}
+
+

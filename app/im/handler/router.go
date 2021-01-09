@@ -39,9 +39,11 @@ func InitRouters(middleware ...gin.HandlerFunc) *gin.Engine {
 
 	friendGroup := router.Group("/friend")
 	{
-		//朋友列表
+		//好友列表
 		friendGroup.GET("/list", FriendList)
-		//朋友信息
+		//删除好友
+		friendGroup.DELETE("/delete", DeleteFriendInfo)
+		//好友信息
 		friendGroup.GET("/info", FriendInfo)
 	}
 

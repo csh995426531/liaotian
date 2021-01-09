@@ -88,7 +88,7 @@ func (h *Handler) PassApplicationInfo(ctx context.Context, request *proto.PassAp
 		return ErrorInternalServerError(err)
 	}
 	if friend.Id == 0 {
-		return ErrorInternalServerError(errors.New("创建朋友失败，未知错误"))
+		return ErrorInternalServerError(errors.New("创建好友失败，未知错误"))
 	}
 
 	if err = event.Instance.PassApplication(friend.UserIdA, friend.UserIdB); err != nil {
