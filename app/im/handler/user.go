@@ -37,7 +37,7 @@ func Login(ctx *gin.Context) {
 
 	generatedReq := authService.GeneratedRequest{
 		UserId: res.Data.Id,
-		Name: res.Data.Name,
+		Name:   res.Data.Name,
 	}
 	tokenRes, err := domainAuth.Generated(ctx.Request.Context(), &generatedReq)
 	if err != nil {
@@ -47,7 +47,7 @@ func Login(ctx *gin.Context) {
 	}
 
 	ginResult.Success(ctx, http.StatusOK, map[string]interface{}{
-		"data": res.Data,
+		"data":  res.Data,
 		"token": tokenRes.Data,
 	})
 }

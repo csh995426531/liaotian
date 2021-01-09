@@ -7,7 +7,7 @@ import (
 )
 
 var (
-	m sync.Mutex
+	m        sync.Mutex
 	Instance *Event
 )
 
@@ -15,7 +15,7 @@ type Event struct {
 	PubSub broker.Broker
 }
 
-func Init (broker broker.Broker) {
+func Init(broker broker.Broker) {
 	m.Lock()
 	defer m.Unlock()
 	if Instance != nil {

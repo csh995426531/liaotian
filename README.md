@@ -1,5 +1,6 @@
 ###
-菜鸟一只，抽时间学习搞的一个微服务练习项目
+基于go micro 1.18搞的练习项目，从0开始。
+包含k8s、微服务网关、ci、cd、日志等部署到使用。
 ### 目录结构
 - [.circleci](https://github.com/csh995426531/liaotian/tree/master/.circleci) - circleci 持续集成工具的配置
 - [.gitlab-ci](https://github.com/csh995426531/liaotian/tree/master/.gitlab-ci) - gitlab-ci使用的ci配置 （**目前都是用的这个，circleci有点慢**）

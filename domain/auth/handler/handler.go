@@ -8,7 +8,6 @@ import (
 )
 
 type Handler struct {
-
 }
 
 func (h *Handler) Generated(ctx context.Context, request *proto.GeneratedRequest, response *proto.GeneratedResponse) error {
@@ -20,9 +19,9 @@ func (h *Handler) Generated(ctx context.Context, request *proto.GeneratedRequest
 	secret := "k0xdv7apeo21sfjo"
 	token := jwt.NewWithClaims(jwt.SigningMethodHS256, jwt.MapClaims{
 		"user_id": request.UserId,
-		"name": request.Name,
-		"nbf": time.Now().Unix(),
-		"exp": time.Now().Unix() + 86400,
+		"name":    request.Name,
+		"nbf":     time.Now().Unix(),
+		"exp":     time.Now().Unix() + 86400,
 	})
 
 	tokenString, err := token.SignedString([]byte(secret))
@@ -40,7 +39,7 @@ func (h *Handler) Parse(ctx context.Context, request *proto.ParseRequest, respon
 		return ErrorBadRequest
 	}
 
-	secret := "k0xdv7apeo21sfjo";
+	secret := "k0xdv7apeo21sfjo"
 	token, err := jwt.Parse(request.Token, func(token *jwt.Token) (interface{}, error) {
 		if _, ok := token.Method.(*jwt.SigningMethodHMAC); !ok {
 			return nil, jwt.ErrSignatureInvalid
@@ -55,7 +54,7 @@ func (h *Handler) Parse(ctx context.Context, request *proto.ParseRequest, respon
 	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
 		response.Data = &proto.User{
 			UserId: int64(claims["user_id"].(float64)),
-			Name: claims["name"].(string),
+			Name:   claims["name"].(string),
 		}
 		response.Message = "success"
 		return nil

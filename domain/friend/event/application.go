@@ -7,7 +7,7 @@ import (
 
 const PassApplication = "PassApplication"
 
-func (e *Event) PassApplication (userIdA, userIdB int64) (err error) {
+func (e *Event) PassApplication(userIdA, userIdB int64) (err error) {
 	msg := &broker.Message{
 		Header: map[string]string{
 			"user_id_a": string(userIdA),

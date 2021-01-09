@@ -10,7 +10,7 @@ import (
 )
 
 //创建申请单
-func CreateApplication (ctx *gin.Context) {
+func CreateApplication(ctx *gin.Context) {
 	createApplicationValidator := &validator.CreateApplicationValidator{}
 	req := friendService.CreateApplicationRequest{}
 	err := validator.Bind(ctx, createApplicationValidator, &req)
@@ -30,12 +30,12 @@ func CreateApplication (ctx *gin.Context) {
 }
 
 //申请单列表
-func applicationList (ctx *gin.Context) {
+func applicationList(ctx *gin.Context) {
 	applicationListValidator := &validator.ApplicationListValidator{}
 	req := &friendService.GetApplicationListRequest{}
 
 	err := validator.Bind(ctx, applicationListValidator, req)
-	if err != nil{
+	if err != nil {
 		ginResult.Failed(ctx, http.StatusBadRequest, err.Error())
 		return
 	}
@@ -53,7 +53,7 @@ func applicationList (ctx *gin.Context) {
 }
 
 //申请单信息
-func ApplicationInfo (ctx *gin.Context) {
+func ApplicationInfo(ctx *gin.Context) {
 	applicationInfoValidator := &validator.ApplicationInfoValidator{}
 	req := &friendService.GetApplicationRequest{}
 
@@ -74,7 +74,7 @@ func ApplicationInfo (ctx *gin.Context) {
 }
 
 //通过申请
-func PassApplication (ctx *gin.Context) {
+func PassApplication(ctx *gin.Context) {
 	passApplicationValidator := &validator.PassApplicationValidator{}
 	req := &friendService.PassApplicationInfoRequest{}
 
@@ -86,7 +86,7 @@ func PassApplication (ctx *gin.Context) {
 
 	res, err := domainFriend.PassApplicationInfo(ctx.Request.Context(), req)
 	if err != nil {
-		zap.SugarLogger.Errorf("domainFriend.PassApplicationInfo error: %v",err)
+		zap.SugarLogger.Errorf("domainFriend.PassApplicationInfo error: %v", err)
 		ginResult.Failed(ctx, http.StatusInternalServerError, "上游服务异常")
 		return
 	}
@@ -95,7 +95,7 @@ func PassApplication (ctx *gin.Context) {
 }
 
 //拒绝申请
-func RejectApplication (ctx *gin.Context) {
+func RejectApplication(ctx *gin.Context) {
 	rejectApplicationValidator := &validator.RejectApplicationValidator{}
 	req := &friendService.RejectApplicationInfoRequest{}
 
@@ -116,7 +116,7 @@ func RejectApplication (ctx *gin.Context) {
 }
 
 //回复申请
-func ReplyApplication (ctx *gin.Context) {
+func ReplyApplication(ctx *gin.Context) {
 	replyApplicationValidator := &validator.ReplyApplicationValidator{}
 	req := &friendService.CreateApplicationSayRequest{}
 
@@ -135,4 +135,3 @@ func ReplyApplication (ctx *gin.Context) {
 
 	ginResult.Success(ctx, http.StatusOK, resp.Data)
 }
-

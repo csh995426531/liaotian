@@ -45,11 +45,11 @@ func TestMain(m *testing.M) {
 func TestGeneratedAndParse(t *testing.T) {
 
 	testData := []struct {
-		UserId   int64
-		Name     string
-		Code     int32
-		Msg      string
-		Data     string
+		UserId int64
+		Name   string
+		Code   int32
+		Msg    string
+		Data   string
 	}{
 		{1, "张三", http.StatusCreated, "success", "{\"Data\":{\"UserId\":1,\"Name\":\"张三\"},\"Message\":\"success\"}"},
 		{0, "张三", http.StatusBadRequest, "参数错误", ""},
@@ -62,8 +62,8 @@ func TestGeneratedAndParse(t *testing.T) {
 		t.Run("", func(t *testing.T) {
 
 			request := proto.GeneratedRequest{
-				UserId:  data.UserId,
-				Name:     data.Name,
+				UserId: data.UserId,
+				Name:   data.Name,
 			}
 			resp, err := service.Generated(context.Background(), &request)
 			if err != nil {

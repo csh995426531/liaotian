@@ -7,9 +7,9 @@ import (
 )
 
 var (
-	domainUser userService.UserService
+	domainUser   userService.UserService
 	domainFriend friendService.FriendService
-	domainAuth authService.AuthService
+	domainAuth   authService.AuthService
 )
 
 func UserDomain(service userService.UserService) {

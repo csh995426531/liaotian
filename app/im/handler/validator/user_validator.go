@@ -1,7 +1,7 @@
 package validator
 
 import (
-	//"liaotian/middlewares/validate/translate"
+//"liaotian/middlewares/validate/translate"
 )
 
 // 登录验证器

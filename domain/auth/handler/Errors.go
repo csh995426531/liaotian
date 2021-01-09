@@ -6,7 +6,7 @@ import (
 )
 
 var (
-	ErrorBadRequest        = errors.New("user", "参数错误", http.StatusBadRequest)
+	ErrorBadRequest = errors.New("user", "参数错误", http.StatusBadRequest)
 )
 
 func ErrorInternalServerError(err interface{}) error {
