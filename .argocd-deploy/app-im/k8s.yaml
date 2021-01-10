@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: app-im
+  namespace: liaotian
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: app-im
+  template:
+    metadata:
+      labels:
+        app: app-im
+        logging: "true"
+    spec:
+      containers:
+        - name: app-im
+          image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/app-im:latest
+          imagePullPolicy: Always
+          ports:
+            - name: 80-port
+              containerPort: 80
+          env:
+            - name: SERVICE_PORT
+              value: ":80"
+      serviceAccountName: liaotian-account  # serviceAccount的名称 用于权限
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: app-im
+  namespace: liaotian
+spec:
+  ports:
+    - name: 80-port
+      port: 80
+      targetPort: 80
+  selector:
+    app: app-im

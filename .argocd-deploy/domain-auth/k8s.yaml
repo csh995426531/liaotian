@@ -1,0 +1,45 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: domain-auth-cm
+  namespace: liaotian
+data:
+  mysql_url: url=debian-sys-maint:F0sm3f7WrNJox1oV@(129.211.55.205:3306)/liaotian
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: domain-auth
+  namespace: liaotian
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: domain-auth
+  template:
+    metadata:
+      labels:
+        app: domain-auth
+        logging: "true"
+    spec:
+      containers:
+        - name: domain-auth
+          image: registry.cn-hangzhou.aliyuncs.com/liaotian_csh/domain-auth:latest
+          imagePullPolicy: Always
+          ports:
+            - name: 80-port
+              containerPort: 80
+      serviceAccountName: liaotian-account  # serviceAccount的名称 用于权限
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: domain-auth
+  namespace: liaotian
+spec:
+  ports:
+    - name: 80-port
+      port: 80
+      targetPort: 80
+  selector:
+    app: domain-auth
