@@ -107,7 +107,7 @@ build_push_domain_friend:
         - middlewares/**/*
 
 #认证领域服务
-build_push_domain_auth
+build_push_domain_auth:
   variables:
     SERVICE_NAME: domain-auth
   <<: *build_push_template

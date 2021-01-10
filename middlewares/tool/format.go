@@ -7,4 +7,3 @@ func Int64ToInt(i64 int64) (i int) {
 	i, _ = strconv.Atoi(str)
 	return
 }
-
