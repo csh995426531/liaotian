@@ -6,8 +6,8 @@ import (
 )
 
 /**
-	路由
- */
+路由
+*/
 // 初始化路由
 func InitRouters(middleware ...gin.HandlerFunc) *gin.Engine {
 

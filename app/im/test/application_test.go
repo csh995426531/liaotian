@@ -14,17 +14,17 @@ import (
 
 func CreateApplication(t *testing.T) {
 
-	testData := []struct{
-		Token   string
+	testData := []struct {
+		Token      string
 		ReceiverId int64
-		HttpCode int
-		Response *proto.ApplicationResponse
+		HttpCode   int
+		Response   *proto.ApplicationResponse
 	}{
 		{"我是万能钥匙",
 			2, http.StatusCreated, &proto.ApplicationResponse{
-			Data: &proto.Application{Id: 1, SenderId: 1, ReceiverId: 2, SayList: []*proto.ApplicationSay{}},
-			Message: "success",
-		}},
+				Data:    &proto.Application{Id: 1, SenderId: 1, ReceiverId: 2, SayList: []*proto.ApplicationSay{}},
+				Message: "success",
+			}},
 	}
 
 	for _, data := range testData {

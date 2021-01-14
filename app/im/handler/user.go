@@ -12,8 +12,8 @@ import (
 )
 
 /**
-	用户控制器
- */
+用户控制器
+*/
 //登录
 func Login(ctx *gin.Context) {
 
@@ -57,7 +57,6 @@ func Login(ctx *gin.Context) {
 
 //注册
 func Register(ctx *gin.Context) {
-
 
 	registerValidator := &validator.RegisterValidator{}
 	req := userService.Request{}

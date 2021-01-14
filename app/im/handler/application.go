@@ -10,8 +10,8 @@ import (
 )
 
 /**
-	申请单控制器
- */
+申请单控制器
+*/
 
 //创建申请单
 func CreateApplication(ctx *gin.Context) {

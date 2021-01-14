@@ -12,8 +12,8 @@ import (
 )
 
 /**
-	认证中间件
- */
+认证中间件
+*/
 func AuthMiddleware(domainAuth *authService.AuthService) gin.HandlerFunc {
 	return func(ctx *gin.Context) {
 		data, _ := ctx.GetRawData()

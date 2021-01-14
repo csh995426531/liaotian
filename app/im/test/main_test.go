@@ -12,8 +12,8 @@ import (
 )
 
 /**
-	test入口
- */
+test入口
+*/
 func TestMain(m *testing.M) {
 
 	zap.InitLogger()
@@ -53,10 +53,9 @@ func TestStart(t *testing.T) {
 		Message: "success",
 		Data: &authService.User{
 			UserId: 1,
-			Name: "张三",
+			Name:   "张三",
 		},
 	}, nil)
-
 
 	t.Run("Register", Register)
 	t.Run("Login", Login)
