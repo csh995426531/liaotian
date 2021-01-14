@@ -2,8 +2,13 @@ package handler
 
 import (
 	"github.com/gin-gonic/gin"
+	ginWrapper "liaotian/middlewares/wrapper/gin"
 )
 
+/**
+	路由
+ */
+// 初始化路由
 func InitRouters(middleware ...gin.HandlerFunc) *gin.Engine {
 
 	router := gin.Default()
@@ -15,13 +20,13 @@ func InitRouters(middleware ...gin.HandlerFunc) *gin.Engine {
 		userGroup.POST("/register", Register)
 		//登录
 		userGroup.POST("/login", Login)
-		//创建用户信息
-		userGroup.GET("/info", GetUserInfo)
+		//获取用户信息
+		userGroup.GET("/info", ginWrapper.AuthMiddleware(&domainAuth), GetUserInfo)
 		//更新用户信息
-		userGroup.POST("/info", UpdateUserInfo)
+		userGroup.POST("/info", ginWrapper.AuthMiddleware(&domainAuth), UpdateUserInfo)
 	}
 
-	applicationGroup := router.Group("/application")
+	applicationGroup := router.Group("/application", ginWrapper.AuthMiddleware(&domainAuth))
 	{
 		//创建申请单
 		applicationGroup.POST("/create", CreateApplication)
@@ -37,7 +42,7 @@ func InitRouters(middleware ...gin.HandlerFunc) *gin.Engine {
 		applicationGroup.GET("/reply", ReplyApplication)
 	}
 
-	friendGroup := router.Group("/friend")
+	friendGroup := router.Group("/friend", ginWrapper.AuthMiddleware(&domainAuth))
 	{
 		//好友列表
 		friendGroup.GET("/list", FriendList)
@@ -50,8 +55,9 @@ func InitRouters(middleware ...gin.HandlerFunc) *gin.Engine {
 	return router
 }
 
-func AddMiddleware(router *gin.Engine, middleware gin.HandlerFunc) *gin.Engine {
+// 添加中间件
+func AddMiddleware(router *gin.Engine, middleware ...gin.HandlerFunc) *gin.Engine {
 
-	router.Use(middleware)
+	router.Use(middleware...)
 	return router
 }

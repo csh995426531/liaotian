@@ -51,7 +51,7 @@ func (h *Handler) Parse(ctx context.Context, request *proto.ParseRequest, respon
 		return ErrorInternalServerError(err)
 	}
 
-	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid {
+	if claims, ok := token.Claims.(jwt.MapClaims); ok && token.Valid && int64(claims["exp"].(float64)) > time.Now().Unix() {
 		response.Data = &proto.User{
 			UserId: int64(claims["user_id"].(float64)),
 			Name:   claims["name"].(string),

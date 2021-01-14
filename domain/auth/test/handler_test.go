@@ -82,7 +82,6 @@ func TestGeneratedAndParse(t *testing.T) {
 					request2 := proto.ParseRequest{
 						Token: resp.Data,
 					}
-
 					resp2, err2 := service.Parse(context.Background(), &request2)
 					if err2 != nil {
 						errData2 := errors.Parse(err2.Error())

@@ -3,20 +3,18 @@ package main
 import (
 	"github.com/SkyAPM/go2sky"
 	"github.com/SkyAPM/go2sky/reporter"
-	"github.com/micro/go-micro/client"
 	"liaotian/app/im/handler"
-	authService "liaotian/domain/auth/proto"
-	friendService "liaotian/domain/friend/proto"
-	userService "liaotian/domain/user/proto"
 	"liaotian/middlewares/logger/zap"
 	"liaotian/middlewares/wrapper/skywalking/gin2micro"
 	"os"
 
-	"github.com/micro/cli"
 	"github.com/micro/go-micro/web"
 	"github.com/micro/go-plugins/registry/kubernetes"
 )
 
+/**
+	包入口
+ */
 func main() {
 
 	zap.InitLogger()
@@ -32,6 +30,8 @@ func main() {
 	} else {
 		zap.ZapLogger.Info("创建 trace oap.skywalking:11800 - app-im 成功")
 	}
+
+	handler.Init()
 	ginRouter := handler.InitRouters()
 	ginRouter = handler.AddMiddleware(ginRouter, gin2micro.Middleware(ginRouter, tracer))
 
@@ -45,13 +45,7 @@ func main() {
 	)
 
 	// 服务初始化
-	if err := service.Init(
-		web.Action(func(c *cli.Context) {
-			handler.UserDomain(userService.NewUserService("domain.user.service", client.DefaultClient))
-			handler.FriendDomain(friendService.NewFriendService("domain.friend.service", client.DefaultClient))
-			handler.AuthDomain(authService.NewAuthService("domain.auth.service", client.DefaultClient))
-		}),
-	); err != nil {
+	if err := service.Init(); err != nil {
 		zap.SugarLogger.Fatalf("服务初始化失败，error: %v", err)
 	}
 

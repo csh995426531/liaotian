@@ -2,13 +2,18 @@ package test
 
 import (
 	"fmt"
+	"github.com/golang/mock/gomock"
 	"github.com/micro/go-micro/web"
 	"liaotian/app/im/handler"
+	authService "liaotian/domain/auth/proto"
 	"liaotian/middlewares/logger/zap"
 	"testing"
 	"time"
 )
 
+/**
+	test入口
+ */
 func TestMain(m *testing.M) {
 
 	zap.InitLogger()
@@ -39,8 +44,23 @@ func TestMain(m *testing.M) {
 }
 
 func TestStart(t *testing.T) {
+
+	ctrl := gomock.NewController(t)
+	defer ctrl.Finish()
+	service := NewMockAuthService(ctrl)
+	handler.AuthDomain(service)
+	service.EXPECT().Parse(gomock.Any(), gomock.Any()).Return(&authService.ParseResponse{
+		Message: "success",
+		Data: &authService.User{
+			UserId: 1,
+			Name: "张三",
+		},
+	}, nil)
+
+
 	t.Run("Register", Register)
 	t.Run("Login", Login)
 	t.Run("GetUserInfo", GetUserInfo)
 	t.Run("UpdateUserInfo", UpdateUserInfo)
+	t.Run("CreateApplication", CreateApplication)
 }

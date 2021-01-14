@@ -9,6 +9,9 @@ import (
 	"net/http"
 )
 
+/**
+	好友控制器
+ */
 //好友列表
 func FriendList(ctx *gin.Context) {
 	friendListValidator := &validator.FriendListValidator{}

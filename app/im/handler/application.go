@@ -9,6 +9,10 @@ import (
 	"net/http"
 )
 
+/**
+	申请单控制器
+ */
+
 //创建申请单
 func CreateApplication(ctx *gin.Context) {
 	createApplicationValidator := &validator.CreateApplicationValidator{}
@@ -26,7 +30,7 @@ func CreateApplication(ctx *gin.Context) {
 		return
 	}
 
-	ginResult.Success(ctx, http.StatusOK, res.Data)
+	ginResult.Success(ctx, http.StatusCreated, res.Data)
 }
 
 //申请单列表
