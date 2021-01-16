@@ -14,8 +14,11 @@ import (
 
 //校验绑定参数
 func Bind(ctx *gin.Context, reqValidator interface{}, req interface{}) (err error) {
-
-	err = ctx.ShouldBind(reqValidator)
+	if ctx.Request.Method == "POST" {
+		err = ctx.ShouldBind(reqValidator)
+	} else {
+		err = ctx.ShouldBindQuery(reqValidator)
+	}
 	if err != nil {
 		return
 	}

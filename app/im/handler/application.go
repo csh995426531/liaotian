@@ -37,7 +37,6 @@ func CreateApplication(ctx *gin.Context) {
 func applicationList(ctx *gin.Context) {
 	applicationListValidator := &validator.ApplicationListValidator{}
 	req := &friendService.GetApplicationListRequest{}
-
 	err := validator.Bind(ctx, applicationListValidator, req)
 	if err != nil {
 		ginResult.Failed(ctx, http.StatusBadRequest, err.Error())

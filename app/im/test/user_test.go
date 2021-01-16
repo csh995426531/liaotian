@@ -115,7 +115,7 @@ func (c *testService) CheckUserPwd(ctx context.Context, in *userService.Request,
 	return out, nil
 }
 
-func Register(t *testing.T) {
+func register(t *testing.T) {
 
 	testData := []struct {
 		Account  string
@@ -155,7 +155,7 @@ func Register(t *testing.T) {
 	}
 }
 
-func Login(t *testing.T) {
+func login(t *testing.T) {
 	testData := []struct {
 		Account  string
 		Password string
@@ -191,7 +191,7 @@ func Login(t *testing.T) {
 	}
 }
 
-func GetUserInfo(t *testing.T) {
+func getUserInfo(t *testing.T) {
 	testData := []struct {
 		Id       int64
 		HttpCode int
@@ -223,7 +223,7 @@ func GetUserInfo(t *testing.T) {
 	}
 }
 
-func UpdateUserInfo(t *testing.T) {
+func updateUserInfo(t *testing.T) {
 	testData := []struct {
 		Id       int64
 		Name     string

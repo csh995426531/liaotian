@@ -35,11 +35,11 @@ func InitRouters(middleware ...gin.HandlerFunc) *gin.Engine {
 		//申请单信息
 		applicationGroup.GET("/info", ApplicationInfo)
 		//通过申请
-		applicationGroup.GET("/pass", PassApplication)
+		applicationGroup.POST("/pass", PassApplication)
 		//拒绝申请
-		applicationGroup.GET("/reject", RejectApplication)
+		applicationGroup.POST("/reject", RejectApplication)
 		//回复申请
-		applicationGroup.GET("/reply", ReplyApplication)
+		applicationGroup.POST("/reply", ReplyApplication)
 	}
 
 	friendGroup := router.Group("/friend", ginWrapper.AuthMiddleware(&domainAuth))

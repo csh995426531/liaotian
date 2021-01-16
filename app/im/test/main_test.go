@@ -12,7 +12,7 @@ import (
 )
 
 /**
-test入口
+测试入口
 */
 func TestMain(m *testing.M) {
 
@@ -57,9 +57,14 @@ func TestStart(t *testing.T) {
 		},
 	}, nil)
 
-	t.Run("Register", Register)
-	t.Run("Login", Login)
-	t.Run("GetUserInfo", GetUserInfo)
-	t.Run("UpdateUserInfo", UpdateUserInfo)
-	t.Run("CreateApplication", CreateApplication)
+	t.Run("register", register)
+	t.Run("login", login)
+	t.Run("getUserInfo", getUserInfo)
+	t.Run("updateUserInfo", updateUserInfo)
+	t.Run("createApplication", createApplication)
+	t.Run("applicationList", applicationList)
+	t.Run("applicationInfo", applicationInfo)
+	t.Run("passApplication", passApplication)
+	t.Run("rejectApplication", rejectApplication)
+	t.Run("replyApplication", replyApplication)
 }
