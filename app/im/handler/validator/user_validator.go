@@ -19,12 +19,12 @@ type RegisterValidator struct {
 
 //获取用户信息验证器
 type GetUserInfoValidator struct {
-	Id int64 `validate:"required,min=1"`
+	Id int64 `form:"user_id" validate:"required,min=1"`
 }
 
 //更新用户信息验证器
 type UpdateUserInfoValidator struct {
-	Id       int64  `validate:"required,min=1"`
+	Id       int64  `json:"user_id" validate:"required,min=1"`
 	Name     string `validate:"required,min=1,max=20"`
 	Password string `validate:"required,min=1,max=20"`
 	Avatar   string

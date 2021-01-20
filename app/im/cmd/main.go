@@ -28,7 +28,7 @@ func main() {
 	if err != nil {
 		zap.SugarLogger.Fatalf("创建 tracer 失败，error: %v", err)
 	} else {
-		zap.ZapLogger.Info("创建 trace oap.skywalking:11800 - app-im 成功")
+		zap.ZapLogger.Info("创建 trace oap.skywalking:11800 - app-im success")
 	}
 
 	handler.Init()
@@ -53,5 +53,5 @@ func main() {
 	if err := service.Run(); err != nil {
 		zap.SugarLogger.Fatalf("服务启动失败，error: %v", err)
 	}
-	zap.ZapLogger.Info("服务启动成功")
+	zap.ZapLogger.Info("服务启动success")
 }

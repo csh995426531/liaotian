@@ -19,4 +19,6 @@ type UserInterface interface {
 	GetUserInfo(id int64, name, account string) (user *User, err error)
 	// 更新用户信息
 	UpdateUserInfo(id int64, name, password, avatar string) (user *User, err error)
+	// 批量获取用户信息
+	BatchGetUserInfo(ids []int64) (list []*User, err error)
 }

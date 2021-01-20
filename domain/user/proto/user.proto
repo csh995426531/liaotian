@@ -9,6 +9,7 @@ service User {
   rpc GetUserInfo(Request) returns (Response) {}
   rpc UpdateUserInfo(Request) returns (Response) {}
   rpc CheckUserPwd(Request) returns (Response) {}
+  rpc BatchGetUserInfo(BatchGetUserInfoRequest) returns (BatchGetUserInfoResponse) {}
 }
 
 message user {
@@ -30,4 +31,14 @@ message Response {
   int64 code = 1;
   string message = 2;
   user data = 3;
+}
+
+message BatchGetUserInfoRequest {
+  repeated int64 ids = 1;
+}
+
+message BatchGetUserInfoResponse {
+  int64 code = 1;
+  string message = 2;
+  repeated user data = 3;
 }

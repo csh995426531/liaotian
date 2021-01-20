@@ -33,10 +33,9 @@ func (h *Handler) CreateUserInfo(ctx context.Context, request *proto.Request, re
 	response.Code = http.StatusCreated
 	response.Message = "success"
 	response.Data = &proto.User{
-		Id:       user.Id,
-		Name:     user.Name,
-		Password: user.Password,
-		Avatar:   user.Avatar,
+		Id:     user.Id,
+		Name:   user.Name,
+		Avatar: user.Avatar,
 	}
 
 	return nil
@@ -90,10 +89,9 @@ func (h *Handler) UpdateUserInfo(ctx context.Context, request *proto.Request, re
 	response.Code = http.StatusOK
 	response.Message = "success"
 	response.Data = &proto.User{
-		Id:       user.Id,
-		Name:     user.Name,
-		Password: user.Password,
-		Avatar:   user.Avatar,
+		Id:     user.Id,
+		Name:   user.Name,
+		Avatar: user.Avatar,
 	}
 	return nil
 }
@@ -120,11 +118,34 @@ func (h *Handler) CheckUserPwd(ctx context.Context, request *proto.Request, resp
 	response.Code = http.StatusOK
 	response.Message = "success"
 	response.Data = &proto.User{
-		Id:       user.Id,
-		Name:     user.Name,
-		Password: user.Password,
-		Avatar:   user.Avatar,
+		Id:     user.Id,
+		Name:   user.Name,
+		Avatar: user.Avatar,
 	}
 
+	return nil
+}
+
+func (h *Handler) BatchGetUserInfo(ctx context.Context, request *proto.BatchGetUserInfoRequest, response *proto.BatchGetUserInfoResponse) error {
+
+	if len(request.Ids) == 0 {
+		return ErrorBadRequest
+	}
+
+	list, err := h.UserEntity.BatchGetUserInfo(request.Ids)
+	if err != nil {
+		return ErrorInternalServerError(err)
+	}
+
+	response.Code = http.StatusOK
+	response.Message = "success"
+	for _, temp := range list {
+		response.Data = append(response.Data, &proto.User{
+			Id:      temp.Id,
+			Name:    temp.Name,
+			Account: temp.Account,
+			Avatar:  temp.Avatar,
+		})
+	}
 	return nil
 }

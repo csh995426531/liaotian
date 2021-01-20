@@ -20,7 +20,7 @@ func GetFriendList(t *testing.T) {
 		Msg    string
 		Data   string
 	}{
-		{1, http.StatusOK, "success", "[2,3]"},
+		{1, http.StatusOK, "success", "[{\"Id\":1,\"UserId\":2},{\"Id\":2,\"UserId\":3}]"},
 		{0, http.StatusBadRequest, "参数错误", ""},
 	}
 

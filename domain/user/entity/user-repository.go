@@ -100,3 +100,25 @@ func (e *User) UpdateUserInfo(id int64, name, password, avatar string) (user *Us
 	}
 	return
 }
+
+func (e *User) BatchGetUserInfo(ids []int64) (list []*User, err error) {
+	if len(ids) == 0 {
+		err = errors.New("缺少必要参数")
+		return
+	}
+
+	var data []*UserModel
+	err = repository.Repo.MysqlDb.Where("id In (?)", ids).Find(&data).Error
+	if err == nil {
+		for _, temp := range data {
+			user := &User{
+				Id:      temp.Id,
+				Name:    temp.Name,
+				Account: temp.Account,
+				Avatar:  temp.Avatar,
+			}
+			list = append(list, user)
+		}
+	}
+	return
+}

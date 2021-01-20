@@ -31,13 +31,14 @@ var _ context.Context
 var _ client.Option
 var _ server.Option
 
-// Client API for User handler
+// Client API for User service
 
 type UserService interface {
 	CreateUserInfo(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	GetUserInfo(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	UpdateUserInfo(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
 	CheckUserPwd(ctx context.Context, in *Request, opts ...client.CallOption) (*Response, error)
+	BatchGetUserInfo(ctx context.Context, in *BatchGetUserInfoRequest, opts ...client.CallOption) (*BatchGetUserInfoResponse, error)
 }
 
 type userService struct {
@@ -50,7 +51,7 @@ func NewUserService(name string, c client.Client) UserService {
 		c = client.NewClient()
 	}
 	if len(name) == 0 {
-		name = "domain.user.handler"
+		name = "domain.user.service"
 	}
 	return &userService{
 		c:    c,
@@ -98,13 +99,24 @@ func (c *userService) CheckUserPwd(ctx context.Context, in *Request, opts ...cli
 	return out, nil
 }
 
-// Server API for User handler
+func (c *userService) BatchGetUserInfo(ctx context.Context, in *BatchGetUserInfoRequest, opts ...client.CallOption) (*BatchGetUserInfoResponse, error) {
+	req := c.c.NewRequest(c.name, "User.BatchGetUserInfo", in)
+	out := new(BatchGetUserInfoResponse)
+	err := c.c.Call(ctx, req, out, opts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
+// Server API for User service
 
 type UserHandler interface {
 	CreateUserInfo(context.Context, *Request, *Response) error
 	GetUserInfo(context.Context, *Request, *Response) error
 	UpdateUserInfo(context.Context, *Request, *Response) error
 	CheckUserPwd(context.Context, *Request, *Response) error
+	BatchGetUserInfo(context.Context, *BatchGetUserInfoRequest, *BatchGetUserInfoResponse) error
 }
 
 func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.HandlerOption) error {
@@ -113,6 +125,7 @@ func RegisterUserHandler(s server.Server, hdlr UserHandler, opts ...server.Handl
 		GetUserInfo(ctx context.Context, in *Request, out *Response) error
 		UpdateUserInfo(ctx context.Context, in *Request, out *Response) error
 		CheckUserPwd(ctx context.Context, in *Request, out *Response) error
+		BatchGetUserInfo(ctx context.Context, in *BatchGetUserInfoRequest, out *BatchGetUserInfoResponse) error
 	}
 	type User struct {
 		user
@@ -139,4 +152,8 @@ func (h *userHandler) UpdateUserInfo(ctx context.Context, in *Request, out *Resp
 
 func (h *userHandler) CheckUserPwd(ctx context.Context, in *Request, out *Response) error {
 	return h.UserHandler.CheckUserPwd(ctx, in, out)
+}
+
+func (h *userHandler) BatchGetUserInfo(ctx context.Context, in *BatchGetUserInfoRequest, out *BatchGetUserInfoResponse) error {
+	return h.UserHandler.BatchGetUserInfo(ctx, in, out)
 }

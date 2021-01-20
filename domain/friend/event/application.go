@@ -15,6 +15,6 @@ func (e *Event) PassApplication(userIdA, userIdB int64) (err error) {
 		},
 	}
 	msg.Body, _ = json.Marshal(msg.Header)
-	err = e.PubSub.Publish(PassApplication, msg)
+	//err = e.PubSub.Publish(PassApplication, msg)
 	return
 }

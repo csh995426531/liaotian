@@ -38,7 +38,7 @@ func TestMain(m *testing.M) {
 		}
 	}()
 
-	fmt.Println("服务启动成功")
+	fmt.Println("服务启动success")
 	time.Sleep(time.Second * 1)
 	m.Run()
 }
@@ -46,7 +46,7 @@ func TestMain(m *testing.M) {
 func TestStart(t *testing.T) {
 
 	ctrl := gomock.NewController(t)
-	defer ctrl.Finish()
+	//defer ctrl.Finish()
 	service := NewMockAuthService(ctrl)
 	handler.AuthDomain(service)
 	service.EXPECT().Parse(gomock.Any(), gomock.Any()).Return(&authService.ParseResponse{
@@ -55,6 +55,10 @@ func TestStart(t *testing.T) {
 			UserId: 1,
 			Name:   "张三",
 		},
+	}, nil)
+	service.EXPECT().Generated(gomock.Any(), gomock.Any()).Return(&authService.GeneratedResponse{
+		Message: "success",
+		Data:    "我是万能钥匙",
 	}, nil)
 
 	t.Run("register", register)
@@ -67,4 +71,7 @@ func TestStart(t *testing.T) {
 	t.Run("passApplication", passApplication)
 	t.Run("rejectApplication", rejectApplication)
 	t.Run("replyApplication", replyApplication)
+	t.Run("friendList", friendList)
+	t.Run("deleteFriendInfo", deleteFriendInfo)
+	t.Run("friendInfo", friendInfo)
 }

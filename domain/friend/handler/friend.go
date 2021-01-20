@@ -17,11 +17,13 @@ func (h *Handler) GetFriendList(ctx context.Context, request *proto.GetFriendLis
 
 	response.Message = "success"
 	for _, friend := range list {
+		var tempData proto.FriendList
 		if friend.UserIdA == request.UserId {
-			response.Data = append(response.Data, friend.UserIdB)
+			tempData = proto.FriendList{Id: friend.Id, UserId: friend.UserIdB}
 		} else {
-			response.Data = append(response.Data, friend.UserIdA)
+			tempData = proto.FriendList{Id: friend.Id, UserId: friend.UserIdA}
 		}
+		response.Data = append(response.Data, &tempData)
 	}
 
 	return nil

@@ -50,7 +50,7 @@ func Login(ctx *gin.Context) {
 	}
 
 	ginResult.Success(ctx, http.StatusOK, map[string]interface{}{
-		"data":  res.Data,
+		"info":  res.Data,
 		"token": tokenRes.Data,
 	})
 }

@@ -63,8 +63,13 @@ message GetFriendListRequest {
   int64 UserId = 1;
 }
 
+message FriendList {
+  int64 Id = 1;
+  int64 UserId = 2;
+}
+
 message GetFriendListResponse {
-  repeated int64 data = 1;
+  repeated FriendList data = 1;
   string message = 2;
 }
 
