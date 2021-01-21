@@ -3,18 +3,19 @@ package event
 import (
 	"encoding/json"
 	"github.com/micro/go-micro/broker"
+	"liaotian/domain/friend/entity"
 )
 
 const PassApplication = "PassApplication"
 
-func (e *Event) PassApplication(userIdA, userIdB int64) (err error) {
+func (e *Event) PassApplication(friend *entity.Friend) (err error) {
 	msg := &broker.Message{
 		Header: map[string]string{
-			"user_id_a": string(userIdA),
-			"user_id_b": string(userIdB),
+			"id": string(friend.Id),
 		},
 	}
-	msg.Body, _ = json.Marshal(msg.Header)
+
+	msg.Body, _ = json.Marshal(friend)
 	//err = e.PubSub.Publish(PassApplication, msg)
 	return
 }

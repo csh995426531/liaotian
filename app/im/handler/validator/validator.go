@@ -23,6 +23,12 @@ func Bind(ctx *gin.Context, reqValidator interface{}, req interface{}) (err erro
 		return
 	}
 
+	err = ExecBind(reqValidator, req)
+	return nil
+}
+
+func ExecBind(reqValidator interface{}, req interface{}) (err error) {
+
 	uni := ut.New(en.New(), zh.New())
 	trans, _ := uni.GetTranslator("zh")
 

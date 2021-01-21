@@ -91,7 +91,7 @@ func (h *Handler) PassApplicationInfo(ctx context.Context, request *proto.PassAp
 		return ErrorInternalServerError(errors.New("创建好友失败，未知错误"))
 	}
 
-	if err = event.Instance.PassApplication(friend.UserIdA, friend.UserIdB); err != nil {
+	if err = event.Instance.PassApplication(friend); err != nil {
 		zap.SugarLogger.Errorf("通过申请单事件异常，%v", err)
 	}
 

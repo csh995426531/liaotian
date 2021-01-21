@@ -1,0 +1,31 @@
+syntax = "proto3";
+
+option go_package = "./proto;proto";
+
+package domain.message.service;
+
+service Message {
+  rpc Sub(SubRequest) returns (Response) {}
+  rpc UnSub(UnSubRequest) returns (Response) {}
+  rpc Send(SendRequest) returns (Response) {}
+}
+
+message SendRequest {
+  int64 FriendId = 1;
+  int64 SenderId = 2;
+  int64 ReceiverId = 3;
+  string Content = 4;
+}
+
+message Response {
+  bool Ok = 1;
+  string message = 2;
+}
+
+message SubRequest {
+  int64 UserId = 1;
+}
+
+message UnSubRequest {
+  int64 UserId = 1;
+}

@@ -4,9 +4,9 @@ package entity
 好友实体
 */
 type Friend struct {
-	Id      int64
-	UserIdA int64
-	UserIdB int64
+	Id      int64 `json:"id"`
+	UserIdA int64 `json:"user_id_a"`
+	UserIdB int64 `json:"user_id_b"`
 }
 
 type FriendInterface interface {

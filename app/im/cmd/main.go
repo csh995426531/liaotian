@@ -3,6 +3,10 @@ package main
 import (
 	"github.com/SkyAPM/go2sky"
 	"github.com/SkyAPM/go2sky/reporter"
+	_ "github.com/micro/go-micro/broker"
+	_ "github.com/micro/go-micro/broker/nats"
+	"github.com/micro/go-plugins/broker/grpc"
+	"liaotian/app/im/event"
 	"liaotian/app/im/handler"
 	"liaotian/middlewares/logger/zap"
 	"liaotian/middlewares/wrapper/skywalking/gin2micro"
@@ -30,6 +34,11 @@ func main() {
 	} else {
 		zap.ZapLogger.Info("创建 trace oap.skywalking:11800 - app-im success")
 	}
+
+	//natsBroker := nats.NewBroker(broker.Addrs("nats-cluster.nats.svc.cluster.local:4222"))
+	grpcBroker := grpc.NewBroker()
+	grpcBroker.Init()
+	event.Init(grpcBroker)
 
 	handler.Init()
 	ginRouter := handler.InitRouters()

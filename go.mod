@@ -4,9 +4,11 @@ go 1.14
 
 require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
+	github.com/Shopify/sarama v1.24.1
 	github.com/SkyAPM/go2sky v0.6.0
 	github.com/coreos/etcd v3.3.18+incompatible // indirect
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
+	github.com/docker/distribution v2.7.1+incompatible
 	github.com/gin-gonic/gin v1.6.3
 	github.com/go-log/log v0.2.0 // indirect
 	github.com/go-playground/locales v0.13.0
@@ -19,7 +21,7 @@ require (
 	github.com/google/go-cmp v0.5.2 // indirect
 	github.com/google/uuid v1.1.2 // indirect
 	github.com/googleapis/gnostic v0.5.1 // indirect
-	github.com/gorilla/websocket v1.4.2 // indirect
+	github.com/gorilla/websocket v1.4.2
 	github.com/grpc-ecosystem/grpc-gateway v1.9.5 // indirect
 	github.com/imdario/mergo v0.3.9 // indirect
 	github.com/json-iterator/go v1.1.10 // indirect

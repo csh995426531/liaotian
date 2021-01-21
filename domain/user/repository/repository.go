@@ -42,6 +42,7 @@ func NewDb() *gorm.DB {
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		zap.SugarLogger.Panicf("仓库实例化DB失败，error: %v", err)
+		panic(err)
 	}
 	return db
 }
