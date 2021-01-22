@@ -10,12 +10,12 @@ import (
 )
 
 func sub(t *testing.T) {
-	testData := []struct{
+	testData := []struct {
 		UserId int64
-		Code       int32
-		Msg        string
-		Ok       bool
-	} {
+		Code   int32
+		Msg    string
+		Ok     bool
+	}{
 		{1, http.StatusOK, "success", true},
 		{0, http.StatusBadRequest, "参数错误", false},
 	}
@@ -48,12 +48,12 @@ func sub(t *testing.T) {
 }
 
 func unSub(t *testing.T) {
-	testData := []struct{
+	testData := []struct {
 		UserId int64
-		Code       int32
-		Msg        string
-		Ok       bool
-	} {
+		Code   int32
+		Msg    string
+		Ok     bool
+	}{
 		{1, http.StatusOK, "success", true},
 		{0, http.StatusBadRequest, "参数错误", false},
 	}
@@ -86,17 +86,17 @@ func unSub(t *testing.T) {
 }
 
 func send(t *testing.T) {
-	testData := []struct{
-		FriendId int64
-		SenderId int64
+	testData := []struct {
+		FriendId   int64
+		SenderId   int64
 		ReceiverId int64
-		Content string
+		Content    string
 		Code       int32
 		Msg        string
-		Ok       bool
-	} {
-		{1, 1,2,"你好啊",http.StatusOK, "success", true},
-		{0, 1,2,"我是赛利亚",http.StatusBadRequest, "参数错误", false},
+		Ok         bool
+	}{
+		{1, 1, 2, "你好啊", http.StatusOK, "success", true},
+		{0, 1, 2, "我是赛利亚", http.StatusBadRequest, "参数错误", false},
 	}
 
 	service := proto.NewMessageService("domain.message.service", client.DefaultClient)
@@ -105,10 +105,10 @@ func send(t *testing.T) {
 		t.Run("", func(t *testing.T) {
 
 			request := &proto.SendRequest{
-				FriendId: data.FriendId,
-				SenderId: data.SenderId,
+				FriendId:   data.FriendId,
+				SenderId:   data.SenderId,
 				ReceiverId: data.ReceiverId,
-				Content: data.Content,
+				Content:    data.Content,
 			}
 
 			resp, err := service.Send(context.Background(), request)

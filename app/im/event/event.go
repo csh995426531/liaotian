@@ -2,6 +2,8 @@ package event
 
 import (
 	"github.com/micro/go-micro/broker"
+	"github.com/micro/go-micro/client"
+	messageService "liaotian/domain/message/proto"
 	"liaotian/middlewares/logger/zap"
 	"sync"
 )
@@ -12,7 +14,8 @@ var (
 )
 
 type Event struct {
-	PubSub broker.Broker
+	PubSub        broker.Broker
+	DomainMessage messageService.MessageService
 }
 
 func Init(broker broker.Broker) {
@@ -30,6 +33,7 @@ func Init(broker broker.Broker) {
 
 	Instance = &Event{
 		broker,
+		messageService.NewMessageService("domain.message.service", client.DefaultClient),
 	}
 
 	go Instance.PassApplication()

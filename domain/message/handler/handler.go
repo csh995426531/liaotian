@@ -5,7 +5,6 @@ import (
 )
 
 type Handler struct {
-
 }
 
 func Init() (handler *Handler) {
@@ -15,6 +14,3 @@ func Init() (handler *Handler) {
 	}
 	return
 }
-
-
-

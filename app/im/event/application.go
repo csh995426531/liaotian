@@ -4,7 +4,6 @@ import (
 	"encoding/json"
 	"github.com/docker/distribution/context"
 	"github.com/micro/go-micro/broker"
-	"liaotian/app/im/handler"
 	messageService "liaotian/domain/message/proto"
 	"liaotian/middlewares/logger/zap"
 )
@@ -20,25 +19,25 @@ func (e *Event) PassApplication() {
 	}
 
 	for {
-		sub, err := Instance.PubSub.Subscribe(PassApplication, func(event broker.Event) error {
+		sub, err := e.PubSub.Subscribe(PassApplication, func(event broker.Event) error {
 
 			var friend Friend
 			_ = json.Unmarshal(event.Message().Body, &friend)
 
-			res, err := handler.DomainMessage.Send(context.Background(), &messageService.SendRequest{
-				FriendId: friend.Id,
-				SenderId: friend.UserIdA,
+			res, err := e.DomainMessage.Send(context.Background(), &messageService.SendRequest{
+				FriendId:   friend.Id,
+				SenderId:   friend.UserIdA,
 				ReceiverId: friend.UserIdB,
-				Content: "你们已经成为朋友啦！",
+				Content:    "你们已经成为朋友啦！",
 			})
 			if err != nil || res.Ok != true {
 				zap.SugarLogger.Panicf("订阅事件PassApplication,DomainMessage.Send失败，error: %v", err)
 			}
-			res, err = handler.DomainMessage.Send(context.Background(), &messageService.SendRequest{
-				FriendId: friend.Id,
-				SenderId: friend.UserIdB,
+			res, err = e.DomainMessage.Send(context.Background(), &messageService.SendRequest{
+				FriendId:   friend.Id,
+				SenderId:   friend.UserIdB,
 				ReceiverId: friend.UserIdA,
-				Content: "你们已经成为朋友啦！",
+				Content:    "你们已经成为朋友啦！",
 			})
 			if err != nil || res.Ok != true {
 				zap.SugarLogger.Panicf("订阅事件PassApplication,DomainMessage.Send失败，error: %v", err)
@@ -49,7 +48,7 @@ func (e *Event) PassApplication() {
 		if err != nil {
 			zap.SugarLogger.Panicf("订阅事件PassApplication失败，error: %v", err)
 		}
-		_= sub.Unsubscribe()
+		_ = sub.Unsubscribe()
 	}
 
 }

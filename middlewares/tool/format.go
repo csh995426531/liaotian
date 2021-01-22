@@ -13,7 +13,6 @@ func Int64ToInt(i64 int64) (i int) {
 	return
 }
 
-
 //字节数(大端)组转成int(无符号的)
 func BytesToIntU(b []byte) (int, error) {
 	if len(b) == 3 {

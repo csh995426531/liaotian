@@ -24,7 +24,7 @@ func AuthMiddleware(domainAuth *authService.AuthService) gin.HandlerFunc {
 		var token string
 		if reqData["Token"] == nil || reqData["Token"].(string) == "" {
 
-			token := ctx.GetHeader("token")
+			token = ctx.GetHeader("token")
 			if token == "" {
 				ctx.Abort()
 				ginResult.Failed(ctx, http.StatusUnauthorized, "请登录后操作")

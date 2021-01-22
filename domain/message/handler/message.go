@@ -12,7 +12,7 @@ import (
 	"liaotian/middlewares/tool"
 )
 
-func (h *Handler)Send(ctx context.Context, request *proto.SendRequest, response *proto.Response) error {
+func (h *Handler) Send(ctx context.Context, request *proto.SendRequest, response *proto.Response) error {
 	if request.FriendId == 0 || request.SenderId == 0 || request.ReceiverId == 0 || len(request.Content) == 0 {
 		return ErrorBadRequest
 	}
@@ -34,7 +34,7 @@ func (h *Handler)Send(ctx context.Context, request *proto.SendRequest, response 
 	return nil
 }
 
-func (h *Handler)Sub(ctx context.Context, request *proto.SubRequest, response *proto.Response) error {
+func (h *Handler) Sub(ctx context.Context, request *proto.SubRequest, response *proto.Response) error {
 
 	if request.UserId == 0 {
 		return ErrorBadRequest
@@ -42,12 +42,12 @@ func (h *Handler)Sub(ctx context.Context, request *proto.SubRequest, response *p
 
 	// 写入Etcd在线用户
 	onlineUsersKey := fmt.Sprintf("/online_users/%v", request.UserId)
-	if _, err := repository.GetKv().Put(ctx, onlineUsersKey, string(request.UserId)); err != nil{
+	if _, err := repository.GetKv().Put(ctx, onlineUsersKey, string(request.UserId)); err != nil {
 		return ErrorInternalServerError(err)
 	}
 
 	// 创建读取消息协程
-	if err := ReadWorker(request.UserId); err != nil{
+	if err := ReadWorker(request.UserId); err != nil {
 		return ErrorInternalServerError(err)
 	}
 
@@ -56,7 +56,7 @@ func (h *Handler)Sub(ctx context.Context, request *proto.SubRequest, response *p
 	return nil
 }
 
-func (h *Handler)UnSub(ctx context.Context, request *proto.UnSubRequest, response *proto.Response) error {
+func (h *Handler) UnSub(ctx context.Context, request *proto.UnSubRequest, response *proto.Response) error {
 
 	if request.UserId == 0 {
 		return ErrorBadRequest
@@ -65,7 +65,7 @@ func (h *Handler)UnSub(ctx context.Context, request *proto.UnSubRequest, respons
 	onlineUsersKey := fmt.Sprintf("/online_users/%v", request.UserId)
 
 	_, err := repository.GetKv().Delete(ctx, onlineUsersKey)
-	if err != nil{
+	if err != nil {
 		return ErrorInternalServerError(err)
 	}
 	response.Ok = true
@@ -105,9 +105,10 @@ func ReadWorker(UserId int64) error {
 	return nil
 }
 
-type consumerGroupHandler struct{
+type consumerGroupHandler struct {
 	UserId int64
 }
+
 func (consumerGroupHandler) Setup(_ sarama.ConsumerGroupSession) error   { return nil }
 func (consumerGroupHandler) Cleanup(_ sarama.ConsumerGroupSession) error { return nil }
 func (h consumerGroupHandler) ConsumeClaim(sess sarama.ConsumerGroupSession, claim sarama.ConsumerGroupClaim) error {

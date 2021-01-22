@@ -55,7 +55,7 @@ func InitRouters(middleware ...gin.HandlerFunc) *gin.Engine {
 	messageGroup := router.Group("/message", ginWrapper.AuthMiddleware(&domainAuth))
 	{
 		//连接消息
-		messageGroup.Any("/Connect", Connect)
+		messageGroup.GET("/connect", Connect)
 	}
 
 	return router

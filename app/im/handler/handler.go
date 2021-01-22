@@ -9,9 +9,9 @@ import (
 )
 
 var (
-	domainUser   userService.UserService
-	domainFriend friendService.FriendService
-	domainAuth   authService.AuthService
+	domainUser    userService.UserService
+	domainFriend  friendService.FriendService
+	domainAuth    authService.AuthService
 	DomainMessage messageService.MessageService
 )
 

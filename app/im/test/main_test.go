@@ -4,6 +4,8 @@ import (
 	"fmt"
 	"github.com/golang/mock/gomock"
 	"github.com/micro/go-micro/web"
+	"github.com/micro/go-plugins/broker/grpc"
+	"liaotian/app/im/event"
 	"liaotian/app/im/handler"
 	authService "liaotian/domain/auth/proto"
 	"liaotian/middlewares/logger/zap"
@@ -18,7 +20,9 @@ func TestMain(m *testing.M) {
 
 	zap.InitLogger()
 	//translate.Init()
-
+	grpcBroker := grpc.NewBroker()
+	grpcBroker.Init()
+	event.Init(grpcBroker)
 	//初始化路由
 	ginRouter := handler.InitRouters()
 
@@ -65,13 +69,17 @@ func TestStart(t *testing.T) {
 	t.Run("login", login)
 	t.Run("getUserInfo", getUserInfo)
 	t.Run("updateUserInfo", updateUserInfo)
+
 	t.Run("createApplication", createApplication)
 	t.Run("applicationList", applicationList)
 	t.Run("applicationInfo", applicationInfo)
 	t.Run("passApplication", passApplication)
 	t.Run("rejectApplication", rejectApplication)
 	t.Run("replyApplication", replyApplication)
+
 	t.Run("friendList", friendList)
 	t.Run("deleteFriendInfo", deleteFriendInfo)
 	t.Run("friendInfo", friendInfo)
+
+	t.Run("connect", connect)
 }

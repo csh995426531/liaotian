@@ -16,6 +16,6 @@ func (e *Event) PassApplication(friend *entity.Friend) (err error) {
 	}
 
 	msg.Body, _ = json.Marshal(friend)
-	//err = e.PubSub.Publish(PassApplication, msg)
+	err = e.PubSub.Publish(PassApplication, msg)
 	return
 }

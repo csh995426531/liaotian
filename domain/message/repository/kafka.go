@@ -6,7 +6,7 @@ import (
 	"strconv"
 )
 
-func NewProducer () (producer sarama.SyncProducer, err error) {
+func NewProducer() (producer sarama.SyncProducer, err error) {
 	config := sarama.NewConfig()
 	config.Producer.RequiredAcks = sarama.WaitForAll
 	config.Producer.Partitioner = sarama.NewRandomPartitioner

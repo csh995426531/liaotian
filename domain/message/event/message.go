@@ -10,6 +10,6 @@ func (e *Event) SendMessage(userId int64, content []byte) (err error) {
 		Body: content,
 	}
 	topic := fmt.Sprintf("/message/%v", userId)
-	err = e.PubSub.Publish(topic,msg)
+	err = e.PubSub.Publish(topic, msg)
 	return
 }

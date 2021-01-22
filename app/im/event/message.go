@@ -6,10 +6,10 @@ import (
 	"liaotian/middlewares/logger/zap"
 )
 
-func (e *Event) ReadNewMessage (userId int64) (data []byte) {
+func (e *Event) ReadNewMessage(userId int64) (data []byte) {
 
 	topic := fmt.Sprintf("/message/%v", userId)
-	sub, err := Instance.PubSub.Subscribe(topic, func(event broker.Event) error {
+	sub, err := e.PubSub.Subscribe(topic, func(event broker.Event) error {
 		data = event.Message().Body
 		return nil
 	})
@@ -17,6 +17,6 @@ func (e *Event) ReadNewMessage (userId int64) (data []byte) {
 	if err != nil {
 		zap.SugarLogger.Panicf("订阅事件ReadNewMessage失败，error: %v", err)
 	}
-	_= sub.Unsubscribe()
+	_ = sub.Unsubscribe()
 	return data
 }
