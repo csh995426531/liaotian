@@ -9,14 +9,14 @@ import (
 
 var (
 	ProducerPond []*sarama.SyncProducer
-	ConsumerPond []*sarama.Consumer
+	ConsumerGroupPond []*sarama.ConsumerGroup
 	EtcdClient *clientv3.Client
 )
 
 //初始化
 func Init () error {
 	startTime := time.Now().Unix()
-	for len(ProducerPond) < 10 {
+	for len(ProducerPond) < 100 {
 		if producer, err := NewProducer(); err == nil {
 			ProducerPond = append(ProducerPond, &producer)
 		}
@@ -25,15 +25,15 @@ func Init () error {
 		}
 	}
 
-	startTime = time.Now().Unix()
-	for len(ConsumerPond) < 10 {
-		if consumer, err := NewConsumer(); err == nil {
-			ConsumerPond = append(ConsumerPond, &consumer)
-		}
-		if time.Now().Unix() - startTime > 10 {
-			return errors.New("init kafka consumerPond 失败")
-		}
-	}
+	//startTime = time.Now().Unix()
+	//for len(ConsumerGroupPond) < 10 {
+	//	if ConsumerGroup, err := NewConsumerGroup(len(ConsumerGroupPond)); err == nil {
+	//		ConsumerGroupPond = append(ConsumerGroupPond, &ConsumerGroup)
+	//	}
+	//	if time.Now().Unix() - startTime > 10 {
+	//		return errors.New("init kafka consumerPond 失败")
+	//	}
+	//}
 
 	client, err := NewClient()
 	if err != nil {
@@ -48,9 +48,9 @@ func Close() {
 		_= (*ProducerPond[i]).Close()
 	}
 	ProducerPond = nil
-	for i := 0; i < len(ConsumerPond); i ++ {
-		_= (*ConsumerPond[i]).Close()
+	for i := 0; i < len(ConsumerGroupPond); i ++ {
+		_= (*ConsumerGroupPond[i]).Close()
 	}
-	ConsumerPond = nil
+	ConsumerGroupPond = nil
 	_= EtcdClient.Close()
 }

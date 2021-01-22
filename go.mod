@@ -6,7 +6,7 @@ require (
 	github.com/DATA-DOG/go-sqlmock v1.5.0
 	github.com/Shopify/sarama v1.24.1
 	github.com/SkyAPM/go2sky v0.6.0
-	github.com/coreos/etcd v3.3.18+incompatible // indirect
+	github.com/coreos/etcd v3.3.18+incompatible
 	github.com/dgrijalva/jwt-go v3.2.0+incompatible
 	github.com/docker/distribution v2.7.1+incompatible
 	github.com/gin-gonic/gin v1.6.3
@@ -62,7 +62,7 @@ require (
 	gorm.io/gorm v1.20.7
 	honnef.co/go/tools v0.0.1-2020.1.5 // indirect
 	k8s.io/api v0.17.1 // indirect
-	k8s.io/apimachinery v0.17.1 // indirect
+	k8s.io/apimachinery v0.17.1
 	k8s.io/utils v0.0.0-20200109141947-94aeca20bf09 // indirect
 )
 

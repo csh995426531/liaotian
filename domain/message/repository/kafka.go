@@ -3,7 +3,7 @@ package repository
 import (
 	"github.com/Shopify/sarama"
 	"k8s.io/apimachinery/pkg/util/rand"
-	"strings"
+	"strconv"
 )
 
 func NewProducer () (producer sarama.SyncProducer, err error) {
@@ -16,19 +16,22 @@ func NewProducer () (producer sarama.SyncProducer, err error) {
 	return
 }
 
-func NewConsumer() (consumer sarama.Consumer, err error) {
-	consumer, err = sarama.NewConsumer(strings.Split("192.168.66.104:9092", ","), nil)
+func NewConsumerGroup(groupId int) (consumerGroup sarama.ConsumerGroup, err error) {
+	config := sarama.NewConfig()
+	config.Consumer.Return.Errors = false
+	config.Consumer.Group.Rebalance.Strategy = sarama.BalanceStrategyRange // 分区分配策略
+	config.Version = sarama.V2_3_0_0
+	client, err := sarama.NewClient([]string{"192.168.66.104:9092"}, config)
+	if err != nil {
+		return nil, err
+	}
+
+	consumerGroup, err = sarama.NewConsumerGroupFromClient(strconv.Itoa(groupId), client)
 	return
 }
 
 func GetProducer() (producer sarama.SyncProducer) {
 	random := rand.IntnRange(0, len(ProducerPond))
 	producer = *ProducerPond[random]
-	return
-}
-
-func GetConsumer() (consumer sarama.Consumer) {
-	random := rand.IntnRange(0, len(ConsumerPond))
-	consumer = *ConsumerPond[random]
 	return
 }
