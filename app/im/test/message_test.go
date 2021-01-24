@@ -13,18 +13,18 @@ import (
 )
 
 func connect(t *testing.T) {
-	type messageType struct {
-		Id         int64  `json:"id"`
+	type message struct {
+		FriendId         int64  `json:"id"`
 		ReceiverId int64  `json:"receiver_id"`
 		Content    string `json:"content"`
 	}
 	testData := []struct {
 		Token       string
-		SendContent []messageType
+		SendContent []message
 		HttpCode    int
 		Response    *proto.Response
 	}{
-		{"我是万能钥匙", []messageType{
+		{"我是万能钥匙", []message{
 			{1, 2, "你好啊"},
 			{1, 2, "我是赛利亚"},
 		}, http.StatusOK, &proto.Response{
@@ -51,6 +51,14 @@ func connect(t *testing.T) {
 			if err != nil {
 				t.Errorf("websocket Dial error: %v", err)
 				panic(err)
+			} else {
+				_, msg, err := client.ReadMessage()
+				if err != nil {
+					t.Error(err)
+				}
+				if string(msg) != "连接成功" {
+					t.Error("连接失败")
+				}
 			}
 
 			for _, message := range data.SendContent {
@@ -60,18 +68,16 @@ func connect(t *testing.T) {
 				err := client.WriteMessage(websocket.TextMessage, messageByte)
 				if err != nil {
 					t.Errorf("client.WriteMessage error:%v", err)
-				}
-			}
+				} else {
 
-			for {
-				_, msg, err := client.ReadMessage()
-				if err != nil {
-					t.Error(err)
+					_, msg, err := client.ReadMessage()
+					if err != nil {
+						t.Error(err)
+					}
+					if string(msg) != fmt.Sprintf("send ok! {%v}",string(messageByte)) {
+						t.Errorf("send&read message error, read:%v, send:%v", string(msg), fmt.Sprintf("send ok! {%v}",string(messageByte)))
+					}
 				}
-				if len(msg) == 0 {
-					break
-				}
-				fmt.Printf("ReadMessage:%v\n", string(msg))
 			}
 		})
 	}

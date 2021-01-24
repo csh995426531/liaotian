@@ -94,7 +94,7 @@ func (c *Coon) readWorker(ctx *gin.Context) {
 			zap.SugarLogger.Errorf("DomainMessage.Send error: %v, res:%v", err, res)
 			goto ERR
 		}
-		if err := c.connect.Write(websocket.TextMessage, []byte(fmt.Sprintf("send ok! {%v}", sendReq.String()))); err != nil {
+		if err := c.connect.Write(websocket.TextMessage, []byte(fmt.Sprintf("send ok! {%v}", string(data.Data)))); err != nil {
 			zap.SugarLogger.Errorf("wsSocket.WriteMessage error: %v", err)
 			goto ERR
 		}
