@@ -62,6 +62,7 @@ func connect(t *testing.T) {
 					t.Errorf("client.WriteMessage error:%v", err)
 				}
 			}
+
 			for {
 				_, msg, err := client.ReadMessage()
 				if err != nil {
