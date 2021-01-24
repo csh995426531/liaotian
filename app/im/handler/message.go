@@ -20,8 +20,8 @@ import (
 */
 
 type Coon struct {
-	id int64
-	connect *msgSocket.Connect
+	id       int64
+	connect  *msgSocket.Connect
 	isClosed bool
 }
 
@@ -49,8 +49,8 @@ func Connect(ctx *gin.Context) {
 	}
 
 	coon := &Coon{
-		id: req.UserId,
-		connect: connect,
+		id:       req.UserId,
+		connect:  connect,
 		isClosed: false,
 	}
 

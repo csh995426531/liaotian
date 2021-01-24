@@ -10,16 +10,16 @@ import (
 
 type wsMessage struct {
 	MessageType int
-	Data []byte
+	Data        []byte
 }
 
 type Connect struct {
-	wsSocket *websocket.Conn
-	inChan chan *wsMessage
-	outChan chan *wsMessage
+	wsSocket  *websocket.Conn
+	inChan    chan *wsMessage
+	outChan   chan *wsMessage
 	closeChan chan byte
-	mutex sync.Mutex
-	isClosed bool
+	mutex     sync.Mutex
+	isClosed  bool
 }
 
 func New(ctx *gin.Context) (conn *Connect, err error) {
@@ -30,15 +30,15 @@ func New(ctx *gin.Context) (conn *Connect, err error) {
 	}
 	wsSocket, err := upGrader.Upgrade(ctx.Writer, ctx.Request, nil)
 	if err != nil {
-		return nil,err
+		return nil, err
 	}
 
 	conn = &Connect{
-		wsSocket: wsSocket,
-		inChan: make(chan *wsMessage, 1000),
-		outChan: make(chan *wsMessage, 1000),
+		wsSocket:  wsSocket,
+		inChan:    make(chan *wsMessage, 1000),
+		outChan:   make(chan *wsMessage, 1000),
 		closeChan: make(chan byte),
-		isClosed: false,
+		isClosed:  false,
 	}
 
 	// 读协程
@@ -48,8 +48,8 @@ func New(ctx *gin.Context) (conn *Connect, err error) {
 	return
 }
 
-func (c *Connect)wsReadLoop() {
-	for  {
+func (c *Connect) wsReadLoop() {
+	for {
 		// 从websocket读一个消息
 		msgType, data, err := c.wsSocket.ReadMessage()
 		if err != nil {
@@ -63,7 +63,7 @@ func (c *Connect)wsReadLoop() {
 			// 放入请求队列
 			select {
 			case c.inChan <- req:
-			case <- c.closeChan:
+			case <-c.closeChan:
 				goto CLOSED
 			}
 		}
@@ -73,8 +73,8 @@ ERR:
 CLOSED:
 }
 
-func (c *Connect)wsWriteLoop() {
-	for  {
+func (c *Connect) wsWriteLoop() {
+	for {
 		select {
 		case msg := <-c.outChan:
 			// 写入websocket
@@ -90,7 +90,7 @@ ERR:
 CLOSED:
 }
 
-func (c *Connect) Write (messageType int, data []byte) error {
+func (c *Connect) Write(messageType int, data []byte) error {
 	select {
 	case c.outChan <- &wsMessage{messageType, data}:
 	case <-c.closeChan:
@@ -99,16 +99,16 @@ func (c *Connect) Write (messageType int, data []byte) error {
 	return nil
 }
 
-func (c *Connect) Read () (*wsMessage, error) {
+func (c *Connect) Read() (*wsMessage, error) {
 	select {
-	case msg := <- c.inChan:
+	case msg := <-c.inChan:
 		return msg, nil
-	case <- c.closeChan:
+	case <-c.closeChan:
 	}
 	return nil, errors.New("websocket closed")
 }
 
-func (c *Connect)Close() {
+func (c *Connect) Close() {
 	c.wsSocket.Close()
 	c.mutex.Lock()
 	defer c.mutex.Unlock()

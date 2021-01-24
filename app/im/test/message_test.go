@@ -14,7 +14,7 @@ import (
 
 func connect(t *testing.T) {
 	type message struct {
-		FriendId         int64  `json:"id"`
+		FriendId   int64  `json:"id"`
 		ReceiverId int64  `json:"receiver_id"`
 		Content    string `json:"content"`
 	}
@@ -74,8 +74,8 @@ func connect(t *testing.T) {
 					if err != nil {
 						t.Error(err)
 					}
-					if string(msg) != fmt.Sprintf("send ok! {%v}",string(messageByte)) {
-						t.Errorf("send&read message error, read:%v, send:%v", string(msg), fmt.Sprintf("send ok! {%v}",string(messageByte)))
+					if string(msg) != fmt.Sprintf("send ok! {%v}", string(messageByte)) {
+						t.Errorf("send&read message error, read:%v, send:%v", string(msg), fmt.Sprintf("send ok! {%v}", string(messageByte)))
 					}
 				}
 			}
