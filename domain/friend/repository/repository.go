@@ -35,14 +35,16 @@ func Init(db *gorm.DB, mock sqlmock.Sqlmock) {
 		MysqlDb: db,
 		MockDb:  mock,
 	}
+	zap.ZapLogger.Info("repository 初始化成功")
 }
 
 func NewDb() *gorm.DB {
-	dsn := "debian-sys-maint:F0sm3f7WrNJox1oV@(129.211.55.205:3306)/liaotian"
+	dsn := "root:affaw12.fa@(192.168.66.103:3339)/liaotian"
 	db, err := gorm.Open(mysql.Open(dsn), &gorm.Config{})
 	if err != nil {
 		zap.SugarLogger.Panicf("仓库实例化DB失败，error: %v", err)
 	}
+
 	return db
 }
 

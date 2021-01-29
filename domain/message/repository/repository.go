@@ -4,6 +4,7 @@ import (
 	"errors"
 	"github.com/Shopify/sarama"
 	"github.com/coreos/etcd/clientv3"
+	"liaotian/middlewares/logger/zap"
 	"time"
 )
 
@@ -40,6 +41,7 @@ func Init() error {
 		return errors.New("init etcd client 失败")
 	}
 	EtcdClient = client
+	zap.ZapLogger.Info("repository 初始化成功")
 	return nil
 }
 

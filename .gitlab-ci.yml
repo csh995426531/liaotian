@@ -106,6 +106,16 @@ build_push_domain_friend:
         - domain/friend/**/*
         - middlewares/**/*
 
+#消息领域服务
+build_push_domain_message:
+  variables:
+    SERVICE_NAME: domain-message
+  <<: *build_push_template
+  rules:
+    - changes:
+        - domain/message/**/*
+        - middlewares/**/*
+
 #认证领域服务
 build_push_domain_auth:
   variables:
